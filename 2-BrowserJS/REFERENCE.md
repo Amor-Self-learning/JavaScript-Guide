@@ -240,11 +240,11 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 6.1 | XMLHttpRequest | `06-Fetch-and-AJAX/001-XMLHttpRequest.md` | ⬜ |
-| 6.2 | Fetch API | `06-Fetch-and-AJAX/002-Fetch-API.md` | ⬜ |
-| 6.3 | Response Handling | `06-Fetch-and-AJAX/003-Response-Handling.md` | ⬜ |
-| 6.4 | Request Cancellation | `06-Fetch-and-AJAX/004-Request-Cancellation.md` | ⬜ |
-| 6.5 | CORS | `06-Fetch-and-AJAX/005-CORS.md` | ⬜ |
+| 6.1 | XMLHttpRequest | `06-Fetch-and-AJAX/001-XMLHttpRequest.md` | ✅ |
+| 6.2 | Fetch API | `06-Fetch-and-AJAX/002-Fetch-API.md` | ✅ |
+| 6.3 | Response Handling | `06-Fetch-and-AJAX/003-Response-Handling.md` | ✅ |
+| 6.4 | Request Cancellation | `06-Fetch-and-AJAX/004-Request-Cancellation.md` | ✅ |
+| 6.5 | CORS | `06-Fetch-and-AJAX/005-CORS.md` | ✅ |
 
 **README coverage (§II.6):**
 - 6.1: Creating XHR, `open`/`send`, `onreadystatechange`, `readyState`/`status`, `responseText`/`responseXML`/`response`, `setRequestHeader`/`getResponseHeader`, `abort`, upload progress
