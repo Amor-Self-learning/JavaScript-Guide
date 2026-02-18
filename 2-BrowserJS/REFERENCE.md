@@ -483,12 +483,12 @@ Status key: ✅ Done · ⬜ Pending
 | 21.1 | Selecting Contacts | `21-Contact-Picker-API/001-Selecting-Contacts.md` | ✅ |
 | 22.1 | Preventing Sleep | `22-Screen-Wake-Lock-API/001-Preventing-Sleep.md` | ✅ |
 | 23.1 | User Idle State | `23-Idle-Detection-API/001-User-Idle-State.md` | ✅ |
-| 24.1 | Serial Port Access | `24-Web-Serial-API/001-Serial-Port-Access.md` | ⬜ |
-| 25.1 | USB Device Access | `25-Web-USB-API/001-USB-Device-Access.md` | ⬜ |
-| 26.1 | Bluetooth Device Access | `26-Web-Bluetooth-API/001-Bluetooth-Device-Access.md` | ⬜ |
-| 27.1 | NFC Operations | `27-Web-NFC-API/001-NFC-Operations.md` | ⬜ |
-| 28.1 | MIDI Access | `28-Web-MIDI-API/001-MIDI-Access.md` | ⬜ |
-| 29.1 | Gamepad Input | `29-Gamepad-API/001-Gamepad-Input.md` | ⬜ |
+| 24.1 | Serial Port Access | `24-Web-Serial-API/001-Serial-Port-Access.md` | ✅ |
+| 25.1 | USB Device Access | `25-Web-USB-API/001-USB-Device-Access.md` | ✅ |
+| 26.1 | Bluetooth Device Access | `26-Web-Bluetooth-API/001-Bluetooth-Device-Access.md` | ✅ |
+| 27.1 | NFC Operations | `27-Web-NFC-API/001-NFC-Operations.md` | ✅ |
+| 28.1 | MIDI Access | `28-Web-MIDI-API/001-MIDI-Access.md` | ✅ |
+| 29.1 | Gamepad Input | `29-Gamepad-API/001-Gamepad-Input.md` | ✅ |
 | 30.1 | Orientation Control | `30-Screen-Orientation-API/001-Orientation-Control.md` | ⬜ |
 | 31.1 | Fullscreen Mode | `31-Fullscreen-API/001-Fullscreen-Mode.md` | ⬜ |
 | 32.1 | Mouse Lock | `32-Pointer-Lock-API/001-Mouse-Lock.md` | ⬜ |
