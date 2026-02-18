@@ -640,12 +640,12 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 58.1 | ARIA Fundamentals | `58-Accessibility/001-ARIA-Fundamentals.md` | ⬜ |
-| 58.2 | Keyboard Navigation | `58-Accessibility/002-Keyboard-Navigation.md` | ⬜ |
-| 58.3 | Screen Reader Support | `58-Accessibility/003-Screen-Reader-Support.md` | ⬜ |
-| 58.4 | Accessible Forms | `58-Accessibility/004-Accessible-Forms.md` | ⬜ |
-| 58.5 | Accessible Components | `58-Accessibility/005-Accessible-Components.md` | ⬜ |
-| 58.6 | Testing for Accessibility | `58-Accessibility/006-Testing-for-Accessibility.md` | ⬜ |
+| 58.1 | ARIA Fundamentals | `58-Accessibility/001-ARIA-Fundamentals.md` | ✅ |
+| 58.2 | Keyboard Navigation | `58-Accessibility/002-Keyboard-Navigation.md` | ✅ |
+| 58.3 | Screen Reader Support | `58-Accessibility/003-Screen-Reader-Support.md` | ✅ |
+| 58.4 | Accessible Forms | `58-Accessibility/004-Accessible-Forms.md` | ✅ |
+| 58.5 | Accessible Components | `58-Accessibility/005-Accessible-Components.md` | ✅ |
+| 58.6 | Testing for Accessibility | `58-Accessibility/006-Testing-for-Accessibility.md` | ✅ |
 
 **README coverage (§II.58):**
 - 58.1: ARIA roles/states/properties; semantic HTML; landmark roles
@@ -662,10 +662,9 @@ Status key: ✅ Done · ⬜ Pending
 | Metric | Value |
 |---|---|
 | Total groups | 58 |
-| Groups completed | 57 (Groups 01-57) |
-| Groups remaining | 1 (Group 58 — Accessibility) |
-| Total chapter files created | ~110 |
-| Next chapter | **58.1 ARIA Fundamentals** → `58-Accessibility/001-ARIA-Fundamentals.md` |
+| Groups completed | 58 ✅ |
+| Total chapter files | ~116 |
+| **Status** | **SECTION COMPLETE** |
 
 ---
 
