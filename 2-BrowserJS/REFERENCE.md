@@ -259,14 +259,14 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 7.1 | Canvas API | `07-Multimedia-APIs/001-Canvas-API.md` | ⬜ |
-| 7.2 | WebGL | `07-Multimedia-APIs/002-WebGL.md` | ⬜ |
-| 7.3 | Web Audio API | `07-Multimedia-APIs/003-Web-Audio-API.md` | ⬜ |
-| 7.4 | WebRTC | `07-Multimedia-APIs/004-WebRTC.md` | ⬜ |
-| 7.5 | Media Capture and Streams | `07-Multimedia-APIs/005-Media-Capture-and-Streams.md` | ⬜ |
-| 7.6 | MediaRecorder API | `07-Multimedia-APIs/006-MediaRecorder-API.md` | ⬜ |
-| 7.7 | HTMLMediaElement | `07-Multimedia-APIs/007-HTMLMediaElement.md` | ⬜ |
-| 7.8 | Picture-in-Picture API | `07-Multimedia-APIs/008-Picture-in-Picture-API.md` | ⬜ |
+| 7.1 | Canvas API | `07-Multimedia-APIs/001-Canvas-API.md` | ✅ |
+| 7.2 | WebGL | `07-Multimedia-APIs/002-WebGL.md` | ✅ |
+| 7.3 | Web Audio API | `07-Multimedia-APIs/003-Web-Audio-API.md` | ✅ |
+| 7.4 | WebRTC | `07-Multimedia-APIs/004-WebRTC.md` | ✅ |
+| 7.5 | Media Capture and Streams | `07-Multimedia-APIs/005-Media-Capture-and-Streams.md` | ✅ |
+| 7.6 | MediaRecorder API | `07-Multimedia-APIs/006-MediaRecorder-API.md` | ✅ |
+| 7.7 | HTMLMediaElement | `07-Multimedia-APIs/007-HTMLMediaElement.md` | ✅ |
+| 7.8 | Picture-in-Picture API | `07-Multimedia-APIs/008-Picture-in-Picture-API.md` | ✅ |
 
 **README coverage (§II.7):**
 - 7.1: 2D context; shapes/paths/arcs/curves; fillStyle/strokeStyle/gradients/patterns; text; images/pixels; transformations; compositing; `toDataURL`/`toBlob`; OffscreenCanvas
