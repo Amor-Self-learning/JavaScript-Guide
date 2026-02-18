@@ -469,7 +469,7 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 20.1 | Sharing Content | `20-Web-Share-API/001-Sharing-Content.md` | ⬜ |
+| 20.1 | Sharing Content | `20-Web-Share-API/001-Sharing-Content.md` | ✅ |
 
 **README coverage (§II.20):**
 - 20.1: `navigator.share`; share data (title/text/url/files); share target API
@@ -480,9 +480,9 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 21.1 | Selecting Contacts | `21-Contact-Picker-API/001-Selecting-Contacts.md` | ⬜ |
-| 22.1 | Preventing Sleep | `22-Screen-Wake-Lock-API/001-Preventing-Sleep.md` | ⬜ |
-| 23.1 | User Idle State | `23-Idle-Detection-API/001-User-Idle-State.md` | ⬜ |
+| 21.1 | Selecting Contacts | `21-Contact-Picker-API/001-Selecting-Contacts.md` | ✅ |
+| 22.1 | Preventing Sleep | `22-Screen-Wake-Lock-API/001-Preventing-Sleep.md` | ✅ |
+| 23.1 | User Idle State | `23-Idle-Detection-API/001-User-Idle-State.md` | ✅ |
 | 24.1 | Serial Port Access | `24-Web-Serial-API/001-Serial-Port-Access.md` | ⬜ |
 | 25.1 | USB Device Access | `25-Web-USB-API/001-USB-Device-Access.md` | ⬜ |
 | 26.1 | Bluetooth Device Access | `26-Web-Bluetooth-API/001-Bluetooth-Device-Access.md` | ⬜ |
