@@ -150,11 +150,11 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 2.1 | Window Object | `02-BOM/001-Window-Object.md` | ⬜ |
-| 2.2 | Location Object | `02-BOM/002-Location-Object.md` | ⬜ |
-| 2.3 | History Object | `02-BOM/003-History-Object.md` | ⬜ |
-| 2.4 | Navigator Object | `02-BOM/004-Navigator-Object.md` | ⬜ |
-| 2.5 | Screen Object | `02-BOM/005-Screen-Object.md` | ⬜ |
+| 2.1 | Window Object | `02-BOM/001-Window-Object.md` | ✅ |
+| 2.2 | Location Object | `02-BOM/002-Location-Object.md` | ✅ |
+| 2.3 | History Object | `02-BOM/003-History-Object.md` | ✅ |
+| 2.4 | Navigator Object | `02-BOM/004-Navigator-Object.md` | ✅ |
+| 2.5 | Screen Object | `02-BOM/005-Screen-Object.md` | ✅ |
 
 **README coverage (§II.2):**
 - 2.1: Global object, `innerWidth`/`innerHeight`, `outerWidth`/`outerHeight`, `scrollX`/`scrollY`, `pageXOffset`/`pageYOffset`, `open`/`close`, `moveTo`/`resizeTo`, `scrollTo`/`scrollBy`, `print`, `focus`/`blur`, `getSelection`, `matchMedia`
