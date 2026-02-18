@@ -4,14 +4,6 @@
 
 # JavaScript Deep Dive: Memory Management
 
-## Table of Contents
-
-- [17.1 Garbage Collection](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#171-garbage-collection)
-- [17.2 WeakRef](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#172-weakref)
-- [17.3 FinalizationRegistry](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#173-finalizationregistry)
-- [17.4 Memory Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#174-memory-optimization)
-
----
 
 ## 17.1 Garbage Collection
 

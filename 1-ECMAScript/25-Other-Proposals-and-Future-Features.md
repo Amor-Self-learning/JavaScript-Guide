@@ -4,20 +4,6 @@
 
 # Future Features & Proposals
 
-## Table of Contents
-
-- [25.1 Pattern Matching (Stage 1)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#251-pattern-matching-stage-1)
-    - [Match Expression](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#match-expression)
-    - [Pattern Syntax](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#pattern-syntax)
-- [25.2 Records and Tuples (Stage 2)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#252-records-and-tuples-stage-2)
-    - [Immutable Data Structures](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#immutable-data-structures)
-    - [Deep Equality](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#deep-equality)
-- [25.3 Pipeline Operator (Stage 2)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#253-pipeline-operator-stage-2)
-    - [Function Chaining with `|>`](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#function-chaining-with-)
-- [25.4 Throw Expressions (Stage 2)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#254-throw-expressions-stage-2)
-    - [`throw` as Expression](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#throw-as-expression)
-
----
 
 **Note:** These are proposals in various stages of the TC39 process. Syntax and behavior may change before final standardization. Use Babel or TypeScript to experiment with these features.
 

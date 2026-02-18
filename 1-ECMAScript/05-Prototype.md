@@ -6,6 +6,19 @@ JavaScript uses prototypal inheritance—objects inherit directly from other obj
 
 ## 5.1 Prototype Chain
 
+### Why Prototypes Matter
+
+JavaScript doesn't have classical inheritance like Java or C++. Instead, it uses **prototypal inheritance** — objects inherit directly from other objects. This matters because:
+
+- **Memory efficiency** — Methods defined on prototypes are shared, not copied to each instance
+- **Dynamic inheritance** — You can modify prototypes at runtime and all instances see the changes
+- **Flexible object composition** — Objects can inherit from any object, not just classes
+- **Foundation of classes** — ES6 `class` is syntactic sugar over prototypes
+
+Understanding prototypes is essential because even if you use `class` syntax, you're still using prototypes under the hood.
+
+### The Chain Explained
+
 The prototype chain is JavaScript's fundamental mechanism for inheritance. Every object in JavaScript has an internal link to another object called its prototype. This creates a chain of objects that JavaScript traverses when looking for properties.
 
 ### `__proto__` vs `prototype`

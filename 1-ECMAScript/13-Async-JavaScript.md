@@ -1,30 +1,28 @@
 # 13 Asynchronous JavaScript
 
-JavaScript is single-threaded but handles async operations via the event loop. This chapter covers the event loop, callbacks, promises, and async/await patterns.
+### Why Async Matters
+
+JavaScript runs on a **single thread** — it can only do one thing at a time. Without async patterns, any slow operation (network requests, file reads, timers) would freeze the entire program.
+
+Async JavaScript solves this through:
+
+- **Event Loop** — Orchestrates non-blocking execution
+- **Callbacks** — Functions called when operations complete
+- **Promises** — Objects representing future values
+- **async/await** — Clean syntax for promise-based code
+
+Understanding async is essential because:
+- Nearly all real-world JS involves async (APIs, user events, timers)
+- Async bugs are hard to debug without understanding the event loop
+- Performance depends on proper async patterns (parallel vs sequential)
 
 ---
 
-# Event Loop
+## 13.1 Event Loop
 
-## Table of Contents
-1. [Introduction to the Event Loop](#introduction-to-the-event-loop)
-2. [Call Stack](#call-stack)
-3. [Task Queue (Macrotasks)](#task-queue-macrotasks)
-4. [Microtask Queue](#microtask-queue)
-5. [Event Loop Phases](#event-loop-phases)
-6. [setTimeout and setInterval Timing](#settimeout-and-setinterval-timing)
-7. [queueMicrotask()](#queuemicrotask)
-8. [Execution Order](#execution-order)
-9. [Visual Mental Models](#visual-mental-models)
-10. [Common Pitfalls](#common-pitfalls)
-11. [Summary](#summary)
+The event loop is JavaScript's mechanism for handling async operations while remaining single-threaded.
 
----
-
-
-## Call Stack
-
-### What is the Call Stack?
+### Call Stack
 
 The **Call Stack** is a data structure that tracks function calls and their execution context.
 
@@ -776,19 +774,8 @@ console.log('4');                    // Sync: 4
 - Learn how Promises handle the event loop
 - Master async/await patterns
 - Apply async patterns to real-world scenarios
-# Callbacks 
+## Callbacks 
 
-## Table of Contents
-1. [Introduction to Callbacks](#introduction-to-callbacks)
-2. [Callback Pattern](#callback-pattern)
-3. [Error-First Callbacks](#error-first-callbacks)
-4. [Callback Hell](#callback-hell)
-5. [Inversion of Control](#inversion-of-control)
-6. [Advanced Callback Patterns](#advanced-callback-patterns)
-7. [Best Practices](#best-practices)
-8. [Summary](#summary)
-
----
 
 
 ## Callback Pattern
@@ -1437,26 +1424,8 @@ try {
 - Learn async/await syntax
 - Understand async patterns and antipatterns
 - Apply to real-world projects
-# Promises 
+## Promises 
 
-## Table of Contents
-1. [Introduction to Promises](#introduction-to-promises)
-2. [Promise States](#promise-states)
-3. [Creating Promises](#creating-promises)
-4. [then(), catch(), finally()](#then-catch-finally)
-5. [Promise Chaining](#promise-chaining)
-6. [Error Propagation](#error-propagation)
-7. [Promise.resolve() and Promise.reject()](#promiseresolve-and-promisereject)
-8. [Promise.all()](#promiseall)
-9. [Promise.race()](#promiserace)
-10. [Promise.allSettled()](#promiseallsettled)
-11. [Promise.any()](#promiseany)
-12. [Promise.try() (Proposal)](#promisetry-proposal)
-13. [Practical Examples](#practical-examples)
-14. [Best Practices](#best-practices)
-15. [Summary](#summary)
-
----
 
 
 ## Promise States
@@ -2353,22 +2322,8 @@ Promise.any([p1, p2, p3])
 - Learn async patterns and best practices
 - Understand concurrency patterns
 - Apply to real-world scenarios
-# Async/Await 
+## Async/Await 
 
-## Table of Contents
-1. [Introduction to Async/Await](#introduction-to-asyncawait)
-2. [async Functions](#async-functions)
-3. [await Expression](#await-expression)
-4. [Error Handling with try/catch](#error-handling-with-trycatch)
-5. [Parallel Execution](#parallel-execution)
-6. [Sequential vs Concurrent Patterns](#sequential-vs-concurrent-patterns)
-7. [Top-Level await](#top-level-await)
-8. [Async Function Return Values](#async-function-return-values)
-9. [Common Patterns](#common-patterns)
-10. [Best Practices](#best-practices)
-11. [Summary](#summary)
-
----
 
 
 ## async Functions
@@ -3157,23 +3112,8 @@ try {
 - Learn concurrent patterns
 - Understand error handling strategies
 - Apply to production code
-# Async Patterns
+## Async Patterns
 
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Promisification](#promisification)
-3. [Throttling](#throttling)
-4. [Debouncing](#debouncing)
-5. [Retry Logic](#retry-logic)
-6. [Timeout Patterns](#timeout-patterns)
-7. [Concurrency Control](#concurrency-control)
-8. [Queue Management](#queue-management)
-9. [Race Conditions and Solutions](#race-conditions-and-solutions)
-10. [Advanced Patterns](#advanced-patterns)
-11. [Best Practices](#best-practices)
-12. [Summary](#summary)
-
----
 
 
 ## Promisification

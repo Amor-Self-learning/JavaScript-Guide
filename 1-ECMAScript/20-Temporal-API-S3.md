@@ -4,18 +4,6 @@
 
 # Temporal API (Stage 3)
 
-## Table of Contents
-
-- [20.1 Temporal.Instant](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#201-temporalinstant)
-- [20.2 Temporal.ZonedDateTime](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#202-temporalzoneddatetime)
-- [20.3 Temporal.PlainDate](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#203-temporalplaindate)
-- [20.4 Temporal.PlainTime](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#204-temporalplaintime)
-- [20.5 Temporal.PlainDateTime](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#205-temporalplaindatetime)
-- [20.6 Temporal.Duration](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#206-temporalduration)
-- [20.7 Temporal.Calendar](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#207-temporalcalendar)
-- [20.8 Temporal.TimeZone](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#208-temporaltimezone)
-
----
 
 **Note:** The Temporal API is currently a Stage 3 proposal. This document describes the proposed API which may change before final standardization. You may need a polyfill to use Temporal in current environments.
 

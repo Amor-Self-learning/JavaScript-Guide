@@ -3055,7 +3055,30 @@ console.log(doubled);
 
 ## 4.4 Destructuring
 
-Destructuring is a JavaScript expression that allows you to extract values from arrays or properties from objects into distinct variables. It provides a concise and readable way to unpack values.
+### Why Destructuring Changes How You Write JavaScript
+
+Destructuring is a JavaScript expression that allows you to extract values from arrays or properties from objects into distinct variables. It's not just syntactic sugar—it fundamentally improves code clarity:
+
+```javascript
+// ❌ Before: Verbose and repetitive
+function processUser(user) {
+  const name = user.name;
+  const email = user.email;
+  const role = user.role;
+  // ...
+}
+
+// ✅ After: Clean and declarative
+function processUser({ name, email, role }) {
+  // Variables ready to use immediately
+}
+```
+
+**Destructuring shines in:**
+- **Function parameters** — Extract just what you need, with defaults
+- **API responses** — Pull out nested data cleanly
+- **React/Vue** — Props and state management
+- **Import statements** — `import { useState } from 'react'`
 
 ### Object Destructuring
 
@@ -3926,7 +3949,30 @@ console.log(deepCopy.array); // [1, 2, 3, 4]
 
 ## 4.6 `this` Keyword
 
-The `this` keyword in JavaScript refers to the object that is currently executing the code. Its value depends on how and where a function is called.
+### Why `this` Is Confusing (And Why It Matters)
+
+The `this` keyword is one of JavaScript's most misunderstood features. Unlike most languages where `this` always refers to the current object instance, **JavaScript's `this` is determined at call time, not definition time.**
+
+This matters because:
+
+- **Method borrowing** — You can use one object's method on another object
+- **Event handlers** — `this` inside handlers refers to the element, not your object
+- **Callbacks** — `this` often gets "lost" when passing methods as callbacks
+- **Arrow functions** — They inherit `this` from their enclosing scope, changing the rules
+
+Understanding `this` prevents bugs like "Cannot read property of undefined" when `this` isn't what you expect.
+
+### The Core Rule
+
+The `this` keyword in JavaScript refers to the object that is currently executing the code. **Its value depends on how a function is called, not where it's defined.**
+
+| Call Style | `this` Value |
+|------------|--------------|
+| `obj.method()` | `obj` |
+| `func()` | `globalThis` (sloppy) / `undefined` (strict) |
+| `new Func()` | The new instance |
+| `func.call(obj)` | `obj` |
+| `() => {}` | Inherited from enclosing scope |
 
 ### Global Context
 

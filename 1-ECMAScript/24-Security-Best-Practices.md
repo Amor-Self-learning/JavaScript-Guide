@@ -6,23 +6,6 @@ Security is critical for web applications. This chapter covers common vulnerabil
 
 # JavaScript Deep Dive: Security
 
-## Table of Contents
-
-- [24.1 Common Vulnerabilities](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#241-common-vulnerabilities)
-    - [Cross-Site Scripting (XSS)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#cross-site-scripting-xss)
-    - [Cross-Site Request Forgery (CSRF)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#cross-site-request-forgery-csrf)
-    - [Injection Attacks](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#injection-attacks)
-    - [Prototype Pollution](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#prototype-pollution)
-    - [Insecure Dependencies](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#insecure-dependencies)
-- [24.2 Secure Coding Practices](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#242-secure-coding-practices)
-    - [Input Validation and Sanitization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#input-validation-and-sanitization)
-    - [Output Encoding](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#output-encoding)
-    - [Content Security Policy (CSP)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#content-security-policy-csp)
-    - [Subresource Integrity (SRI)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#subresource-integrity-sri)
-    - [HTTPS Enforcement](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#https-enforcement)
-    - [Secure Cookie Practices](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#secure-cookie-practices)
-
----
 
 ## 24.1 Common Vulnerabilities
 
@@ -1447,21 +1430,6 @@ Security requires defense in depth: multiple layers of protection working togeth
 - Security Headers
 # Authentication & Data Protection
 
-## Table of Contents
-
-- [24.3 Authentication & Authorization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#243-authentication--authorization)
-    - [Token-based Authentication (JWT)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#token-based-authentication-jwt)
-    - [OAuth 2.0 / OpenID Connect](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#oauth-20--openid-connect)
-    - [Session Management](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#session-management)
-    - [Password Hashing (bcrypt)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#password-hashing-bcrypt)
-    - [Multi-factor Authentication](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#multi-factor-authentication)
-- [24.4 Data Protection](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#244-data-protection)
-    - [Encryption in Transit and at Rest](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#encryption-in-transit-and-at-rest)
-    - [Secure Storage Practices](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#secure-storage-practices)
-    - [Privacy Considerations](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#privacy-considerations)
-    - [GDPR Compliance Basics](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#gdpr-compliance-basics)
-
----
 
 ## 24.3 Authentication & Authorization
 

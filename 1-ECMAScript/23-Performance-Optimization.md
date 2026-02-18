@@ -6,16 +6,6 @@ Performance matters for user experience. This chapter covers JavaScript optimiza
 
 # Table of Contents
 
-- [23.1 JavaScript Engine Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#231-javascript-engine-optimization)
-    - [V8 Optimization Tips](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#v8-optimization-tips)
-    - [JIT Compilation](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#jit-compilation)
-    - [Hidden Classes and Inline Caching](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#hidden-classes-and-inline-caching)
-    - [Deoptimization Triggers](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#deoptimization-triggers)
-- [23.2 Algorithm Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#232-algorithm-optimization)
-    - [Time Complexity (Big O)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#time-complexity-big-o)
-    - [Space Complexity](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#space-complexity)
-    - [Common Algorithm Patterns](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#common-algorithm-patterns)
-    - [Choosing Appropriate Data Structures](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#choosing-appropriate-data-structures)
 
 ---
 
@@ -1639,21 +1629,6 @@ Understanding these concepts helps write performant JavaScript code.
 - Code Splitting
 # Code & Memory
 
-## Table of Contents
-
-- [23.3 Code-Level Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#233-code-level-optimization)
-    - [Loop Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#loop-optimization)
-    - [Function Call Overhead](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#function-call-overhead)
-    - [Variable Scope Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#variable-scope-optimization)
-    - [Avoiding Unnecessary Work](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#avoiding-unnecessary-work)
-    - [Lazy Evaluation](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#lazy-evaluation)
-- [23.4 Memory Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#234-memory-optimization)
-    - [Reducing Memory Allocations](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#reducing-memory-allocations)
-    - [Object Pooling](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#object-pooling)
-    - [WeakMap/WeakSet Usage](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#weakmapweakset-usage)
-    - [Avoiding Memory Leaks](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#avoiding-memory-leaks)
-
----
 
 ## 23.3 Code-Level Optimization
 
@@ -3214,21 +3189,6 @@ These optimizations help create faster, more memory-efficient JavaScript applica
 - Performance Monitoring
 # Rendering & Bundle
 
-## Table of Contents
-
-- [23.5 Rendering Performance](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#235-rendering-performance)
-    - [Reflow and Repaint](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#reflow-and-repaint)
-    - [Layout Thrashing](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#layout-thrashing)
-    - [requestAnimationFrame](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#requestanimationframe)
-    - [Virtual Scrolling](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#virtual-scrolling)
-    - [Debouncing and Throttling](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#debouncing-and-throttling)
-- [23.6 Bundle Optimization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#236-bundle-optimization)
-    - [Code Splitting](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#code-splitting)
-    - [Tree Shaking](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#tree-shaking)
-    - [Minification](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#minification)
-    - [Compression](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#compression)
-
----
 
 ## 23.5 Rendering Performance
 

@@ -4,12 +4,6 @@
 
 # Proxy and Reflection
 
-## Table of Contents
-
-- [15.1 Proxy](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#151-proxy)
-- [15.2 Reflect](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#152-reflect)
-
----
 
 ## 15.1 Proxy
 

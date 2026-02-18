@@ -6,16 +6,6 @@ Design patterns are reusable solutions to common programming problems. This chap
 
 # Creational Patterns
 
-## Table of Contents
-
-- [Factory Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#factory-pattern)
-- [Constructor Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#constructor-pattern)
-- [Singleton Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#singleton-pattern)
-- [Prototype Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#prototype-pattern)
-- [Builder Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#builder-pattern)
-- [Module Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#module-pattern)
-
----
 
 ## Creational Patterns
 
@@ -1325,17 +1315,6 @@ These patterns provide reusable solutions for object creation in JavaScript appl
 - Dependency Injection
 # Structural Patterns
 
-## Table of Contents
-
-- [Decorator Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#decorator-pattern)
-- [Facade Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#facade-pattern)
-- [Flyweight Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#flyweight-pattern)
-- [Adapter Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#adapter-pattern)
-- [Proxy Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#proxy-pattern)
-- [Composite Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#composite-pattern)
-- [Bridge Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#bridge-pattern)
-
----
 
 ## Structural Patterns
 
@@ -3138,20 +3117,6 @@ These patterns help organize object relationships and create flexible, maintaina
 - Object Composition
 # Design Patterns - Behavioral Patterns
 
-## Table of Contents
-
-- [Observer Pattern (Pub/Sub)](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#observer-pattern-pubsub)
-- [Iterator Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#iterator-pattern)
-- [Strategy Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#strategy-pattern)
-- [Command Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#command-pattern)
-- [Chain of Responsibility](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#chain-of-responsibility)
-- [State Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#state-pattern)
-- [Template Method Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#template-method-pattern)
-- [Mediator Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#mediator-pattern)
-- [Memento Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#memento-pattern)
-- [Visitor Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#visitor-pattern)
-
----
 
 ## Behavioral Patterns
 
@@ -5545,16 +5510,6 @@ These patterns help manage complex behaviors and communication between objects.
 - State Machines
 # Functional Patterns
 
-## Table of Contents
-
-- [Function Composition](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#function-composition)
-- [Higher-Order Functions](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#higher-order-functions)
-- [Currying and Partial Application](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#currying-and-partial-application)
-- [Memoization](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#memoization)
-- [Pure Functions](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#pure-functions)
-- [Immutability Patterns](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#immutability-patterns)
-
----
 
 ## Functional Patterns
 
@@ -6802,14 +6757,6 @@ These patterns promote predictable, testable, and maintainable code through func
 - Monads and Functors
 # Async Patterns
 
-## Table of Contents
-
-- [Promise Patterns](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#promise-patterns)
-- [Async/Await Patterns](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#asyncawait-patterns)
-- [Observable Pattern](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#observable-pattern)
-- [Reactive Programming Concepts](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#reactive-programming-concepts)
-
----
 
 ## Async Patterns
 

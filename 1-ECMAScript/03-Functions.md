@@ -2279,9 +2279,21 @@ for (var i = 0; i < 3; i++) {
 
 ### 3.5.4 Closure Mechanism
 
+### Why Closures Matter
+
+Closures are one of JavaScript's most powerful features. They enable:
+
+- **Data privacy** — Variables hidden from outside access
+- **State persistence** — Functions that "remember" values between calls
+- **Factory functions** — Creating customized functions dynamically
+- **Callbacks** — Event handlers that access outer variables
+- **Module pattern** — Encapsulation before ES6 modules existed
+
+Without closures, JavaScript would lack fundamental patterns like private variables, memoization, and partial application.
+
 ### Definition
 
-A **closure** is a function that retains access to its lexical scope even when the function is executed outside that scope.
+A **closure** is a function that retains access to its lexical scope even when the function is executed outside that scope. In simpler terms: **a function "remembers" the variables from where it was created, not where it's called.**
 
 ```javascript
 function outer() {

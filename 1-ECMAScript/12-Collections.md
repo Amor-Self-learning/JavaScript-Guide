@@ -4,23 +4,8 @@ ES6 introduced `Map`, `Set`, `WeakMap`, and `WeakSet`—specialized collections 
 
 ---
 
-# Maps and WeakMaps
+## Maps and WeakMaps
 
-## Table of Contents
-1. [Introduction to Maps](#introduction-to-maps)
-2. [Creating Maps](#creating-maps)
-3. [Map Methods: set(), get(), has(), delete(), clear()](#map-methods)
-4. [Map Size and Properties](#map-size-and-properties)
-5. [Iterating Maps](#iterating-maps)
-6. [Maps vs Objects](#maps-vs-objects)
-7. [Practical Map Examples](#practical-map-examples)
-8. [WeakMap: Weak References](#weakmap-weak-references)
-9. [WeakMap Methods and Behavior](#weakmap-methods-and-behavior)
-10. [WeakMap Use Cases](#weakmap-use-cases)
-11. [Best Practices](#best-practices)
-12. [Summary](#summary)
-
----
 
 
 ## Creating Maps
@@ -1113,24 +1098,8 @@ wm.set({}, 'metadata');
 - **Module 12.4** - Explore WeakSets for object tagging
 - Combine Maps/WeakMaps with other data structures
 - Use in real applications for caching and state management
-# Sets and WeakSets
+## Sets and WeakSets
 
-## Table of Contents
-1. [Introduction to Sets](#introduction-to-sets)
-2. [Creating Sets](#creating-sets)
-3. [Set Methods: add(), has(), delete(), clear()](#set-methods)
-4. [Set Size and Properties](#set-size-and-properties)
-5. [Iterating Sets](#iterating-sets)
-6. [Set Operations](#set-operations)
-7. [Sets vs Arrays](#sets-vs-arrays)
-8. [Practical Set Examples](#practical-set-examples)
-9. [WeakSet: Weak References](#weakset-weak-references)
-10. [WeakSet Methods and Behavior](#weakset-methods-and-behavior)
-11. [WeakSet Use Cases](#weakset-use-cases)
-12. [Best Practices](#best-practices)
-13. [Summary](#summary)
-
----
 
 
 ## Creating Sets

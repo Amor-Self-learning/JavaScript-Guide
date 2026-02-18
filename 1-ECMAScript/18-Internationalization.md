@@ -4,18 +4,6 @@
 
 # Internationalization (Intl)
 
-## Table of Contents
-
-- [18.1 Intl.DateTimeFormat](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#181-intldatetimeformat)
-- [18.2 Intl.NumberFormat](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#182-intlnumberformat)
-- [18.3 Intl.Collator](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#183-intlcollator)
-- [18.4 Intl.PluralRules](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#184-intlpluralrules)
-- [18.5 Intl.RelativeTimeFormat](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#185-intlrelativetimeformat)
-- [18.6 Intl.ListFormat](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#186-intllistformat)
-- [18.7 Intl.Locale](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#187-intllocale)
-- [18.8 Intl.Segmenter](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#188-intlsegmenter)
-
----
 
 ## 18.1 Intl.DateTimeFormat
 

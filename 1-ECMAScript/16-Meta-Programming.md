@@ -4,13 +4,6 @@
 
 # Meta-programming
 
-## Table of Contents
-
-- [16.1 Property Descriptors](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#161-property-descriptors)
-- [16.2 Object Introspection](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#162-object-introspection)
-- [16.3 Function Introspection](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#163-function-introspection)
-
----
 
 ## 16.1 Property Descriptors
 

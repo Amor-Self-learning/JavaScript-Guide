@@ -6,21 +6,6 @@ Modules organize code into reusable units. ES modules (`import`/`export`) are th
 
 # ES Modules (ESM) 
 
-## Table of Contents
-1. [Introduction to ES Modules](#introduction-to-es-modules)
-2. [import Statement](#import-statement)
-3. [export Statement](#export-statement)
-4. [Default Exports vs Named Exports](#default-exports-vs-named-exports)
-5. [Re-exporting](#re-exporting)
-6. [Dynamic Imports](#dynamic-imports)
-7. [import.meta](#importmeta)
-8. [Module Scope](#module-scope)
-9. [Top-Level await](#top-level-await)
-10. [Practical Examples](#practical-examples)
-11. [Best Practices](#best-practices)
-12. [Summary](#summary)
-
----
 
 
 ## import Statement
@@ -742,20 +727,8 @@ export * from './utils.js';
 - Master module patterns
 - Understand ESM vs CommonJS interop
 - Build modular applications
-# CommonJS (Node.js) 
+## CommonJS (Node.js) 
 
-## Table of Contents
-1. [Introduction to CommonJS](#introduction-to-commonjs)
-2. [require() Function](#require-function)
-3. [module.exports and exports](#moduleexports-and-exports)
-4. [Module Caching](#module-caching)
-5. [Circular Dependencies](#circular-dependencies)
-6. [ESM vs CommonJS](#esm-vs-commonjs)
-7. [ESM/CommonJS Interoperability](#esmcommonjs-interoperability)
-8. [Best Practices](#best-practices)
-9. [Summary](#summary)
-
----
 
 
 ## require() Function
@@ -1307,20 +1280,8 @@ const express = require('express');
 - Master both CommonJS and ESM
 - Understand module loading strategies
 - Build modular applications
-# Module Patterns 
+## Module Patterns 
 
-## Table of Contents
-1. [Introduction to Module Patterns](#introduction-to-module-patterns)
-2. [Module Pattern (IIFE)](#module-pattern-iife)
-3. [Revealing Module Pattern](#revealing-module-pattern)
-4. [Singleton Pattern](#singleton-pattern)
-5. [Namespace Pattern](#namespace-pattern)
-6. [Comparison of Patterns](#comparison-of-patterns)
-7. [Modern Approach](#modern-approach)
-8. [Best Practices](#best-practices)
-9. [Summary](#summary)
-
----
 
 
 ## Module Pattern (IIFE)

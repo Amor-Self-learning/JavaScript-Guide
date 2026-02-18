@@ -6069,7 +6069,24 @@ console.log(obj instanceof MyClass);  // true (custom logic!)
 
 ### 1.4.3 Type Coercion (Implicit Conversion)
 
-Type coercion is **automatic type conversion** performed by JavaScript.
+### Why Coercion Causes Bugs
+
+Type coercion is **automatic type conversion** performed by JavaScript. It's the source of infamous quirks like:
+
+```javascript
+[] + []      // "" (empty string!)
+[] + {}      // "[object Object]"
+{} + []      // 0 (or "[object Object]" depending on context)
+"5" - 3      // 2 (number)
+"5" + 3      // "53" (string!)
+```
+
+Understanding coercion rules prevents:
+- Unexpected string concatenation instead of addition
+- Silent NaN bugs from invalid conversions
+- Confusing truthy/falsy behavior in conditionals
+
+**The golden rule:** When in doubt, convert explicitly with `Number()`, `String()`, or `Boolean()`.
 
 ---
 

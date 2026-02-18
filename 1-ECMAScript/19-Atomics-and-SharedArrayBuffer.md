@@ -4,12 +4,6 @@
 
 # JavaScript Deep Dive: Atomics and SharedArrayBuffer
 
-## Table of Contents
-
-- [19.1 SharedArrayBuffer](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#191-sharedarraybuffer)
-- [19.2 Atomics](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#192-atomics)
-
----
 
 ## 19.1 SharedArrayBuffer
 

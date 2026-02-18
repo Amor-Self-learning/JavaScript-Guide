@@ -4,19 +4,8 @@ The iteration protocol defines how objects produce sequences of values. Generato
 
 ---
 
-# Iteration Protocols
+## Iteration Protocols
 
-## Table of Contents
-1. [The Iterable Protocol](#the-iterable-protocol)
-2. [The Iterator Protocol](#the-iterator-protocol)
-3. [Symbol.iterator](#symboliterator)
-4. [Making Objects Iterable](#making-objects-iterable)
-5. [Practical Examples](#practical-examples)
-6. [Common Patterns](#common-patterns)
-7. [Best Practices](#best-practices)
-8. [Summary](#summary)
-
----
 
 ## The Iterable Protocol
 
@@ -868,18 +857,9 @@ class Multi {
 - **Module 11.2** - Learn about built-in iterables (Array, String, Map, Set)
 - **Module 11.3** - Use generators to simplify iterator creation
 - **Module 11.4** - Async iterators for asynchronous operations
-# Generators, Built-in Iterables & Async Iterators
+## Generators, Built-in Iterables & Async Iterators
 ## Part 1: Built-in Iterables (Module 11.2)
 
-### Table of Contents - Part 1
-1. [Built-in Iterables Overview](#built-in-iterables-overview)
-2. [Arrays](#arrays)
-3. [Strings](#strings)
-4. [Maps and Sets](#maps-and-sets)
-5. [TypedArrays](#typedarrays)
-6. [DOM NodeLists](#dom-nodelists)
-
----
 
 ## Built-in Iterables Overview
 
@@ -1260,16 +1240,6 @@ for (const element of liveCollection) {
 
 ## Part 2: Generator Functions (Module 11.3)
 
-### Table of Contents - Part 2
-1. [Generator Function Basics](#generator-function-basics)
-2. [The yield Mechanism](#the-yield-mechanism)
-3. [Generator Delegation (yield*)](#generator-delegation-yield)
-4. [Passing Values to Generators](#passing-values-to-generators)
-5. [Error Handling in Generators](#error-handling-in-generators)
-6. [Infinite Sequences](#infinite-sequences)
-7. [Practical Generator Examples](#practical-generator-examples)
-
----
 
 ## Generator Function Basics
 
@@ -1825,16 +1795,6 @@ console.log(result);  // [6, 8, 10]
 
 ## Part 3: Async Iterators (Module 11.4)
 
-### Table of Contents - Part 3
-1. [Async Iterable Protocol](#async-iterable-protocol)
-2. [Symbol.asyncIterator](#symbolasynciterator)
-3. [for await...of Loops](#for-awaitof-loops)
-4. [Async Generators](#async-generators)
-5. [Streaming Data](#streaming-data)
-6. [Pagination with Async](#pagination-with-async)
-7. [Error Handling](#error-handling)
-
----
 
 ## Async Iterable Protocol
 

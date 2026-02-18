@@ -4,15 +4,6 @@
 
 # Decorators (Stage 3)
 
-## Table of Contents
-
-- [21.1 Class Decorators](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#211-class-decorators)
-- [21.2 Method Decorators](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#212-method-decorators)
-- [21.3 Accessor Decorators](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#213-accessor-decorators)
-- [21.4 Field Decorators](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#214-field-decorators)
-- [21.5 Auto-accessor Decorators](https://claude.ai/chat/05dbd0b9-25d5-4da3-9c76-0a6472c2db52#215-auto-accessor-decorators)
-
----
 
 **Note:** Decorators are currently a Stage 3 proposal. This document describes the proposed API which may change before final standardization. You'll need TypeScript or Babel to use decorators in current environments.
 
