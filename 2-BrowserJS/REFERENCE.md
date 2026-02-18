@@ -346,12 +346,12 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 12.1 | Geolocation API | `12-Device-APIs/001-Geolocation-API.md` | ⬜ |
-| 12.2 | Device Orientation and Motion | `12-Device-APIs/002-Device-Orientation-and-Motion.md` | ⬜ |
-| 12.3 | Battery Status API | `12-Device-APIs/003-Battery-Status-API.md` | ⬜ |
-| 12.4 | Vibration API | `12-Device-APIs/004-Vibration-API.md` | ⬜ |
-| 12.5 | Ambient Light API | `12-Device-APIs/005-Ambient-Light-API.md` | ⬜ |
-| 12.6 | Proximity API | `12-Device-APIs/006-Proximity-API.md` | ⬜ |
+| 12.1 | Geolocation API | `12-Device-APIs/001-Geolocation-API.md` | ✅ |
+| 12.2 | Device Orientation and Motion | `12-Device-APIs/002-Device-Orientation-and-Motion.md` | ✅ |
+| 12.3 | Battery Status API | `12-Device-APIs/003-Battery-Status-API.md` | ✅ |
+| 12.4 | Vibration API | `12-Device-APIs/004-Vibration-API.md` | ✅ |
+| 12.5 | Ambient Light API | `12-Device-APIs/005-Ambient-Light-API.md` | ✅ |
+| 12.6 | Proximity API | `12-Device-APIs/006-Proximity-API.md` | ✅ |
 
 **README coverage (§II.12):**
 - 12.1: `getCurrentPosition`; `watchPosition`/`clearWatch`; Position object; options (enableHighAccuracy/timeout/maximumAge); error handling
