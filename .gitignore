@@ -1,1 +1,6 @@
-.obsidian
+# Old/archived data
+oldData/
+
+# IDE and editor folders
+.obsidian/
+.github/
