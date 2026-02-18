@@ -729,6 +729,356 @@ setTimeout(() => {
 
 ---
 
+## Node.js Event Loop Phases (Deep Dive)
+
+The Node.js event loop is more complex than the browser's, with **6 distinct phases**:
+
+### The Six Phases
+
+```
+   ┌───────────────────────────┐
+┌─►│         timers            │  ← setTimeout, setInterval callbacks
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │     pending callbacks     │  ← I/O callbacks deferred from previous loop
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │       idle, prepare       │  ← Internal use only
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │           poll            │  ← Retrieve new I/O events; execute I/O callbacks
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │          check            │  ← setImmediate callbacks
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+└──┤      close callbacks      │  ← socket.on('close'), etc.
+   └───────────────────────────┘
+```
+
+### Phase Details
+
+```javascript
+// ✅ Phase 1: TIMERS
+// Executes callbacks scheduled by setTimeout() and setInterval()
+setTimeout(() => console.log('Timer phase'), 0);
+
+// ✅ Phase 2: PENDING CALLBACKS
+// Executes I/O callbacks deferred to the next loop iteration
+// (system operations like TCP errors)
+
+// ✅ Phase 3: IDLE, PREPARE
+// Internal to Node.js - you can't interact with this phase
+
+// ✅ Phase 4: POLL
+// Retrieves new I/O events and executes their callbacks
+// Most I/O work happens here (file reads, network requests)
+const fs = require('fs');
+fs.readFile('file.txt', (err, data) => {
+  console.log('Poll phase - file read complete');
+});
+
+// ✅ Phase 5: CHECK
+// setImmediate() callbacks execute here
+setImmediate(() => console.log('Check phase'));
+
+// ✅ Phase 6: CLOSE CALLBACKS
+// Close event callbacks (socket.on('close'))
+```
+
+### setImmediate vs setTimeout(0)
+
+```javascript
+// ⚠️ Order is NOT guaranteed in main module
+setTimeout(() => console.log('timeout'), 0);
+setImmediate(() => console.log('immediate'));
+
+// Could output: timeout, immediate
+// OR:           immediate, timeout
+// (depends on system performance/timing)
+
+// ✅ Inside I/O callback, setImmediate ALWAYS runs first
+const fs = require('fs');
+fs.readFile(__filename, () => {
+  setTimeout(() => console.log('timeout'), 0);
+  setImmediate(() => console.log('immediate'));
+});
+
+// ALWAYS outputs:
+// immediate
+// timeout
+// (because we're in poll phase, check phase comes next)
+```
+
+### process.nextTick vs setImmediate
+
+```javascript
+// ✅ process.nextTick runs BEFORE any event loop phase
+// ✅ setImmediate runs in the check phase
+
+console.log('1. Sync');
+
+setImmediate(() => console.log('2. setImmediate'));
+
+process.nextTick(() => console.log('3. process.nextTick'));
+
+Promise.resolve().then(() => console.log('4. Promise'));
+
+console.log('5. Sync end');
+
+// Output:
+// 1. Sync
+// 5. Sync end
+// 3. process.nextTick   ← runs before promises!
+// 4. Promise
+// 2. setImmediate
+```
+
+### Node.js Microtask Priority
+
+```javascript
+// Node.js has TWO microtask queues:
+// 1. process.nextTick queue (higher priority)
+// 2. Promise queue (lower priority)
+
+Promise.resolve().then(() => console.log('1. Promise 1'));
+process.nextTick(() => console.log('2. nextTick 1'));
+Promise.resolve().then(() => console.log('3. Promise 2'));
+process.nextTick(() => console.log('4. nextTick 2'));
+
+// Output:
+// 2. nextTick 1
+// 4. nextTick 2
+// 1. Promise 1
+// 3. Promise 2
+
+// ALL nextTicks run before ANY Promises!
+```
+
+### Danger: nextTick Starvation
+
+```javascript
+// ❌ DANGER: Recursive nextTick blocks the event loop
+function recursiveNextTick() {
+  process.nextTick(recursiveNextTick);
+}
+// recursiveNextTick();  // This would starve I/O!
+
+// ✅ Use setImmediate for recursive async work
+function recursiveImmediate() {
+  setImmediate(recursiveImmediate);
+}
+// This allows I/O to process between iterations
+```
+
+---
+
+## queueMicrotask vs Promise.then
+
+### The Difference
+
+```javascript
+// Both create microtasks, but Promise.then has more overhead
+
+// ✅ queueMicrotask: Direct microtask scheduling
+queueMicrotask(() => {
+  console.log('Direct microtask');
+});
+
+// ✅ Promise.then: Creates a Promise, THEN schedules microtask
+Promise.resolve().then(() => {
+  console.log('Promise microtask');
+});
+```
+
+### When to Use Each
+
+```javascript
+// ✅ Use queueMicrotask for:
+// - Pure scheduling needs (no Promise chain)
+// - Performance-critical microtask scheduling
+// - Custom async primitives
+
+queueMicrotask(() => {
+  // Clean up after sync code completes
+  cleanup();
+});
+
+// ✅ Use Promise.then for:
+// - Async operations returning values
+// - Error handling with .catch()
+// - Chaining async operations
+
+Promise.resolve(data)
+  .then(process)
+  .then(transform)
+  .catch(handleError);
+```
+
+### Performance Comparison
+
+```javascript
+// Benchmark: 100,000 microtasks
+
+console.time('queueMicrotask');
+for (let i = 0; i < 100000; i++) {
+  queueMicrotask(() => {});
+}
+Promise.resolve().then(() => {
+  console.timeEnd('queueMicrotask');  // ~15ms
+});
+
+console.time('Promise.then');
+for (let i = 0; i < 100000; i++) {
+  Promise.resolve().then(() => {});
+}
+Promise.resolve().then(() => {
+  console.timeEnd('Promise.then');    // ~25ms (slower)
+});
+```
+
+### Error Handling Difference
+
+```javascript
+// ❌ queueMicrotask: Errors throw globally
+queueMicrotask(() => {
+  throw new Error('Uncaught!');
+});
+// This becomes an unhandled error
+
+// ✅ Promise: Errors are catchable
+Promise.resolve()
+  .then(() => {
+    throw new Error('Caught!');
+  })
+  .catch(err => {
+    console.log('Handled:', err.message);
+  });
+```
+
+---
+
+## Browser Render Pipeline
+
+### Event Loop and Rendering
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  One Frame (~16.67ms at 60fps)                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  1. Run one macrotask (or none)                         │
+│  2. Run ALL microtasks                                  │
+│  3. If it's time to render:                             │
+│     a. Run requestAnimationFrame callbacks              │
+│     b. Run IntersectionObserver callbacks               │
+│     c. Calculate styles                                 │
+│     d. Layout (reflow)                                  │
+│     e. Paint                                            │
+│     f. Composite                                        │
+│  4. If idle time remains:                               │
+│     - Run requestIdleCallback tasks                     │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### requestAnimationFrame Timing
+
+```javascript
+// ✅ requestAnimationFrame runs BEFORE paint
+console.log('1. Sync');
+
+setTimeout(() => console.log('2. setTimeout'), 0);
+
+requestAnimationFrame(() => {
+  console.log('3. rAF - before paint');
+});
+
+Promise.resolve().then(() => console.log('4. Promise'));
+
+// Typical output:
+// 1. Sync
+// 4. Promise
+// 3. rAF - before paint  ← runs when browser is ready to paint
+// 2. setTimeout
+```
+
+### Avoiding Layout Thrashing
+
+```javascript
+// ❌ BAD: Forced synchronous layout (layout thrashing)
+const elements = document.querySelectorAll('.item');
+elements.forEach(el => {
+  const height = el.offsetHeight;  // FORCES layout read
+  el.style.height = height * 2 + 'px';  // Triggers layout
+  // Next iteration reads, forces another layout...
+});
+
+// ✅ GOOD: Batch reads, then batch writes
+const elements = document.querySelectorAll('.item');
+
+// Phase 1: Read all values
+const heights = Array.from(elements).map(el => el.offsetHeight);
+
+// Phase 2: Write all values
+elements.forEach((el, i) => {
+  el.style.height = heights[i] * 2 + 'px';
+});
+```
+
+### requestIdleCallback for Non-Critical Work
+
+```javascript
+// ✅ requestIdleCallback runs during browser idle time
+function processBackgroundTasks(deadline) {
+  // deadline.timeRemaining() tells us how much time we have
+  while (deadline.timeRemaining() > 0 && tasks.length > 0) {
+    const task = tasks.shift();
+    task();
+  }
+  
+  // If more tasks remain, schedule another idle callback
+  if (tasks.length > 0) {
+    requestIdleCallback(processBackgroundTasks);
+  }
+}
+
+// Start background processing
+requestIdleCallback(processBackgroundTasks);
+```
+
+### Animation Frame vs setTimeout for Animation
+
+```javascript
+// ❌ BAD: setTimeout-based animation (janky)
+function animateWithTimeout(element, targetX) {
+  let currentX = 0;
+  function step() {
+    currentX += 5;
+    element.style.transform = `translateX(${currentX}px)`;
+    if (currentX < targetX) {
+      setTimeout(step, 16);  // Not synced to display
+    }
+  }
+  step();
+}
+
+// ✅ GOOD: requestAnimationFrame animation (smooth)
+function animateWithRAF(element, targetX) {
+  let currentX = 0;
+  function step() {
+    currentX += 5;
+    element.style.transform = `translateX(${currentX}px)`;
+    if (currentX < targetX) {
+      requestAnimationFrame(step);  // Synced to display refresh
+    }
+  }
+  requestAnimationFrame(step);
+}
+```
+
+---
+
 ## Summary
 
 ### Key Concepts
@@ -4039,6 +4389,168 @@ queue.add(task);
 | `Promise.all` | Parallel execution, fail-fast |
 | `Promise.allSettled` | Parallel, all results (ES2020) |
 | `Promise.race` | First to settle wins |
+
+---
+
+## Mastery Check
+
+### Quiz Questions
+
+**Q1:** Predict the output order:
+```javascript
+console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+queueMicrotask(() => console.log('4'));
+console.log('5');
+```
+
+<details>
+<summary>Answer</summary>
+
+```
+1
+5
+3
+4
+2
+```
+Sync code (1, 5) → Microtasks (3, 4) → Macrotasks (2)
+</details>
+
+**Q2:** What's wrong with this code?
+```javascript
+async function getData() {
+  const users = await fetch('/api/users').then(r => r.json());
+  const posts = await fetch('/api/posts').then(r => r.json());
+  const comments = await fetch('/api/comments').then(r => r.json());
+  return { users, posts, comments };
+}
+```
+
+<details>
+<summary>Answer</summary>
+
+Sequential awaits! The three requests run one after another instead of in parallel. Fix with `Promise.all`:
+
+```javascript
+async function getData() {
+  const [users, posts, comments] = await Promise.all([
+    fetch('/api/users').then(r => r.json()),
+    fetch('/api/posts').then(r => r.json()),
+    fetch('/api/comments').then(r => r.json())
+  ]);
+  return { users, posts, comments };
+}
+```
+</details>
+
+**Q3:** What happens here?
+```javascript
+async function test() {
+  return 'hello';
+}
+
+console.log(test());
+console.log(await test());
+```
+
+<details>
+<summary>Answer</summary>
+
+```javascript
+console.log(test());       // Promise { 'hello' } (async always returns Promise)
+console.log(await test()); // 'hello' (await unwraps the promise)
+```
+</details>
+
+**Q4:** Explain the difference:
+```javascript
+// Version A
+for (const item of items) {
+  await processItem(item);
+}
+
+// Version B
+await Promise.all(items.map(item => processItem(item)));
+```
+
+<details>
+<summary>Answer</summary>
+
+- **Version A**: Sequential — processes one item at a time, in order
+- **Version B**: Parallel — processes all items simultaneously
+
+Use A when order matters or resource-constrained. Use B for maximum throughput (but watch out for rate limits).
+</details>
+
+### Coding Challenges
+
+**Challenge 1:** Implement `delay(ms)` that returns a promise resolving after ms milliseconds.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Usage
+await delay(1000);
+console.log('1 second later');
+```
+</details>
+
+**Challenge 2:** Create `promiseWithTimeout(promise, ms)` that rejects if the promise doesn't resolve within ms.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function promiseWithTimeout(promise, ms) {
+  const timeout = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('Timeout')), ms);
+  });
+  
+  return Promise.race([promise, timeout]);
+}
+
+// Usage
+const data = await promiseWithTimeout(fetch('/api/slow'), 5000);
+```
+</details>
+
+**Challenge 3:** Implement `asyncPool(concurrency, items, iteratorFn)` that limits concurrent promises.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+async function asyncPool(concurrency, items, iteratorFn) {
+  const results = [];
+  const executing = new Set();
+  
+  for (const item of items) {
+    const promise = Promise.resolve().then(() => iteratorFn(item));
+    results.push(promise);
+    executing.add(promise);
+    
+    const cleanup = () => executing.delete(promise);
+    promise.then(cleanup, cleanup);
+    
+    if (executing.size >= concurrency) {
+      await Promise.race(executing);
+    }
+  }
+  
+  return Promise.all(results);
+}
+
+// Usage: Process 100 URLs, max 5 at a time
+const results = await asyncPool(5, urls, url => fetch(url));
+```
+</details>
 
 ---
 

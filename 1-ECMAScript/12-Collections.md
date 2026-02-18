@@ -2040,6 +2040,114 @@ ws.add(obj);  // Won't prevent GC
 // Cannot iterate, no size
 ```
 
+---
+
+## Common Pitfalls
+
+### Pitfall 1: Object Keys in Map
+
+```javascript
+// ❌ GOTCHA: Objects as keys are compared by reference
+const map = new Map();
+
+map.set({ id: 1 }, 'user1');
+console.log(map.get({ id: 1 }));  // undefined! Different object!
+
+// ✅ CORRECT: Reuse the same object reference
+const key = { id: 1 };
+map.set(key, 'user1');
+console.log(map.get(key));  // 'user1'
+
+// Or use a primitive key
+map.set('user:1', 'user1');
+console.log(map.get('user:1'));  // 'user1'
+```
+
+### Pitfall 2: WeakMap with Primitives
+
+```javascript
+// ❌ WRONG: WeakMap keys must be objects
+const weakMap = new WeakMap();
+weakMap.set('string', 'value');  // TypeError!
+weakMap.set(123, 'value');       // TypeError!
+weakMap.set(Symbol(), 'value');  // TypeError!
+
+// ✅ CORRECT: Use object keys
+weakMap.set({ id: 1 }, 'value');  // OK
+weakMap.set(new Date(), 'value'); // OK
+weakMap.set([], 'value');         // OK (arrays are objects)
+```
+
+### Pitfall 3: Set Doesn't Dedupe Objects
+
+```javascript
+// ❌ GOTCHA: Objects are compared by reference, not value
+const set = new Set();
+
+set.add({ name: 'Alice' });
+set.add({ name: 'Alice' });
+
+console.log(set.size);  // 2! Both objects added (different references)
+
+// ✅ SOLUTION: Use primitives or serialize
+const set2 = new Set();
+set2.add(JSON.stringify({ name: 'Alice' }));
+set2.add(JSON.stringify({ name: 'Alice' }));
+console.log(set2.size);  // 1 (strings are compared by value)
+```
+
+### Pitfall 4: Map vs Object Performance
+
+```javascript
+// ⚠️ For small collections, Object is often faster
+// Map wins for: large collections, frequent add/delete, non-string keys
+
+// ❌ OVERKILL: Map for small static data
+const config = new Map([
+  ['apiUrl', 'https://api.example.com'],
+  ['timeout', 5000]
+]);
+
+// ✅ SIMPLER: Plain object for small static data
+const config = {
+  apiUrl: 'https://api.example.com',
+  timeout: 5000
+};
+
+// ✅ Map shines with: dynamic keys, iteration needs, size tracking
+const userCache = new Map();  // Better for caches
+userCache.set(userId, user);
+console.log(userCache.size);  // O(1) size access
+```
+
+### Pitfall 5: WeakMap Doesn't Prevent Closure Leaks
+
+```javascript
+// ❌ GOTCHA: WeakMap doesn't help if you hold the key
+const privateData = new WeakMap();
+
+function createLeak() {
+  const obj = { data: 'sensitive' };
+  privateData.set(obj, 'secret');
+  
+  return function() {
+    // Closure holds reference to obj — it won't be GC'd!
+    return privateData.get(obj);
+  };
+}
+
+const getSecret = createLeak();
+// obj is never garbage collected because getSecret holds a reference
+
+// ✅ WeakMap works when keys are externally managed
+function attachMetadata(element, metadata) {
+  privateData.set(element, metadata);
+}
+// When element is removed from DOM and no other refs exist, entry is GC'd
+```
+
+---
+
 ### Next Steps
 
 - Combine Maps/WeakMaps with Sets/WeakSets

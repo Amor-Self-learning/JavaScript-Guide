@@ -2217,6 +2217,101 @@ let tokenRegex = /(\d+|[+\-*/])/y;
 /\b(\w+)\s+\1\b/i
 ```
 
+---
+
+## Common Pitfalls
+
+### Pitfall 1: Forgetting to Escape Special Characters
+
+```javascript
+// ❌ WRONG: Dot matches ANY character
+const regex = /192.168.1.1/;
+console.log(regex.test('192X168Y1Z1'));  // true! Dots match X, Y, Z
+
+// ✅ CORRECT: Escape dots for literal match
+const regex = /192\.168\.1\.1/;
+console.log(regex.test('192X168Y1Z1'));  // false
+console.log(regex.test('192.168.1.1'));  // true
+```
+
+### Pitfall 2: Global Flag and lastIndex
+
+```javascript
+// ❌ GOTCHA: Global regex remembers position between test() calls
+const regex = /a/g;
+
+console.log(regex.test('banana'));  // true (found at index 1)
+console.log(regex.lastIndex);       // 2
+console.log(regex.test('banana'));  // true (found at index 3)
+console.log(regex.test('banana'));  // true (found at index 5)
+console.log(regex.test('banana'));  // false (no more matches)
+console.log(regex.test('banana'));  // true (reset, found at 1 again)
+
+// ✅ SOLUTION: Reset lastIndex or don't use global for test()
+regex.lastIndex = 0;  // Manual reset
+
+// Or use non-global for simple testing
+const simpleRegex = /a/;  // No 'g' flag
+console.log(simpleRegex.test('banana'));  // Always starts fresh
+```
+
+### Pitfall 3: Greedy vs Lazy Matching
+
+```javascript
+// ❌ GOTCHA: Default is greedy (matches as much as possible)
+const html = '<div>Hello</div><div>World</div>';
+const greedy = /<div>.*<\/div>/;
+console.log(html.match(greedy)[0]);
+// '<div>Hello</div><div>World</div>' — matched TOO much!
+
+// ✅ CORRECT: Use lazy quantifier (?)
+const lazy = /<div>.*?<\/div>/;
+console.log(html.match(lazy)[0]);
+// '<div>Hello</div>' — matches minimum
+```
+
+### Pitfall 4: Backtracking Performance
+
+```javascript
+// ❌ DANGER: Catastrophic backtracking (ReDoS vulnerability)
+const evilRegex = /^(a+)+$/;
+
+// This takes EXPONENTIAL time on near-matches:
+console.time('evil');
+evilRegex.test('aaaaaaaaaaaaaaaaaaaaaaaaaaaa!');  // Hangs!
+console.timeEnd('evil');
+
+// ✅ SOLUTION: Use possessive quantifiers or atomic groups
+// Or rewrite to avoid nested quantifiers
+const safeRegex = /^a+$/;  // Simple, no backtracking
+```
+
+### Pitfall 5: Unicode Without the u Flag
+
+```javascript
+// ❌ WRONG: Without 'u', regex sees UTF-16 code units
+const emoji = '😀';
+console.log(/^.$/.test(emoji));   // false! 😀 is 2 code units
+console.log(emoji.length);        // 2
+
+// ✅ CORRECT: Use 'u' flag for Unicode
+console.log(/^.$/u.test(emoji));  // true
+console.log(/\p{Emoji}/u.test(emoji));  // true (Unicode property)
+```
+
+### Pitfall 6: ^ and $ in Multiline
+
+```javascript
+// ❌ GOTCHA: Without 'm', ^ and $ match string start/end only
+const text = 'line1\nline2\nline3';
+console.log(text.match(/^\w+/g));  // ['line1'] — only first line
+
+// ✅ CORRECT: Use 'm' flag for line-by-line matching
+console.log(text.match(/^\w+/gm));  // ['line1', 'line2', 'line3']
+```
+
+---
+
 ## 9.5 RegExp Summary
 
 | Flag | Meaning |

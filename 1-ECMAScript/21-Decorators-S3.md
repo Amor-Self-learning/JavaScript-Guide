@@ -1,9 +1,74 @@
-# 21 Decorators S3
+# 21 Decorators (Stage 3)
 
 ---
 
-# Decorators (Stage 3)
+## Why Decorators Matter
 
+Decorators are **metaprogramming** — code that writes code. They let you modify class behavior declaratively, without cluttering your business logic.
+
+### The Problem Decorators Solve
+
+```javascript
+// ❌ WITHOUT DECORATORS: Cross-cutting concerns pollute business logic
+
+class UserService {
+  async getUser(id) {
+    // Logging boilerplate
+    console.log(`[${new Date().toISOString()}] getUser called with ${id}`);
+    const start = Date.now();
+    
+    try {
+      // Caching boilerplate
+      const cached = cache.get(`user:${id}`);
+      if (cached) return cached;
+      
+      // Actual business logic (buried in boilerplate!)
+      const user = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+      
+      // More caching boilerplate
+      cache.set(`user:${id}`, user, 300);
+      
+      // Timing boilerplate
+      console.log(`getUser took ${Date.now() - start}ms`);
+      
+      return user;
+    } catch (error) {
+      // Error handling boilerplate
+      console.error(`getUser failed:`, error);
+      throw error;
+    }
+  }
+}
+
+// ✅ WITH DECORATORS: Clean separation of concerns
+
+class UserService {
+  @logged
+  @timed
+  @cached({ ttl: 300 })
+  async getUser(id) {
+    // Pure business logic!
+    return await db.query('SELECT * FROM users WHERE id = ?', [id]);
+  }
+}
+
+// Cross-cutting concerns are declarative, reusable, and testable
+```
+
+### When to Use Decorators
+
+| Use Case | Example Decorators |
+|----------|-------------------|
+| **Logging** | `@logged`, `@timed`, `@trace` |
+| **Validation** | `@validate`, `@sanitize`, `@required` |
+| **Caching** | `@cached`, `@memoize` |
+| **Access Control** | `@authenticated`, `@roles(['admin'])` |
+| **Error Handling** | `@retry`, `@fallback`, `@timeout` |
+| **Dependency Injection** | `@inject`, `@service`, `@singleton` |
+| **Serialization** | `@jsonProperty`, `@expose`, `@exclude` |
+| **ORM/Database** | `@entity`, `@column`, `@oneToMany` |
+
+---
 
 **Note:** Decorators are currently a Stage 3 proposal. This document describes the proposed API which may change before final standardization. You'll need TypeScript or Babel to use decorators in current environments.
 
@@ -1421,27 +1486,547 @@ console.log(input.text);
 
 ---
 
-## Summary
+## 21.6 Dependency Injection with Decorators
 
-This document covered Decorators (Stage 3) comprehensively:
+Decorators are perfect for implementing Dependency Injection (DI) — a pattern where classes receive their dependencies from the outside rather than creating them internally.
 
-- **Class Decorators**: Modifying entire classes, adding methods, registry patterns, singletons, metadata collection
-- **Method Decorators**: Logging, timing, memoization, validation, retry logic, deprecation warnings, debouncing
-- **Accessor Decorators**: Modifying getters/setters, validation, caching, read-only properties, type coercion
-- **Field Decorators**: Initialization logic, default values, validation, transformation, observable fields, metadata
-- **Auto-accessor Decorators**: Combined getter/setter decorators, reactive properties, computed properties, type coercion
+### Simple DI Container
 
-Decorators provide a powerful way to add cross-cutting concerns and metaprogramming capabilities to JavaScript classes.
+```javascript
+// A basic DI container using decorators
+const container = new Map();
+const dependencies = new WeakMap();
+
+// Register a class as injectable
+function injectable(value, context) {
+  if (context.kind === 'class') {
+    container.set(context.name, value);
+    return value;
+  }
+}
+
+// Mark a field for injection
+function inject(serviceName) {
+  return function(value, context) {
+    if (context.kind === 'field') {
+      return function() {
+        const Service = container.get(serviceName);
+        if (!Service) throw new Error(`Service ${serviceName} not registered`);
+        return new Service();
+      };
+    }
+  };
+}
+
+// Usage
+@injectable
+class Logger {
+  log(msg) {
+    console.log(`[LOG] ${msg}`);
+  }
+}
+
+@injectable
+class Database {
+  query(sql) {
+    return `Query result for: ${sql}`;
+  }
+}
+
+class UserService {
+  @inject('Logger')
+  logger;
+  
+  @inject('Database')
+  db;
+  
+  getUser(id) {
+    this.logger.log(`Getting user ${id}`);
+    return this.db.query(`SELECT * FROM users WHERE id = ${id}`);
+  }
+}
+
+const userService = new UserService();
+console.log(userService.getUser(123));
+```
+
+### Singleton Pattern
+
+```javascript
+// Ensure only one instance exists
+const instances = new Map();
+
+function singleton(value, context) {
+  if (context.kind === 'class') {
+    return new Proxy(value, {
+      construct(target, args) {
+        if (!instances.has(target)) {
+          instances.set(target, new target(...args));
+        }
+        return instances.get(target);
+      }
+    });
+  }
+}
+
+@singleton
+class ConfigService {
+  constructor() {
+    this.config = { env: 'production' };
+    console.log('ConfigService created (only once!)');
+  }
+}
+
+const config1 = new ConfigService();
+const config2 = new ConfigService();
+console.log(config1 === config2);  // true (same instance)
+```
+
+### Scoped Dependencies
+
+```javascript
+// Lifetime scopes: singleton, transient, scoped
+const lifetimes = new Map();
+const scopedInstances = new Map();
+let currentScope = null;
+
+function service(lifetime = 'transient') {
+  return function(value, context) {
+    if (context.kind === 'class') {
+      lifetimes.set(context.name, { class: value, lifetime });
+      
+      return new Proxy(value, {
+        construct(target, args) {
+          const config = lifetimes.get(context.name);
+          
+          switch (config.lifetime) {
+            case 'singleton':
+              if (!instances.has(target)) {
+                instances.set(target, new target(...args));
+              }
+              return instances.get(target);
+              
+            case 'scoped':
+              if (!currentScope) throw new Error('No active scope');
+              if (!scopedInstances.get(currentScope)?.has(target)) {
+                const scopeMap = scopedInstances.get(currentScope) || new Map();
+                scopeMap.set(target, new target(...args));
+                scopedInstances.set(currentScope, scopeMap);
+              }
+              return scopedInstances.get(currentScope).get(target);
+              
+            case 'transient':
+            default:
+              return new target(...args);
+          }
+        }
+      });
+    }
+  };
+}
+
+// Create a scope for request handling
+function createScope(fn) {
+  const scope = Symbol('scope');
+  currentScope = scope;
+  try {
+    return fn();
+  } finally {
+    scopedInstances.delete(scope);
+    currentScope = null;
+  }
+}
+
+// Usage
+@service('singleton')
+class AppConfig {}
+
+@service('scoped')
+class RequestContext {}
+
+@service('transient')
+class Logger {}
+```
 
 ---
 
-**Related Topics to Explore Next:**
+## 21.7 Real-World Decorator Patterns
 
-- Metadata Reflection API
-- Dependency Injection patterns
-- Aspect-Oriented Programming (AOP)
-- TypeScript decorators
-- Framework-specific decorators (Angular, NestJS, etc.)
+### Validation Decorators
+
+```javascript
+// Field validation using metadata
+const validations = new WeakMap();
+
+function required(value, context) {
+  if (context.kind === 'field') {
+    const existing = validations.get(context) || [];
+    existing.push({ type: 'required', field: context.name });
+    validations.set(context, existing);
+    
+    return function(initialValue) {
+      return initialValue;
+    };
+  }
+}
+
+function minLength(min) {
+  return function(value, context) {
+    if (context.kind === 'field') {
+      return function(initialValue) {
+        // Add validation to setter via addInitializer
+        context.addInitializer(function() {
+          const original = Object.getOwnPropertyDescriptor(this, context.name);
+          Object.defineProperty(this, context.name, {
+            set(val) {
+              if (typeof val === 'string' && val.length < min) {
+                throw new Error(`${context.name} must be at least ${min} characters`);
+              }
+              this[`_${context.name}`] = val;
+            },
+            get() {
+              return this[`_${context.name}`];
+            }
+          });
+        });
+        return initialValue;
+      };
+    }
+  };
+}
+
+function email(value, context) {
+  if (context.kind === 'field') {
+    return function(initialValue) {
+      context.addInitializer(function() {
+        Object.defineProperty(this, context.name, {
+          set(val) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (val && !emailRegex.test(val)) {
+              throw new Error(`${context.name} must be a valid email`);
+            }
+            this[`_${context.name}`] = val;
+          },
+          get() {
+            return this[`_${context.name}`];
+          }
+        });
+      });
+      return initialValue;
+    };
+  }
+}
+
+// Usage
+class User {
+  @required
+  @minLength(2)
+  name = '';
+  
+  @required
+  @email
+  email = '';
+}
+
+const user = new User();
+user.name = 'AB';      // OK
+// user.name = 'A';    // Error: name must be at least 2 characters
+user.email = 'test@example.com';  // OK
+// user.email = 'invalid';  // Error: email must be a valid email
+```
+
+### API Route Decorators (Express-style)
+
+```javascript
+// Route metadata collection
+const routes = [];
+
+function controller(basePath) {
+  return function(value, context) {
+    if (context.kind === 'class') {
+      context.addInitializer(function() {
+        routes.filter(r => r.controller === context.name)
+          .forEach(r => r.basePath = basePath);
+      });
+      return value;
+    }
+  };
+}
+
+function route(method, path) {
+  return function(value, context) {
+    if (context.kind === 'method') {
+      routes.push({
+        controller: context.name,
+        method: method.toUpperCase(),
+        path,
+        handler: context.name
+      });
+      return value;
+    }
+  };
+}
+
+const get = (path) => route('GET', path);
+const post = (path) => route('POST', path);
+const put = (path) => route('PUT', path);
+const del = (path) => route('DELETE', path);
+
+// Middleware decorator
+function middleware(...middlewares) {
+  return function(value, context) {
+    if (context.kind === 'method') {
+      // Wrap method with middleware chain
+      return async function(...args) {
+        for (const mw of middlewares) {
+          await mw(...args);
+        }
+        return value.apply(this, args);
+      };
+    }
+  };
+}
+
+// Usage
+const authenticate = async (req, res, next) => {
+  if (!req.user) throw new Error('Unauthorized');
+};
+
+@controller('/api/users')
+class UserController {
+  @get('/')
+  async list(req, res) {
+    return { users: [] };
+  }
+  
+  @get('/:id')
+  async get(req, res) {
+    return { user: { id: req.params.id } };
+  }
+  
+  @post('/')
+  @middleware(authenticate)
+  async create(req, res) {
+    return { created: true };
+  }
+  
+  @del('/:id')
+  @middleware(authenticate)
+  async delete(req, res) {
+    return { deleted: true };
+  }
+}
+
+// Register routes with Express
+function registerRoutes(app) {
+  routes.forEach(route => {
+    const fullPath = route.basePath + route.path;
+    console.log(`Registering ${route.method} ${fullPath}`);
+    // app[route.method.toLowerCase()](fullPath, route.handler);
+  });
+}
+```
+
+### ORM-Style Entity Decorators
+
+```javascript
+// Database entity metadata
+const entityMetadata = new Map();
+
+function entity(tableName) {
+  return function(value, context) {
+    if (context.kind === 'class') {
+      entityMetadata.set(value, {
+        tableName,
+        columns: []
+      });
+      return value;
+    }
+  };
+}
+
+function column(options = {}) {
+  return function(value, context) {
+    if (context.kind === 'field') {
+      context.addInitializer(function() {
+        const meta = entityMetadata.get(this.constructor);
+        if (meta) {
+          meta.columns.push({
+            name: options.name || context.name,
+            property: context.name,
+            type: options.type || 'string',
+            nullable: options.nullable ?? true,
+            primary: options.primary ?? false
+          });
+        }
+      });
+      return function(initialValue) {
+        return initialValue;
+      };
+    }
+  };
+}
+
+function primaryKey(value, context) {
+  return column({ primary: true, type: 'integer', nullable: false })(value, context);
+}
+
+// Usage
+@entity('users')
+class User {
+  @primaryKey
+  id = 0;
+  
+  @column({ type: 'string', nullable: false })
+  name = '';
+  
+  @column({ type: 'string', name: 'email_address' })
+  email = '';
+  
+  @column({ type: 'timestamp' })
+  createdAt = new Date();
+}
+
+// Generate SQL from metadata
+function generateCreateTable(EntityClass) {
+  const meta = entityMetadata.get(EntityClass);
+  const instance = new EntityClass();  // Trigger initializers
+  
+  const columnDefs = meta.columns.map(col => {
+    let def = `${col.name} ${col.type.toUpperCase()}`;
+    if (col.primary) def += ' PRIMARY KEY';
+    if (!col.nullable) def += ' NOT NULL';
+    return def;
+  });
+  
+  return `CREATE TABLE ${meta.tableName} (\n  ${columnDefs.join(',\n  ')}\n);`;
+}
+
+console.log(generateCreateTable(User));
+// CREATE TABLE users (
+//   id INTEGER PRIMARY KEY NOT NULL,
+//   name STRING NOT NULL,
+//   email_address STRING,
+//   createdAt TIMESTAMP
+// );
+```
+
+---
+
+## 21.8 Common Pitfalls
+
+### Pitfall 1: Decorator Order Matters
+
+```javascript
+// Decorators apply BOTTOM to TOP (closest to target first)
+@first   // Executed LAST
+@second  // Executed SECOND
+@third   // Executed FIRST (closest to class)
+class MyClass {}
+
+// This matters for method decorators!
+@logged     // Logs the cached result, not the original call
+@cached     // Caches the result
+async getData() { ... }
+
+// vs
+
+@cached     // Caches the logged result (probably not what you want)
+@logged     // Logs every call
+async getData() { ... }
+```
+
+### Pitfall 2: this Binding in Decorators
+
+```javascript
+// ❌ WRONG: Arrow functions lose class binding
+function logged(value, context) {
+  if (context.kind === 'method') {
+    return (...args) => {  // Arrow function!
+      console.log(`Calling ${context.name}`);
+      return value(...args);  // 'this' is wrong!
+    };
+  }
+}
+
+// ✅ CORRECT: Use regular function
+function logged(value, context) {
+  if (context.kind === 'method') {
+    return function(...args) {  // Regular function
+      console.log(`Calling ${context.name}`);
+      return value.call(this, ...args);  // Preserve 'this'
+    };
+  }
+}
+```
+
+### Pitfall 3: Async Method Decoration
+
+```javascript
+// ❌ WRONG: Not handling async
+function timed(value, context) {
+  if (context.kind === 'method') {
+    return function(...args) {
+      const start = Date.now();
+      const result = value.call(this, ...args);  // Returns promise!
+      console.log(`Took ${Date.now() - start}ms`);  // Logs immediately
+      return result;
+    };
+  }
+}
+
+// ✅ CORRECT: Handle both sync and async
+function timed(value, context) {
+  if (context.kind === 'method') {
+    return function(...args) {
+      const start = Date.now();
+      const result = value.call(this, ...args);
+      
+      if (result instanceof Promise) {
+        return result.finally(() => {
+          console.log(`Took ${Date.now() - start}ms`);
+        });
+      }
+      
+      console.log(`Took ${Date.now() - start}ms`);
+      return result;
+    };
+  }
+}
+```
+
+---
+
+## Summary
+
+| Decorator Type | Target | Returns |
+|---------------|--------|---------|
+| **Class** | Class constructor | Modified/new class |
+| **Method** | Method function | Modified function |
+| **Field** | Field initializer | Modified initializer |
+| **Accessor** | Getter/setter | New getter/setter object |
+| **Auto-accessor** | Auto accessor | Modified get/set/init |
+
+### Context Object Properties
+
+| Property | Description |
+|----------|-------------|
+| `kind` | `'class'`, `'method'`, `'field'`, `'accessor'`, `'getter'`, `'setter'` |
+| `name` | Name of decorated element |
+| `static` | `true` if static member |
+| `private` | `true` if private member |
+| `access` | Object with `get()` and `set()` for fields |
+| `addInitializer()` | Register callback to run during construction |
+
+### Best Practices
+
+1. **Keep decorators focused** — one concern per decorator
+2. **Make decorators composable** — design for stacking
+3. **Handle async properly** — check for Promise returns
+4. **Preserve `this` binding** — use regular functions, not arrows
+5. **Document decorator order** — when order matters, make it clear
+6. **Provide good error messages** — decorators run at definition time
+
 ---
 
 **End of Chapter 21**

@@ -1,9 +1,88 @@
-# 20 Temporal API S3
+# 20 Temporal API (Stage 3)
 
 ---
 
-# Temporal API (Stage 3)
+## Why Temporal Matters
 
+The JavaScript `Date` object is fundamentally broken. It was copied from Java's `java.util.Date` in 1995, which Java itself deprecated in 1997. Every professional JavaScript developer has encountered these problems:
+
+### Problems with Date
+
+```javascript
+// ❌ Problem 1: Months are 0-indexed (January = 0)
+const date = new Date(2024, 1, 1);  // February 1st, NOT January!
+console.log(date);  // Thu Feb 01 2024
+
+// ❌ Problem 2: Date is mutable (causes bugs)
+const original = new Date('2024-01-15');
+const modified = original;
+modified.setMonth(5);
+console.log(original);  // June! Original was mutated!
+
+// ❌ Problem 3: Parsing is inconsistent across browsers
+new Date('2024-01-15');     // Parsed as UTC in some browsers, local in others
+new Date('2024-1-15');      // Invalid in some browsers, works in others
+new Date('01/15/2024');     // US format? European? Depends on locale
+
+// ❌ Problem 4: No timezone support
+const nyTime = new Date();  // What timezone is this? Depends on system!
+// Can't represent "3pm in Tokyo" - only "3pm in local timezone"
+
+// ❌ Problem 5: DST handling is a nightmare
+const dst = new Date('2024-03-10T02:30:00');  // 2:30 AM doesn't exist! (DST skip)
+// Date silently gives wrong time
+
+// ❌ Problem 6: No duration type
+const start = new Date('2024-01-01');
+const end = new Date('2024-12-31');
+const diff = end - start;  // 31449600000 ms... now what?
+// How many months? No way to know!
+
+// ❌ Problem 7: No calendar support
+// Can't work with Hebrew, Islamic, Japanese calendars
+```
+
+### How Temporal Fixes Everything
+
+```javascript
+// ✅ Fix 1: Human-readable month (1-indexed)
+const date = Temporal.PlainDate.from({ year: 2024, month: 1, day: 1 });
+console.log(date.toString());  // 2024-01-01 (January!)
+
+// ✅ Fix 2: Immutable (no mutation bugs)
+const original = Temporal.PlainDate.from('2024-01-15');
+const modified = original.with({ month: 6 });
+console.log(original.toString());  // 2024-01-15 (unchanged!)
+console.log(modified.toString());  // 2024-06-15
+
+// ✅ Fix 3: Consistent parsing
+const parsed = Temporal.PlainDate.from('2024-01-15');  // Always works
+// Temporal.PlainDate.from('01/15/2024');  // Throws! Ambiguous formats rejected
+
+// ✅ Fix 4: First-class timezone support
+const tokyo = Temporal.ZonedDateTime.from('2024-01-15T15:00[Asia/Tokyo]');
+const newYork = tokyo.withTimeZone('America/New_York');
+console.log(tokyo.toString());    // 2024-01-15T15:00:00+09:00[Asia/Tokyo]
+console.log(newYork.toString());  // 2024-01-15T01:00:00-05:00[America/New_York]
+
+// ✅ Fix 5: DST is handled correctly
+const beforeDST = Temporal.ZonedDateTime.from('2024-03-10T01:30[America/New_York]');
+const afterDST = beforeDST.add({ hours: 1 });
+console.log(afterDST.toString());  // 2024-03-10T03:30:00-04:00 (skipped 2AM correctly!)
+
+// ✅ Fix 6: Real duration type
+const start = Temporal.PlainDate.from('2024-01-01');
+const end = Temporal.PlainDate.from('2024-12-31');
+const duration = start.until(end, { largestUnit: 'months' });
+console.log(duration.months, duration.days);  // 11 months, 30 days
+
+// ✅ Fix 7: Multiple calendar systems
+const hebrew = Temporal.PlainDate.from('2024-01-15').withCalendar('hebrew');
+console.log(hebrew.toString());  // 2024-01-15[u-ca=hebrew]
+console.log(hebrew.year, hebrew.month, hebrew.day);  // Hebrew year/month/day
+```
+
+---
 
 **Note:** The Temporal API is currently a Stage 3 proposal. This document describes the proposed API which may change before final standardization. You may need a polyfill to use Temporal in current environments.
 
@@ -1415,30 +1494,432 @@ console.log('Business hours overlap:', overlap);
 
 ---
 
-## Summary
+## 20.9 Migrating from Date to Temporal
 
-This document covered the Temporal API comprehensively:
+### Common Migration Patterns
 
-- **Temporal.Instant**: Absolute points in time, UTC timestamps, high-precision timing
-- **Temporal.ZonedDateTime**: Timezone-aware dates and times, DST handling, timezone conversions
-- **Temporal.PlainDate**: Calendar dates without time, date arithmetic, practical date calculations
-- **Temporal.PlainTime**: Wall-clock times without dates, time arithmetic, business hours
-- **Temporal.PlainDateTime**: Combined date and time without timezone, conversions
-- **Temporal.Duration**: Time spans, duration arithmetic, formatting and conversion
-- **Temporal.Calendar**: Multiple calendar systems, calendar-specific operations
-- **Temporal.TimeZone**: Timezone operations, offset calculations, DST transitions
+```javascript
+// === CREATING DATES ===
 
-The Temporal API provides a modern, robust solution for date and time handling in JavaScript, fixing many issues with the Date object.
+// ❌ OLD: new Date()
+const now = new Date();
+
+// ✅ NEW: Temporal equivalents
+const instant = Temporal.Now.instant();           // Absolute time (like Date)
+const zdt = Temporal.Now.zonedDateTimeISO();       // With timezone
+const plainDate = Temporal.Now.plainDateISO();     // Just the date
+const plainTime = Temporal.Now.plainTimeISO();     // Just the time
+
+
+// === PARSING ISO STRINGS ===
+
+// ❌ OLD: Parse ISO string
+const date1 = new Date('2024-06-15T10:30:00Z');
+
+// ✅ NEW: Parse ISO string
+const instant1 = Temporal.Instant.from('2024-06-15T10:30:00Z');
+const zdt1 = Temporal.ZonedDateTime.from('2024-06-15T10:30:00Z[UTC]');
+
+
+// === CREATING SPECIFIC DATES ===
+
+// ❌ OLD: Month is 0-indexed!
+const date2 = new Date(2024, 5, 15);  // June 15 (5 = June)
+
+// ✅ NEW: Month is 1-indexed
+const plain = Temporal.PlainDate.from({ year: 2024, month: 6, day: 15 });
+
+
+// === GETTING COMPONENTS ===
+
+// ❌ OLD
+const d = new Date('2024-06-15T10:30:00');
+const year = d.getFullYear();    // 2024
+const month = d.getMonth() + 1;  // 6 (had to add 1!)
+const day = d.getDate();         // 15
+const hour = d.getHours();       // 10
+
+// ✅ NEW
+const pd = Temporal.PlainDateTime.from('2024-06-15T10:30:00');
+const year2 = pd.year;   // 2024
+const month2 = pd.month; // 6 (no adjustment needed)
+const day2 = pd.day;     // 15
+const hour2 = pd.hour;   // 10
+
+
+// === DATE ARITHMETIC ===
+
+// ❌ OLD: Manual calculation, error-prone
+const date3 = new Date('2024-06-15');
+date3.setDate(date3.getDate() + 30);  // Mutates! Also wrong for months
+
+// ✅ NEW: Clear, immutable
+const pd2 = Temporal.PlainDate.from('2024-06-15');
+const later = pd2.add({ days: 30 });  // Returns new PlainDate
+
+
+// === COMPARING DATES ===
+
+// ❌ OLD: Convert to numbers
+const d1 = new Date('2024-06-15');
+const d2 = new Date('2024-07-01');
+const isEarlier = d1.getTime() < d2.getTime();
+
+// ✅ NEW: Built-in comparison
+const pd3 = Temporal.PlainDate.from('2024-06-15');
+const pd4 = Temporal.PlainDate.from('2024-07-01');
+const cmp = Temporal.PlainDate.compare(pd3, pd4);  // -1, 0, or 1
+
+
+// === TIME DIFFERENCE ===
+
+// ❌ OLD: Manual millisecond math
+const start = new Date('2024-01-01');
+const end = new Date('2024-06-15');
+const diffMs = end - start;
+const diffDays = diffMs / (1000 * 60 * 60 * 24);  // Error-prone
+
+// ✅ NEW: Duration objects
+const s = Temporal.PlainDate.from('2024-01-01');
+const e = Temporal.PlainDate.from('2024-06-15');
+const duration = s.until(e);
+console.log(duration.days);  // 166
+
+
+// === FORMATTING ===
+
+// ❌ OLD: toLocaleString or manual formatting
+const date4 = new Date('2024-06-15T10:30:00');
+const formatted = date4.toLocaleString('en-US', { 
+  dateStyle: 'long', 
+  timeStyle: 'short' 
+});
+
+// ✅ NEW: Same Intl support, but with consistent types
+const pdt = Temporal.PlainDateTime.from('2024-06-15T10:30:00');
+const fmt = pdt.toLocaleString('en-US', { 
+  dateStyle: 'long', 
+  timeStyle: 'short' 
+});
+```
+
+### Converting Between Date and Temporal
+
+```javascript
+// Date → Temporal
+const date = new Date();
+
+// To Instant
+const instant = Temporal.Instant.fromEpochMilliseconds(date.getTime());
+
+// To ZonedDateTime (in specific timezone)
+const zdt = instant.toZonedDateTimeISO('America/New_York');
+
+// To PlainDateTime (loses timezone)
+const pdt = zdt.toPlainDateTime();
+
+
+// Temporal → Date
+const instant2 = Temporal.Now.instant();
+const date2 = new Date(instant2.epochMilliseconds);
+
+// Or from ZonedDateTime
+const zdt2 = Temporal.Now.zonedDateTimeISO('America/New_York');
+const date3 = new Date(zdt2.epochMilliseconds);
+```
 
 ---
 
-**Related Topics to Explore Next:**
+## 20.10 Duration Deep Dive
 
-- Intl API for internationalization
-- Date formatting with Intl.DateTimeFormat
-- Temporal polyfill usage and browser support
-- Migration from Date to Temporal
-- Advanced timezone handling patterns
+### Understanding Duration Components
+
+```javascript
+// Duration has these components (in order):
+// years, months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds
+
+const duration = Temporal.Duration.from({
+  years: 1,
+  months: 2,
+  weeks: 3,
+  days: 4,
+  hours: 5,
+  minutes: 6,
+  seconds: 7,
+  milliseconds: 8,
+  microseconds: 9,
+  nanoseconds: 10
+});
+
+console.log(duration.toString());
+// P1Y2M3W4DT5H6M7.008009010S
+
+// ISO 8601 Duration format:
+// P = period start
+// 1Y = 1 year
+// 2M = 2 months
+// 3W = 3 weeks
+// 4D = 4 days
+// T = time start
+// 5H = 5 hours
+// 6M = 6 minutes
+// 7.008009010S = 7 seconds and fractional
+```
+
+### Duration Balancing
+
+```javascript
+// By default, Duration doesn't balance
+const d1 = Temporal.Duration.from({ hours: 36 });
+console.log(d1.hours);  // 36 (not converted to days)
+
+// Balancing converts to larger units
+const d2 = d1.round({ largestUnit: 'days' });
+console.log(d2.days, d2.hours);  // 1 day, 12 hours
+
+// Complex balancing example
+const duration = Temporal.Duration.from({
+  seconds: 90061  // 25 hours, 1 minute, 1 second
+});
+
+const balanced = duration.round({
+  largestUnit: 'days',
+  smallestUnit: 'seconds'
+});
+console.log(balanced.toString());  // P1DT1H1M1S
+```
+
+### Duration Arithmetic
+
+```javascript
+// Add durations
+const d1 = Temporal.Duration.from({ hours: 5, minutes: 30 });
+const d2 = Temporal.Duration.from({ hours: 2, minutes: 45 });
+const sum = d1.add(d2);
+console.log(sum.toString());  // PT8H15M (unbalanced!)
+
+// Subtract durations
+const diff = d1.subtract(d2);
+console.log(diff.toString());  // PT2H45M
+
+// Negate duration
+const neg = d1.negated();
+console.log(neg.toString());  // -PT5H30M
+
+// Absolute value
+const abs = neg.abs();
+console.log(abs.toString());  // PT5H30M
+```
+
+### Duration with Relative Context
+
+```javascript
+// Months/years need a reference date (they vary in length!)
+const duration = Temporal.Duration.from({ months: 1 });
+
+const jan1 = Temporal.PlainDate.from('2024-01-01');
+const feb1 = Temporal.PlainDate.from('2024-02-01');
+
+// January has 31 days, February has 29 (2024 is leap year)
+const janDays = jan1.until(jan1.add(duration), { largestUnit: 'days' });
+const febDays = feb1.until(feb1.add(duration), { largestUnit: 'days' });
+
+console.log(janDays.days);  // 31
+console.log(febDays.days);  // 29
+
+// This is why duration.total() needs relativeTo:
+const totalDays = duration.total({
+  unit: 'days',
+  relativeTo: jan1
+});
+console.log(totalDays);  // 31
+```
+
+### Common Duration Patterns
+
+```javascript
+// 1. Human-readable duration
+function formatDuration(duration) {
+  const parts = [];
+  if (duration.years) parts.push(`${duration.years}y`);
+  if (duration.months) parts.push(`${duration.months}mo`);
+  if (duration.days) parts.push(`${duration.days}d`);
+  if (duration.hours) parts.push(`${duration.hours}h`);
+  if (duration.minutes) parts.push(`${duration.minutes}m`);
+  if (duration.seconds) parts.push(`${duration.seconds}s`);
+  return parts.join(' ') || '0s';
+}
+
+const d = Temporal.Duration.from({ hours: 2, minutes: 30 });
+console.log(formatDuration(d));  // "2h 30m"
+
+
+// 2. Age calculation
+function getAge(birthDate) {
+  const today = Temporal.Now.plainDateISO();
+  const birth = Temporal.PlainDate.from(birthDate);
+  return birth.until(today, { largestUnit: 'years' });
+}
+
+const age = getAge('1990-05-15');
+console.log(`${age.years} years, ${age.months} months, ${age.days} days`);
+
+
+// 3. Time until event
+function timeUntil(eventDateTime) {
+  const now = Temporal.Now.zonedDateTimeISO();
+  const event = Temporal.ZonedDateTime.from(eventDateTime);
+  return now.until(event, { largestUnit: 'days' });
+}
+
+const countdown = timeUntil('2024-12-31T23:59:59[America/New_York]');
+console.log(formatDuration(countdown));
+
+
+// 4. Business hours calculation
+function businessHoursBetween(start, end) {
+  let current = start;
+  let totalHours = 0;
+  
+  while (Temporal.PlainDateTime.compare(current, end) < 0) {
+    // Skip weekends
+    if (current.dayOfWeek <= 5) {  // Mon-Fri
+      // Count hours between 9-17
+      const dayStart = current.with({ hour: 9, minute: 0 });
+      const dayEnd = current.with({ hour: 17, minute: 0 });
+      
+      const effectiveStart = Temporal.PlainDateTime.compare(current, dayStart) > 0 
+        ? current : dayStart;
+      const effectiveEnd = Temporal.PlainDateTime.compare(end, dayEnd) < 0 
+        ? end : dayEnd;
+      
+      if (Temporal.PlainDateTime.compare(effectiveStart, effectiveEnd) < 0) {
+        const hours = effectiveStart.until(effectiveEnd, { largestUnit: 'hours' });
+        totalHours += hours.hours + hours.minutes / 60;
+      }
+    }
+    
+    current = current.add({ days: 1 }).with({ hour: 0, minute: 0 });
+  }
+  
+  return totalHours;
+}
+```
+
+---
+
+## 20.11 Timezone Gotchas
+
+### DST Transitions
+
+```javascript
+// DST "spring forward" - hour doesn't exist
+try {
+  // 2:30 AM doesn't exist on March 10, 2024 (US DST)
+  const impossible = Temporal.ZonedDateTime.from(
+    '2024-03-10T02:30[America/New_York]',
+    { offset: 'reject' }  // Strict mode
+  );
+} catch (e) {
+  console.log('Time does not exist!');
+}
+
+// Default behavior: adjust to valid time
+const adjusted = Temporal.ZonedDateTime.from('2024-03-10T02:30[America/New_York]');
+console.log(adjusted.toString());  // 2024-03-10T03:30:00-04:00 (moved forward)
+
+
+// DST "fall back" - hour exists twice
+// 1:30 AM happens twice on November 3, 2024
+const ambiguous1 = Temporal.ZonedDateTime.from({
+  year: 2024, month: 11, day: 3,
+  hour: 1, minute: 30,
+  timeZone: 'America/New_York',
+  offset: '-04:00'  // First 1:30 (before fall back)
+});
+
+const ambiguous2 = Temporal.ZonedDateTime.from({
+  year: 2024, month: 11, day: 3,
+  hour: 1, minute: 30,
+  timeZone: 'America/New_York',
+  offset: '-05:00'  // Second 1:30 (after fall back)
+});
+
+console.log(ambiguous1.epochMilliseconds !== ambiguous2.epochMilliseconds);  // true!
+```
+
+### Duration Across DST
+
+```javascript
+// Adding hours vs adding days across DST
+const beforeDST = Temporal.ZonedDateTime.from('2024-03-10T01:00[America/New_York]');
+
+// Add 24 hours - actual elapsed time
+const plus24h = beforeDST.add({ hours: 24 });
+console.log(plus24h.toString());  // 2024-03-11T02:00 (clock shows 2AM)
+
+// Add 1 day - same wall clock time
+const plus1d = beforeDST.add({ days: 1 });
+console.log(plus1d.toString());   // 2024-03-11T01:00 (clock shows 1AM)
+
+// Different results! March 10 only has 23 hours
+```
+
+### Common Timezone Mistakes
+
+```javascript
+// ❌ WRONG: Assuming all days have 24 hours
+function addDayBad(date) {
+  return date.add({ hours: 24 });  // Wrong on DST days!
+}
+
+// ✅ CORRECT: Use calendar days
+function addDayGood(date) {
+  return date.add({ days: 1 });  // Correct!
+}
+
+
+// ❌ WRONG: Comparing ZonedDateTime directly
+const tokyo = Temporal.ZonedDateTime.from('2024-06-15T15:00[Asia/Tokyo]');
+const ny = Temporal.ZonedDateTime.from('2024-06-15T02:00[America/New_York]');
+// These are the SAME instant! But string comparison would say tokyo > ny
+
+// ✅ CORRECT: Compare instants
+console.log(tokyo.toInstant().equals(ny.toInstant()));  // true!
+
+
+// ❌ WRONG: Storing timezone name from user, applying to server time
+// User says "America/New_York", server is in UTC
+const serverTime = Temporal.Now.plainDateTimeISO();  // Server time!
+const wrongZDT = serverTime.toZonedDateTime('America/New_York');  // Wrong timezone applied!
+
+// ✅ CORRECT: Use instant, then convert
+const instant = Temporal.Now.instant();
+const correctZDT = instant.toZonedDateTimeISO('America/New_York');
+```
+
+---
+
+## Summary
+
+| Type | Use Case | Example |
+|------|----------|---------|
+| **Instant** | Timestamps, logs, precise moments | `Temporal.Now.instant()` |
+| **ZonedDateTime** | Display times, scheduling across zones | User's local time |
+| **PlainDate** | Birthdays, holidays, date-only data | `2024-06-15` |
+| **PlainTime** | Alarms, business hours | `09:00` |
+| **PlainDateTime** | Form inputs, local events | `2024-06-15T09:00` |
+| **Duration** | Time differences, intervals | `P1Y2M3D` |
+
+### Migration Checklist
+
+- [ ] Replace `new Date()` with `Temporal.Now.instant()` or `Temporal.Now.zonedDateTimeISO()`
+- [ ] Replace 0-indexed months with 1-indexed months
+- [ ] Replace mutable date operations with immutable `.with()` and `.add()`
+- [ ] Replace `getTime()` comparisons with `Temporal.*.compare()`
+- [ ] Replace manual duration math with `Duration` objects
+- [ ] Store timezones explicitly with `ZonedDateTime`
+
 ---
 
 **End of Chapter 20**

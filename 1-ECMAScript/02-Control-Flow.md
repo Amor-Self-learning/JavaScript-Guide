@@ -2807,6 +2807,112 @@ process.on("unhandledRejection", (reason, promise) => {
 
 ---
 
+## Common Pitfalls
+
+### Pitfall 1: for-in on Arrays
+
+```javascript
+// ❌ WRONG: for-in iterates over ALL enumerable properties
+const arr = [1, 2, 3];
+arr.customProp = 'oops';
+
+for (const i in arr) {
+  console.log(i);  // "0", "1", "2", "customProp" — includes custom property!
+}
+
+// ✅ CORRECT: Use for-of for arrays
+for (const value of arr) {
+  console.log(value);  // 1, 2, 3
+}
+```
+
+### Pitfall 2: Switch Fallthrough
+
+```javascript
+// ❌ WRONG: Missing break causes fallthrough
+switch (day) {
+  case 'Monday':
+    console.log('Start of week');
+  case 'Tuesday':  // Falls through! Both log on Monday
+    console.log('Still early');
+    break;
+}
+
+// ✅ CORRECT: Always break (or use return/throw)
+switch (day) {
+  case 'Monday':
+    console.log('Start of week');
+    break;
+  case 'Tuesday':
+    console.log('Still early');
+    break;
+}
+```
+
+### Pitfall 3: Loop Variable Closure with var
+
+```javascript
+// ❌ WRONG: var is function-scoped, shared across iterations
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);  // Logs 3, 3, 3
+}
+
+// ✅ CORRECT: let creates new binding per iteration
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);  // Logs 0, 1, 2
+}
+```
+
+### Pitfall 4: Catching Too Broadly
+
+```javascript
+// ❌ WRONG: Catches ALL errors, hides bugs
+try {
+  const result = someFunction();
+  processs(result);  // Typo: 'processs' doesn't exist!
+} catch (e) {
+  console.log('someFunction failed');  // Wrong! It was processs that failed
+}
+
+// ✅ CORRECT: Check error type
+try {
+  const result = someFunction();
+  process(result);
+} catch (e) {
+  if (e instanceof NetworkError) {
+    console.log('Network failed, retrying...');
+  } else {
+    throw e;  // Re-throw unexpected errors
+  }
+}
+```
+
+### Pitfall 5: finally with return
+
+```javascript
+// ⚠️ GOTCHA: finally return overrides try/catch return!
+function strange() {
+  try {
+    return 'try';
+  } finally {
+    return 'finally';  // This wins!
+  }
+}
+
+console.log(strange());  // 'finally' — NOT 'try'!
+
+// ✅ CORRECT: Don't return in finally
+function correct() {
+  try {
+    return 'try';
+  } finally {
+    cleanup();  // OK: side effects, no return
+  }
+}
+```
+
+---
+
 ## Summary
 
 ### Loop Comparison

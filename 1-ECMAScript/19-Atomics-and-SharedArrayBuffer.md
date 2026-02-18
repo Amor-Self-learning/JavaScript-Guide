@@ -1339,24 +1339,740 @@ parallelSum(largeArray, 4).then(sum => {
 
 ---
 
-## Summary
+## 19.3 Race Conditions Deep Dive
 
-This document covered Atomics and SharedArrayBuffer comprehensively:
+Race conditions are the most common bugs in concurrent programming. Understanding them is essential for writing correct multi-threaded code.
 
-- **SharedArrayBuffer**: Creating shared memory, typed array views, structured data in shared memory, sharing between workers, producer-consumer patterns, security considerations (COOP/COEP headers)
-- **Atomics**: Atomic operations overview, arithmetic operations (add, sub), bitwise operations (and, or, xor), exchange operations, load/store for sequential consistency, wait/notify for synchronization, isLockFree for performance optimization, and multi-threaded coordination use cases
+### The Classic Race Condition
 
-These features enable true parallel processing in JavaScript, allowing multiple workers to safely share and modify memory concurrently.
+```javascript
+// The "lost update" problem - most common race condition
+
+// Shared state
+const sab = new SharedArrayBuffer(4);
+const counter = new Int32Array(sab);
+counter[0] = 0;
+
+// Worker A                    | Worker B
+// --------------------------- | ---------------------------
+// read counter[0] → 0         |
+//                             | read counter[0] → 0
+// compute 0 + 1 = 1           |
+//                             | compute 0 + 1 = 1
+// write counter[0] = 1        |
+//                             | write counter[0] = 1
+// 
+// RESULT: counter[0] = 1 (should be 2!)
+// Both increments "lost" one update
+
+// ❌ NON-ATOMIC: Race condition
+function incrementBad(arr, index) {
+  arr[index] = arr[index] + 1;  // Read + Write = TWO operations
+}
+
+// ✅ ATOMIC: No race condition
+function incrementGood(arr, index) {
+  Atomics.add(arr, index, 1);  // Read + Modify + Write = ONE atomic operation
+}
+```
+
+### Check-Then-Act Race Condition
+
+```javascript
+// Another classic: "check-then-act" pattern
+
+// ❌ WRONG: Non-atomic check-then-act
+function reserveSeatBad(seats, seatNumber) {
+  if (seats[seatNumber] === 0) {  // Check if available
+    // >>> RACE WINDOW: Another thread could reserve here! <<<
+    seats[seatNumber] = 1;        // Reserve
+    return true;
+  }
+  return false;
+}
+
+// ✅ CORRECT: Atomic compare-and-exchange
+function reserveSeatGood(seats, seatNumber) {
+  // Atomically: if seats[seatNumber] === 0, set it to 1
+  const result = Atomics.compareExchange(seats, seatNumber, 0, 1);
+  return result === 0;  // Returns true only if WE got the seat
+}
+
+// Usage
+const sab = new SharedArrayBuffer(100 * 4);  // 100 seats
+const seats = new Int32Array(sab);
+
+// Multiple workers can safely reserve seats
+const gotSeat = reserveSeatGood(seats, 42);
+console.log(gotSeat ? 'Reserved seat 42!' : 'Seat 42 taken');
+```
+
+### Read-Modify-Write Patterns
+
+```javascript
+// Common patterns that REQUIRE atomic operations
+
+// 1. COUNTER
+// ❌ Bad: count++ is read-modify-write (not atomic)
+// ✅ Good: Atomics.add(arr, idx, 1)
+
+// 2. FLAG TOGGLE
+// ❌ Bad: flag = !flag
+// ✅ Good: Atomics.xor(arr, idx, 1)  // Toggle between 0 and 1
+
+// 3. MAXIMUM TRACKING
+// ❌ Bad: if (value > max) max = value
+// ✅ Good:
+function atomicMax(arr, idx, value) {
+  let current = Atomics.load(arr, idx);
+  while (value > current) {
+    const oldValue = Atomics.compareExchange(arr, idx, current, value);
+    if (oldValue === current) return value;  // Success
+    current = oldValue;  // Someone else updated, retry
+  }
+  return current;
+}
+
+// 4. MINIMUM TRACKING
+function atomicMin(arr, idx, value) {
+  let current = Atomics.load(arr, idx);
+  while (value < current) {
+    const oldValue = Atomics.compareExchange(arr, idx, current, value);
+    if (oldValue === current) return value;
+    current = oldValue;
+  }
+  return current;
+}
+```
 
 ---
 
-**Related Topics to Explore Next:**
+## 19.4 Lock-Free Data Structures
 
-- Web Workers and Worker threads
-- Parallel algorithms and patterns
-- Lock-free data structures
-- Memory models and consistency
-- WebAssembly with shared memory
+Lock-free algorithms avoid mutexes entirely, using atomic operations for synchronization. They provide better performance and avoid deadlocks.
+
+### Lock-Free Stack (LIFO)
+
+```javascript
+// Lock-free stack using compare-and-swap
+class LockFreeStack {
+  constructor(capacity = 1000) {
+    // Layout: [top_index, ...elements]
+    this.sab = new SharedArrayBuffer((capacity + 1) * 4);
+    this.arr = new Int32Array(this.sab);
+    this.capacity = capacity;
+    
+    // top_index at position 0, elements start at position 1
+    Atomics.store(this.arr, 0, 0);  // Stack is empty
+  }
+  
+  push(value) {
+    while (true) {
+      const top = Atomics.load(this.arr, 0);
+      if (top >= this.capacity) return false;  // Stack full
+      
+      // Try to claim the slot
+      const oldTop = Atomics.compareExchange(this.arr, 0, top, top + 1);
+      if (oldTop === top) {
+        // We claimed slot [top + 1], now write the value
+        Atomics.store(this.arr, top + 1, value);
+        return true;
+      }
+      // Another thread pushed, retry
+    }
+  }
+  
+  pop() {
+    while (true) {
+      const top = Atomics.load(this.arr, 0);
+      if (top === 0) return undefined;  // Stack empty
+      
+      // Read the value first (before decrementing)
+      const value = Atomics.load(this.arr, top);
+      
+      // Try to decrement top
+      const oldTop = Atomics.compareExchange(this.arr, 0, top, top - 1);
+      if (oldTop === top) {
+        return value;  // Success
+      }
+      // Another thread popped, retry
+    }
+  }
+}
+```
+
+### Lock-Free Queue (FIFO)
+
+```javascript
+// Lock-free single-producer single-consumer (SPSC) queue
+// Most efficient for producer-consumer pattern
+class SPSCQueue {
+  constructor(capacity = 1024) {
+    // Layout: [head, tail, ...elements]
+    // Head: read position (consumer)
+    // Tail: write position (producer)
+    this.sab = new SharedArrayBuffer((capacity + 2) * 4);
+    this.arr = new Int32Array(this.sab);
+    this.capacity = capacity;
+    
+    Atomics.store(this.arr, 0, 0);  // head = 0
+    Atomics.store(this.arr, 1, 0);  // tail = 0
+  }
+  
+  // Called only by producer
+  enqueue(value) {
+    const tail = Atomics.load(this.arr, 1);
+    const nextTail = (tail + 1) % this.capacity;
+    const head = Atomics.load(this.arr, 0);
+    
+    if (nextTail === head) return false;  // Queue full
+    
+    Atomics.store(this.arr, tail + 2, value);  // Write element
+    Atomics.store(this.arr, 1, nextTail);      // Update tail
+    return true;
+  }
+  
+  // Called only by consumer
+  dequeue() {
+    const head = Atomics.load(this.arr, 0);
+    const tail = Atomics.load(this.arr, 1);
+    
+    if (head === tail) return undefined;  // Queue empty
+    
+    const value = Atomics.load(this.arr, head + 2);  // Read element
+    const nextHead = (head + 1) % this.capacity;
+    Atomics.store(this.arr, 0, nextHead);  // Update head
+    return value;
+  }
+}
+```
+
+### Lock-Free Counter with Statistics
+
+```javascript
+// High-performance counter that tracks min, max, and count
+class AtomicStats {
+  constructor() {
+    // Layout: [count, sum_lo, sum_hi, min, max]
+    this.sab = new SharedArrayBuffer(5 * 4);
+    this.arr = new Int32Array(this.sab);
+    
+    Atomics.store(this.arr, 0, 0);           // count
+    Atomics.store(this.arr, 1, 0);           // sum_lo
+    Atomics.store(this.arr, 2, 0);           // sum_hi
+    Atomics.store(this.arr, 3, 2147483647);  // min (MAX_INT)
+    Atomics.store(this.arr, 4, -2147483648); // max (MIN_INT)
+  }
+  
+  record(value) {
+    // Increment count
+    Atomics.add(this.arr, 0, 1);
+    
+    // Add to sum (handling overflow into sum_hi)
+    const lo = Atomics.add(this.arr, 1, value);
+    if (value > 0 && lo < value) Atomics.add(this.arr, 2, 1);  // Overflow
+    
+    // Update min
+    let currentMin = Atomics.load(this.arr, 3);
+    while (value < currentMin) {
+      const old = Atomics.compareExchange(this.arr, 3, currentMin, value);
+      if (old === currentMin) break;
+      currentMin = old;
+    }
+    
+    // Update max
+    let currentMax = Atomics.load(this.arr, 4);
+    while (value > currentMax) {
+      const old = Atomics.compareExchange(this.arr, 4, currentMax, value);
+      if (old === currentMax) break;
+      currentMax = old;
+    }
+  }
+  
+  getStats() {
+    return {
+      count: Atomics.load(this.arr, 0),
+      sum: Atomics.load(this.arr, 1),  // Note: ignoring overflow for simplicity
+      min: Atomics.load(this.arr, 3),
+      max: Atomics.load(this.arr, 4)
+    };
+  }
+}
+```
+
+---
+
+## 19.5 Mutex and Semaphore Implementation
+
+Sometimes you need mutual exclusion. Here's how to build synchronization primitives with Atomics.
+
+### Spinlock (Simple Mutex)
+
+```javascript
+// Simple spinlock - busy-waits (wastes CPU but low latency)
+class Spinlock {
+  constructor(sab, offset = 0) {
+    this.arr = new Int32Array(sab, offset, 1);
+    Atomics.store(this.arr, 0, 0);  // 0 = unlocked, 1 = locked
+  }
+  
+  lock() {
+    // Spin until we acquire the lock
+    while (Atomics.compareExchange(this.arr, 0, 0, 1) !== 0) {
+      // Busy wait - burns CPU
+    }
+  }
+  
+  unlock() {
+    Atomics.store(this.arr, 0, 0);
+  }
+  
+  tryLock() {
+    return Atomics.compareExchange(this.arr, 0, 0, 1) === 0;
+  }
+}
+
+// Usage
+const sab = new SharedArrayBuffer(4);
+const lock = new Spinlock(sab);
+
+lock.lock();
+try {
+  // Critical section - only one thread at a time
+  doSomethingCritical();
+} finally {
+  lock.unlock();
+}
+```
+
+### Blocking Mutex (with wait/notify)
+
+```javascript
+// Mutex that sleeps instead of spinning - better for long waits
+class Mutex {
+  constructor(sab, offset = 0) {
+    this.arr = new Int32Array(sab, offset, 1);
+    Atomics.store(this.arr, 0, 0);  // 0 = unlocked, 1 = locked, 2 = contended
+  }
+  
+  lock() {
+    // Fast path: uncontended lock
+    if (Atomics.compareExchange(this.arr, 0, 0, 1) === 0) {
+      return;  // Got the lock immediately
+    }
+    
+    // Slow path: contended lock
+    while (true) {
+      // Mark as contended (so unlock knows to wake waiters)
+      const prev = Atomics.exchange(this.arr, 0, 2);
+      if (prev === 0) return;  // Got the lock
+      
+      // Wait for unlock
+      Atomics.wait(this.arr, 0, 2);  // Sleep until notified
+    }
+  }
+  
+  unlock() {
+    const prev = Atomics.exchange(this.arr, 0, 0);
+    
+    // If there were waiters, wake one
+    if (prev === 2) {
+      Atomics.notify(this.arr, 0, 1);  // Wake one waiter
+    }
+  }
+}
+```
+
+### Semaphore
+
+```javascript
+// Counting semaphore - allows N concurrent accesses
+class Semaphore {
+  constructor(sab, offset = 0, initialCount = 1) {
+    this.arr = new Int32Array(sab, offset, 1);
+    Atomics.store(this.arr, 0, initialCount);
+  }
+  
+  acquire() {
+    while (true) {
+      const count = Atomics.load(this.arr, 0);
+      
+      if (count > 0) {
+        // Try to decrement
+        if (Atomics.compareExchange(this.arr, 0, count, count - 1) === count) {
+          return;  // Acquired
+        }
+        // CAS failed, retry
+      } else {
+        // No permits available, wait
+        Atomics.wait(this.arr, 0, 0);
+      }
+    }
+  }
+  
+  release() {
+    Atomics.add(this.arr, 0, 1);
+    Atomics.notify(this.arr, 0, 1);  // Wake one waiter
+  }
+  
+  tryAcquire() {
+    const count = Atomics.load(this.arr, 0);
+    if (count > 0) {
+      return Atomics.compareExchange(this.arr, 0, count, count - 1) === count;
+    }
+    return false;
+  }
+}
+
+// Usage: Connection pool with max 5 connections
+const sab = new SharedArrayBuffer(4);
+const pool = new Semaphore(sab, 0, 5);
+
+async function useConnection() {
+  pool.acquire();  // Blocks if 5 connections already in use
+  try {
+    await doWork();
+  } finally {
+    pool.release();
+  }
+}
+```
+
+### Read-Write Lock
+
+```javascript
+// Multiple readers OR single writer
+class RWLock {
+  constructor(sab, offset = 0) {
+    // Layout: [readers_count, writer_flag]
+    this.arr = new Int32Array(sab, offset, 2);
+    Atomics.store(this.arr, 0, 0);  // readers = 0
+    Atomics.store(this.arr, 1, 0);  // writer = 0
+  }
+  
+  readLock() {
+    while (true) {
+      // Wait for no writer
+      while (Atomics.load(this.arr, 1) !== 0) {
+        Atomics.wait(this.arr, 1, 1);
+      }
+      
+      // Increment reader count
+      Atomics.add(this.arr, 0, 1);
+      
+      // Double-check no writer sneaked in
+      if (Atomics.load(this.arr, 1) === 0) {
+        return;  // Successfully acquired read lock
+      }
+      
+      // Writer appeared, undo and retry
+      Atomics.sub(this.arr, 0, 1);
+    }
+  }
+  
+  readUnlock() {
+    const remaining = Atomics.sub(this.arr, 0, 1) - 1;
+    if (remaining === 0) {
+      // Last reader, notify waiting writers
+      Atomics.notify(this.arr, 0, 1);
+    }
+  }
+  
+  writeLock() {
+    // Acquire writer flag
+    while (Atomics.compareExchange(this.arr, 1, 0, 1) !== 0) {
+      Atomics.wait(this.arr, 1, 1);
+    }
+    
+    // Wait for all readers to finish
+    while (Atomics.load(this.arr, 0) !== 0) {
+      Atomics.wait(this.arr, 0, Atomics.load(this.arr, 0));
+    }
+  }
+  
+  writeUnlock() {
+    Atomics.store(this.arr, 1, 0);
+    Atomics.notify(this.arr, 1, Infinity);  // Wake all waiters
+  }
+}
+```
+
+---
+
+## 19.6 Real-World Patterns
+
+### Parallel Map-Reduce
+
+```javascript
+// Parallel processing with work stealing
+
+// Main thread
+function parallelMapReduce(data, mapFn, reduceFn, numWorkers = 4) {
+  const sab = new SharedArrayBuffer(
+    4 +                          // work index
+    4 +                          // completion count
+    data.length * 8 +            // input data
+    data.length * 8              // output data
+  );
+  
+  const control = new Int32Array(sab, 0, 2);
+  const input = new Float64Array(sab, 8, data.length);
+  const output = new Float64Array(sab, 8 + data.length * 8, data.length);
+  
+  // Copy input data
+  input.set(data);
+  Atomics.store(control, 0, 0);  // work_index = 0
+  Atomics.store(control, 1, 0);  // completed = 0
+  
+  // Spawn workers
+  const workers = [];
+  for (let i = 0; i < numWorkers; i++) {
+    const w = new Worker('map-worker.js');
+    w.postMessage({
+      sab,
+      mapFn: mapFn.toString(),
+      dataLength: data.length
+    });
+    workers.push(w);
+  }
+  
+  // Wait for completion
+  return new Promise(resolve => {
+    const check = () => {
+      if (Atomics.load(control, 1) === data.length) {
+        workers.forEach(w => w.terminate());
+        
+        // Reduce results
+        const result = Array.from(output).reduce(reduceFn);
+        resolve(result);
+      } else {
+        setTimeout(check, 10);
+      }
+    };
+    check();
+  });
+}
+
+// Worker (map-worker.js)
+self.addEventListener('message', ({ data: { sab, mapFn, dataLength } }) => {
+  const control = new Int32Array(sab, 0, 2);
+  const input = new Float64Array(sab, 8, dataLength);
+  const output = new Float64Array(sab, 8 + dataLength * 8, dataLength);
+  
+  const fn = eval(`(${mapFn})`);
+  
+  // Work stealing loop
+  while (true) {
+    const idx = Atomics.add(control, 0, 1);  // Claim work item
+    if (idx >= dataLength) break;  // No more work
+    
+    output[idx] = fn(input[idx], idx);  // Process
+    Atomics.add(control, 1, 1);  // Mark complete
+  }
+});
+
+// Usage
+parallelMapReduce(
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  x => x * x,           // Map: square each
+  (a, b) => a + b       // Reduce: sum
+).then(result => {
+  console.log('Sum of squares:', result);  // 385
+});
+```
+
+### Progress Reporting
+
+```javascript
+// Report progress from workers to main thread
+
+class ProgressTracker {
+  constructor(numTasks) {
+    this.sab = new SharedArrayBuffer(4 * 3);  // [completed, total, cancelled]
+    this.arr = new Int32Array(this.sab);
+    
+    Atomics.store(this.arr, 0, 0);         // completed
+    Atomics.store(this.arr, 1, numTasks);  // total
+    Atomics.store(this.arr, 2, 0);         // cancelled
+  }
+  
+  // Called by workers
+  incrementProgress() {
+    return Atomics.add(this.arr, 0, 1) + 1;
+  }
+  
+  // Called by main thread
+  getProgress() {
+    const completed = Atomics.load(this.arr, 0);
+    const total = Atomics.load(this.arr, 1);
+    return { completed, total, percent: (completed / total) * 100 };
+  }
+  
+  // Called by main thread to cancel
+  cancel() {
+    Atomics.store(this.arr, 2, 1);
+    Atomics.notify(this.arr, 2, Infinity);
+  }
+  
+  // Called by workers to check cancellation
+  isCancelled() {
+    return Atomics.load(this.arr, 2) === 1;
+  }
+}
+
+// Usage
+const tracker = new ProgressTracker(1000);
+
+// Main thread: poll progress
+const interval = setInterval(() => {
+  const { completed, total, percent } = tracker.getProgress();
+  console.log(`Progress: ${completed}/${total} (${percent.toFixed(1)}%)`);
+  
+  if (completed === total) {
+    clearInterval(interval);
+    console.log('Done!');
+  }
+}, 100);
+
+// Worker: report progress
+self.addEventListener('message', ({ data: { sab } }) => {
+  const arr = new Int32Array(sab);
+  
+  for (let i = 0; i < 1000; i++) {
+    if (Atomics.load(arr, 2) === 1) break;  // Check cancellation
+    
+    doWork(i);
+    Atomics.add(arr, 0, 1);  // Report progress
+  }
+});
+```
+
+---
+
+## 19.7 Common Pitfalls
+
+### Pitfall 1: Forgetting Memory Barriers
+
+```javascript
+// ❌ BAD: Regular reads/writes have no ordering guarantees
+let flag = 0;
+let data = null;
+
+// Thread A
+data = computeResult();
+flag = 1;  // Other threads might see flag=1 BEFORE data is ready!
+
+// Thread B
+while (flag === 0) {}  // Even after seeing flag=1, data might be stale!
+console.log(data);
+
+// ✅ GOOD: Use Atomics for synchronization
+const sab = new SharedArrayBuffer(8);
+const arr = new Int32Array(sab);
+
+// Thread A
+arr[1] = computeResult();
+Atomics.store(arr, 0, 1);  // Memory barrier: all previous writes visible
+
+// Thread B
+while (Atomics.load(arr, 0) === 0) {}  // Memory barrier: sees all writes
+console.log(arr[1]);  // Guaranteed to see correct data
+```
+
+### Pitfall 2: ABA Problem
+
+```javascript
+// ABA: Value changes A→B→A, CAS succeeds when it shouldn't
+
+// ❌ BAD: Simple CAS loop
+function popBad(stack, top) {
+  const head = Atomics.load(stack, top);
+  // >>> Another thread pops head, pushes new item at same location <<<
+  // head is now different data, but same value!
+  Atomics.compareExchange(stack, top, head, stack[head]);  // Succeeds wrongly!
+}
+
+// ✅ GOOD: Use generation counter
+// Layout: [top | generation] packed into one Int32
+function popGood(stack, topGen) {
+  while (true) {
+    const combined = Atomics.load(stack, topGen);
+    const top = combined & 0xFFFF;
+    const gen = combined >>> 16;
+    
+    if (top === 0) return undefined;
+    
+    const newCombined = ((gen + 1) << 16) | (stack[top] & 0xFFFF);
+    if (Atomics.compareExchange(stack, topGen, combined, newCombined) === combined) {
+      return stack[top];
+    }
+  }
+}
+```
+
+### Pitfall 3: Deadlock
+
+```javascript
+// ❌ BAD: Deadlock from inconsistent lock ordering
+const lockA = new Mutex(sabA);
+const lockB = new Mutex(sabB);
+
+// Thread 1
+lockA.lock();
+lockB.lock();  // Waits for Thread 2
+// ...
+
+// Thread 2
+lockB.lock();
+lockA.lock();  // Waits for Thread 1
+// DEADLOCK!
+
+// ✅ GOOD: Always acquire locks in consistent order
+function safeOperation() {
+  const locks = [lockA, lockB].sort((a, b) => a.id - b.id);
+  
+  locks[0].lock();
+  locks[1].lock();
+  try {
+    // Critical section
+  } finally {
+    locks[1].unlock();
+    locks[0].unlock();
+  }
+}
+```
+
+---
+
+## 19.8 Summary
+
+| Concept | Purpose | Key Methods |
+|---------|---------|-------------|
+| **SharedArrayBuffer** | Share memory between workers | `new SharedArrayBuffer(bytes)` |
+| **Typed Array Views** | Read/write shared memory | `new Int32Array(sab)` |
+| **Atomics.add/sub** | Atomic arithmetic | `Atomics.add(arr, idx, val)` |
+| **Atomics.compareExchange** | Conditional atomic update | `Atomics.compareExchange(arr, idx, expected, new)` |
+| **Atomics.wait/notify** | Thread synchronization | `Atomics.wait(arr, idx, val)` |
+| **Atomics.load/store** | Memory barriers | `Atomics.load(arr, idx)` |
+
+### When to Use
+
+| Pattern | Use Case |
+|---------|----------|
+| **Lock-free counter** | High-frequency updates, statistics |
+| **Spinlock** | Short critical sections, low contention |
+| **Blocking mutex** | Long critical sections, high contention |
+| **Semaphore** | Resource pools, rate limiting |
+| **SPSC Queue** | Producer-consumer pipelines |
+
+### Best Practices
+
+1. **Prefer lock-free** when possible (better performance, no deadlocks)
+2. **Use blocking wait** for long waits (saves CPU vs spinning)
+3. **Consistent lock ordering** to prevent deadlocks
+4. **Generation counters** to prevent ABA problems
+5. **Memory barriers** (Atomics.load/store) for non-atomic data synchronization
+
 ---
 
 **End of Chapter 19**

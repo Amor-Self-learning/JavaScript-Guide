@@ -2573,6 +2573,144 @@ console.log(ebook.download()); // "Downloading JavaScript eBook..."
 
 ---
 
+## Common Pitfalls
+
+### Pitfall 1: Forgetting super() in Constructor
+
+```javascript
+// ❌ WRONG: Must call super() before using 'this'
+class Child extends Parent {
+  constructor(name) {
+    this.name = name;  // ReferenceError!
+    super();
+  }
+}
+
+// ✅ CORRECT: super() first
+class Child extends Parent {
+  constructor(name) {
+    super();
+    this.name = name;
+  }
+}
+```
+
+### Pitfall 2: Arrow Methods and Inheritance
+
+```javascript
+// ❌ GOTCHA: Arrow methods can't be overridden properly
+class Parent {
+  greet = () => {
+    console.log('Parent');
+  }
+}
+
+class Child extends Parent {
+  greet = () => {
+    super.greet();  // ERROR: super doesn't work in arrow functions!
+    console.log('Child');
+  }
+}
+
+// ✅ CORRECT: Use regular methods for inheritance
+class Parent {
+  greet() {
+    console.log('Parent');
+  }
+}
+
+class Child extends Parent {
+  greet() {
+    super.greet();  // Works!
+    console.log('Child');
+  }
+}
+```
+
+### Pitfall 3: Private Fields and Inheritance
+
+```javascript
+// ⚠️ GOTCHA: Private fields are NOT inherited
+class Parent {
+  #secret = 'parent secret';
+  
+  getSecret() {
+    return this.#secret;
+  }
+}
+
+class Child extends Parent {
+  reveal() {
+    return this.#secret;  // SyntaxError! #secret doesn't exist in Child
+  }
+}
+
+// ✅ SOLUTION: Use protected pattern or getter
+class Parent {
+  #secret = 'parent secret';
+  
+  get _secret() {  // "Protected" via convention
+    return this.#secret;
+  }
+}
+```
+
+### Pitfall 4: this in Callbacks
+
+```javascript
+// ❌ WRONG: 'this' is lost in callbacks
+class Button {
+  constructor(label) {
+    this.label = label;
+  }
+  
+  handleClick() {
+    console.log(`Clicked: ${this.label}`);
+  }
+  
+  attach(element) {
+    element.addEventListener('click', this.handleClick);  // 'this' is element!
+  }
+}
+
+// ✅ CORRECT: Bind or use arrow function
+class Button {
+  handleClick = () => {  // Arrow function preserves 'this'
+    console.log(`Clicked: ${this.label}`);
+  }
+  
+  // OR bind in constructor
+  constructor(label) {
+    this.label = label;
+    this.handleClick = this.handleClick.bind(this);
+  }
+}
+```
+
+### Pitfall 5: Class vs Object for Configuration
+
+```javascript
+// ❌ OVERKILL: Class for simple data
+class Config {
+  constructor() {
+    this.apiUrl = 'https://api.example.com';
+    this.timeout = 5000;
+  }
+}
+const config = new Config();
+
+// ✅ SIMPLER: Use plain object
+const config = {
+  apiUrl: 'https://api.example.com',
+  timeout: 5000
+};
+
+// Classes are for: behavior + state, inheritance, encapsulation
+// Objects are for: pure data, configuration, simple structures
+```
+
+---
+
 ## Summary
 
 This document covered ES6 Classes comprehensively:

@@ -5504,6 +5504,169 @@ async function good() {
 
 ---
 
+## Mastery Check
+
+### Quiz Questions
+
+**Q1:** What does this output?
+```javascript
+const funcs = [];
+for (var i = 0; i < 3; i++) {
+  funcs.push(() => i);
+}
+console.log(funcs.map(f => f()));
+```
+
+<details>
+<summary>Answer</summary>
+
+`[3, 3, 3]` — `var` is function-scoped, so all closures capture the same `i` which ends up as 3. Using `let` would give `[0, 1, 2]`.
+</details>
+
+**Q2:** What's the value of `this` in each call?
+```javascript
+const obj = {
+  name: 'Alice',
+  greet: function() { return this.name; },
+  greetArrow: () => this.name
+};
+
+console.log(obj.greet());
+console.log(obj.greetArrow());
+
+const greet = obj.greet;
+console.log(greet());
+```
+
+<details>
+<summary>Answer</summary>
+
+```javascript
+console.log(obj.greet());       // "Alice" (this = obj)
+console.log(obj.greetArrow());  // undefined (arrow captures outer this, not obj)
+console.log(greet());           // undefined (this = globalThis in non-strict, TypeError in strict)
+```
+</details>
+
+**Q3:** Explain the difference:
+```javascript
+function* gen() {
+  yield 1;
+  yield 2;
+  return 3;
+}
+
+console.log([...gen()]);
+```
+
+<details>
+<summary>Answer</summary>
+
+`[1, 2]` — The spread operator only collects `yield` values where `done: false`. The `return 3` produces `{ value: 3, done: true }` which is ignored by spread/for-of.
+</details>
+
+**Q4:** What happens here?
+```javascript
+async function fetchData() {
+  const result = await Promise.reject('Error!');
+  return result;
+}
+
+fetchData().then(console.log).catch(console.error);
+```
+
+<details>
+<summary>Answer</summary>
+
+Logs `"Error!"` via `catch`. The `await` on a rejected promise throws, which rejects the async function's returned promise. Without try-catch inside, the error propagates.
+</details>
+
+### Coding Challenges
+
+**Challenge 1:** Implement `memoize(fn)` that caches function results based on arguments.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function memoize(fn) {
+  const cache = new Map();
+  
+  return function(...args) {
+    const key = JSON.stringify(args);
+    
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+// Usage
+const slowFib = (n) => n <= 1 ? n : slowFib(n-1) + slowFib(n-2);
+const fastFib = memoize(slowFib);
+```
+</details>
+
+**Challenge 2:** Write a `curry(fn)` function that transforms `add(a, b, c)` into `add(1)(2)(3)`.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    }
+    return function(...moreArgs) {
+      return curried.apply(this, args.concat(moreArgs));
+    };
+  };
+}
+
+// Usage
+const add = (a, b, c) => a + b + c;
+const curriedAdd = curry(add);
+console.log(curriedAdd(1)(2)(3));  // 6
+console.log(curriedAdd(1, 2)(3));  // 6
+```
+</details>
+
+**Challenge 3:** Create an async `retry(fn, maxAttempts)` that retries a failing async function.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+async function retry(fn, maxAttempts, delay = 1000) {
+  let lastError;
+  
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxAttempts) {
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+  
+  throw lastError;
+}
+
+// Usage
+const fetchData = () => fetch('/api/data').then(r => r.json());
+const result = await retry(fetchData, 3);
+```
+</details>
+
+---
+
 **End of Chapter 3: Functions**
 
 Functions are JavaScript's primary abstraction mechanism. With closures, higher-order patterns, generators, and async/await mastered, you're ready to tackle objects and prototypes.

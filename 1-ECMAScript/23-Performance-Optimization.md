@@ -619,6 +619,331 @@ function sumDense(arr) {
 }
 ```
 
+### Engine Internals Deep Dive
+
+Understanding what happens inside JavaScript engines helps write code that the engine can optimize.
+
+#### V8 Architecture (Chrome, Node.js)
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                         V8 Engine                               │
+├────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Source Code                                                    │
+│       │                                                          │
+│       ▼                                                          │
+│   ┌───────────┐                                                  │
+│   │  Parser   │  → Builds Abstract Syntax Tree (AST)            │
+│   └─────┬─────┘                                                  │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │ Ignition  │  → Bytecode interpreter (fast startup)          │
+│   │(Interpreter)   Collects type feedback                       │
+│   └─────┬─────┘                                                  │
+│         │ (hot function detected)                                │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │ TurboFan  │  → Optimizing compiler (fast execution)         │
+│   │(Compiler) │     Uses type feedback for optimization          │
+│   └─────┬─────┘                                                  │
+│         │ (type assumption violated)                             │
+│         ▼                                                        │
+│   Deoptimization → Back to Ignition bytecode                     │
+│                                                                  │
+└────────────────────────────────────────────────────────────────┘
+```
+
+#### What Ignition Does
+
+```javascript
+// Ignition compiles JavaScript to bytecode
+function add(a, b) {
+  return a + b;
+}
+
+// Ignition generates bytecode like:
+// Ldar a1        (Load argument 1 into accumulator)
+// Add a2         (Add argument 2)
+// Return         (Return accumulator)
+
+// While running, Ignition collects TYPE FEEDBACK:
+// "add() was called with (int, int) 1000 times"
+// This feedback guides TurboFan optimization
+```
+
+#### What TurboFan Does
+
+```javascript
+// TurboFan optimizes hot functions based on type feedback
+
+function sum(arr) {
+  let total = 0;
+  for (let i = 0; i < arr.length; i++) {
+    total += arr[i];
+  }
+  return total;
+}
+
+// If called repeatedly with integer arrays:
+// - TurboFan assumes arr contains SMIs (Small Integers)
+// - Generates machine code with integer math (no type checks)
+// - Can unroll loops, inline functions, eliminate bounds checks
+
+// If assumption breaks (e.g., arr contains floats):
+// - Deoptimization: back to Ignition bytecode
+// - Re-optimize with new type information
+```
+
+#### Shape Transitions (Hidden Classes)
+
+```javascript
+// V8 tracks object "shapes" (hidden classes) for optimization
+
+// Shape C0: empty object {}
+const obj = {};
+
+// Shape C1: {x} 
+obj.x = 1;
+
+// Shape C2: {x, y}
+obj.y = 2;
+
+// Transition chain: C0 → C1 → C2
+
+// Objects with same property order share shapes:
+const a = { x: 1, y: 2 };  // Shape: {x, y}
+const b = { x: 3, y: 4 };  // Shape: {x, y} (same!)
+
+// Different order = different shape:
+const c = { y: 1, x: 2 };  // Shape: {y, x} (different!)
+
+// V8 uses shapes for inline caching:
+function getX(obj) {
+  return obj.x;
+}
+
+// First call: Cache miss, look up property, cache shape + offset
+// Subsequent calls with same shape: Direct offset access (fast!)
+```
+
+#### Inline Caching (IC) States
+
+```javascript
+// IC State Machine:
+// UNINITIALIZED → MONOMORPHIC → POLYMORPHIC → MEGAMORPHIC
+
+// UNINITIALIZED: Never called
+function getX(obj) {
+  return obj.x;  // IC state: UNINITIALIZED
+}
+
+// MONOMORPHIC: One shape seen (FASTEST)
+getX({ x: 1, y: 2 });  // IC state: MONOMORPHIC (shape A)
+getX({ x: 3, y: 4 });  // Still MONOMORPHIC (same shape)
+
+// POLYMORPHIC: 2-4 shapes seen (still fast)
+getX({ x: 1 });        // IC state: POLYMORPHIC (shapes A, B)
+getX({ x: 1, z: 3 });  // POLYMORPHIC (shapes A, B, C)
+
+// MEGAMORPHIC: >4 shapes seen (SLOWEST)
+getX({ x: 1, a: 1 });
+getX({ x: 1, b: 1 });
+getX({ x: 1, c: 1 });
+getX({ x: 1, d: 1 });
+getX({ x: 1, e: 1 });  // IC state: MEGAMORPHIC
+
+// MEGAMORPHIC = V8 gives up caching, does full property lookup every time
+```
+
+#### Object Representation Modes
+
+```javascript
+// V8 has different internal representations for objects:
+
+// 1. FAST MODE (default): Hidden class + contiguous property array
+const fast = { x: 1, y: 2, z: 3 };
+// Properties stored in fixed-size array at known offsets
+
+// 2. DICTIONARY MODE: Hash table (after delete or too many properties)
+const dict = { x: 1, y: 2, z: 3 };
+delete dict.y;  // Triggers dictionary mode!
+// Properties stored in hash table (10x slower access)
+
+// How to detect (Node.js with --allow-natives-syntax):
+// %HasFastProperties(obj) returns true/false
+
+// 3. SMI (Small Integer): 31-bit integers stored inline
+const smi = 42;  // No heap allocation needed
+
+// 4. DOUBLE: 64-bit floats in "double box"
+const dbl = 3.14;  // Heap-allocated box
+
+// 5. POINTER: Reference to heap object
+const ptr = { x: 1 };  // Pointer to heap object
+```
+
+#### Elements Kinds (Array Optimization)
+
+```javascript
+// V8 tracks array "elements kinds" for optimization:
+
+// PACKED_SMI_ELEMENTS: Dense array of small integers (fastest)
+const smi = [1, 2, 3, 4, 5];
+
+// PACKED_DOUBLE_ELEMENTS: Dense array of doubles
+const dbl = [1.1, 2.2, 3.3];
+
+// PACKED_ELEMENTS: Dense array of any objects
+const obj = [{ x: 1 }, { x: 2 }];
+
+// HOLEY_SMI_ELEMENTS: Sparse array of integers
+const holey = [1, 2, , 4];  // Hole at index 2
+
+// Elements kinds form a lattice - they only transition DOWN:
+// PACKED_SMI → PACKED_DOUBLE → PACKED → HOLEY_SMI → HOLEY_DOUBLE → HOLEY
+
+// Once an array becomes HOLEY, it never goes back to PACKED!
+
+const arr = [1, 2, 3];        // PACKED_SMI_ELEMENTS
+arr.push(4.5);                // PACKED_DOUBLE_ELEMENTS
+arr.push({ x: 1 });           // PACKED_ELEMENTS
+arr[100] = 1;                 // HOLEY_ELEMENTS (created holes)
+
+// HOLEY arrays require bounds checking on every access
+```
+
+#### SpiderMonkey (Firefox) Architecture
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                     SpiderMonkey Engine                         │
+├────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Source Code                                                    │
+│       │                                                          │
+│       ▼                                                          │
+│   ┌───────────┐                                                  │
+│   │  Parser   │  → Builds AST                                   │
+│   └─────┬─────┘                                                  │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │ Baseline  │  → Fast-compiling JIT (like Ignition)           │
+│   │   JIT     │     Collects type information                    │
+│   └─────┬─────┘                                                  │
+│         │ (function becomes hot)                                 │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │ IonMonkey │  → Optimizing JIT (like TurboFan)               │
+│   │   JIT     │     Heavy optimization, slower compile           │
+│   └───────────┘                                                  │
+│                                                                  │
+└────────────────────────────────────────────────────────────────┘
+
+Key differences from V8:
+- SpiderMonkey uses "shapes" (same concept as V8 hidden classes)
+- IonMonkey is more aggressive at speculative optimization
+- SpiderMonkey has "Warp" (replaces IonMonkey frontend)
+```
+
+#### JavaScriptCore (Safari) Architecture
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                     JavaScriptCore Engine                       │
+├────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Source Code                                                    │
+│       │                                                          │
+│       ▼                                                          │
+│   ┌───────────┐                                                  │
+│   │    LLInt  │  → Low Level Interpreter (fastest startup)      │
+│   └─────┬─────┘                                                  │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │ Baseline  │  → Simple JIT                                   │
+│   └─────┬─────┘                                                  │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │    DFG    │  → Data Flow Graph JIT (medium optimization)    │
+│   └─────┬─────┘                                                  │
+│         ▼                                                        │
+│   ┌───────────┐                                                  │
+│   │    FTL    │  → Faster Than Light JIT (max optimization)     │
+│   │  (LLVM)   │     Uses LLVM backend                            │
+│   └───────────┘                                                  │
+│                                                                  │
+└────────────────────────────────────────────────────────────────┘
+
+JSC has 4 tiers vs V8's 2 - more granular optimization levels
+```
+
+#### Writing Engine-Friendly Code
+
+```javascript
+// ✅ RULE 1: Consistent object shapes
+// BAD: Dynamic property addition
+function createUserBad(data) {
+  const user = {};
+  if (data.name) user.name = data.name;
+  if (data.age) user.age = data.age;  // Different shapes!
+  return user;
+}
+
+// GOOD: Always same properties
+function createUserGood(data) {
+  return {
+    name: data.name ?? null,
+    age: data.age ?? null
+  };
+}
+
+// ✅ RULE 2: Monomorphic function calls
+// BAD: Pass different types
+function process(item) {
+  return item.value * 2;
+}
+process({ value: 1, type: 'a' });
+process({ value: 2, type: 'b', extra: true });  // Different shape!
+
+// GOOD: Same shape always
+class Item {
+  constructor(value, type) {
+    this.value = value;
+    this.type = type;
+  }
+}
+process(new Item(1, 'a'));
+process(new Item(2, 'b'));
+
+// ✅ RULE 3: Avoid deoptimization triggers
+// BAD: Type changes
+function addNumbers(a, b) { return a + b; }
+addNumbers(1, 2);      // Optimized for integers
+addNumbers('a', 'b');  // DEOPT! Now handles strings
+
+// GOOD: Separate functions for different types
+function addInts(a, b) { return (a | 0) + (b | 0); }
+function addStrings(a, b) { return String(a) + String(b); }
+
+// ✅ RULE 4: Dense arrays
+// BAD: Sparse array
+const sparse = [];
+sparse[1000] = 'value';  // Creates holes
+
+// GOOD: Dense array
+const dense = new Array(1001).fill(null);
+dense[1000] = 'value';
+
+// ✅ RULE 5: Avoid delete
+// BAD: delete makes object slow
+const obj = { x: 1, y: 2 };
+delete obj.x;  // Dictionary mode!
+
+// GOOD: Set to undefined
+obj.x = undefined;  // Keeps fast mode
+```
+
 ---
 
 ## 23.2 Algorithm Optimization

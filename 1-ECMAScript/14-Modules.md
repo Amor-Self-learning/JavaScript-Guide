@@ -2074,6 +2074,113 @@ import { add, subtract } from './math.js';
 - **Single instance**: Singleton pattern
 - **Code organization**: Namespace or ES modules
 
+---
+
+## Common Pitfalls
+
+### Pitfall 1: import Not at Top Level
+
+```javascript
+// ❌ WRONG: import must be at top level
+function loadModule() {
+  import { helper } from './helper.js';  // SyntaxError!
+}
+
+// ✅ CORRECT: Static imports at top
+import { helper } from './helper.js';
+
+// ✅ CORRECT: Dynamic import for conditional loading
+async function loadModule() {
+  const { helper } = await import('./helper.js');
+}
+```
+
+### Pitfall 2: Circular Dependencies
+
+```javascript
+// ❌ PROBLEM: Circular import can cause undefined values
+
+// a.js
+import { b } from './b.js';
+export const a = 'A value: ' + b;  // b might be undefined!
+
+// b.js
+import { a } from './a.js';
+export const b = 'B value: ' + a;  // a might be undefined!
+
+// ✅ SOLUTION: Restructure to break the cycle
+// shared.js (no imports from a.js or b.js)
+export const shared = 'shared';
+
+// Or use factory functions
+export function getA() { return 'A'; }
+export function getB() { return 'B'; }
+```
+
+### Pitfall 3: Named vs Default Import Mismatch
+
+```javascript
+// module.js
+export default function main() {}
+export const helper = () => {};
+
+// ❌ WRONG: Using braces for default import
+import { main } from './module.js';  // undefined! main is not named export
+
+// ❌ WRONG: No braces for named import  
+import helper from './module.js';  // Gets the default, not helper!
+
+// ✅ CORRECT
+import main from './module.js';           // Default (no braces)
+import { helper } from './module.js';     // Named (braces)
+import main, { helper } from './module.js';  // Both
+```
+
+### Pitfall 4: Live Bindings Surprise
+
+```javascript
+// counter.js
+export let count = 0;
+export function increment() {
+  count++;
+}
+
+// main.js
+import { count, increment } from './counter.js';
+
+console.log(count);  // 0
+increment();
+console.log(count);  // 1 — live binding updated!
+
+// ❌ BUT: You can't reassign imported bindings
+count = 5;  // TypeError: Assignment to constant variable
+```
+
+### Pitfall 5: Missing File Extensions
+
+```javascript
+// ❌ WRONG: No extension in browser ES modules
+import { helper } from './helper';  // Fails in browser!
+
+// ✅ CORRECT: Include extension for browser ES modules
+import { helper } from './helper.js';
+
+// Note: Node.js and bundlers may work without extensions
+// but browser native ES modules require them
+```
+
+### Pitfall 6: this in Modules
+
+```javascript
+// ❌ GOTCHA: Module-level 'this' is undefined (not window/global)
+console.log(this);  // undefined in ES modules
+
+// ✅ Use globalThis for cross-environment global access
+console.log(globalThis);  // window in browser, global in Node
+```
+
+---
+
 ### Next Steps
 
 - Master ES modules (modern standard)

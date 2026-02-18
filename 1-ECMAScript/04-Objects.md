@@ -5015,6 +5015,165 @@ greet.call({ name: 'Alice' });
 
 ---
 
+## Mastery Check
+
+### Quiz Questions
+
+**Q1:** What's the output?
+```javascript
+const obj = { a: 1 };
+const copy = obj;
+copy.a = 2;
+console.log(obj.a);
+```
+
+<details>
+<summary>Answer</summary>
+
+`2` — Objects are assigned by reference. `copy` and `obj` point to the same object.
+</details>
+
+**Q2:** What does this return?
+```javascript
+const obj = { x: 1, y: 2, z: 3 };
+const { x, ...rest } = obj;
+console.log(rest);
+```
+
+<details>
+<summary>Answer</summary>
+
+`{ y: 2, z: 3 }` — Rest in destructuring collects remaining properties.
+</details>
+
+**Q3:** What happens here?
+```javascript
+const obj = { a: 1 };
+Object.freeze(obj);
+obj.a = 2;
+obj.b = 3;
+console.log(obj);
+```
+
+<details>
+<summary>Answer</summary>
+
+`{ a: 1 }` — `freeze()` prevents modifications silently (or throws in strict mode). Neither the change to `a` nor the new property `b` takes effect.
+</details>
+
+**Q4:** What's the value of `this`?
+```javascript
+const obj = {
+  name: 'Object',
+  regular: function() { return this.name; },
+  arrow: () => this.name
+};
+
+const { regular, arrow } = obj;
+console.log(obj.regular());
+console.log(regular());
+console.log(obj.arrow());
+```
+
+<details>
+<summary>Answer</summary>
+
+```javascript
+console.log(obj.regular());  // "Object" (called on obj)
+console.log(regular());      // undefined (standalone call, this = globalThis)
+console.log(obj.arrow());    // undefined (arrow captures outer this, not obj)
+```
+</details>
+
+### Coding Challenges
+
+**Challenge 1:** Implement `deepClone(obj)` that creates a true deep copy (no shared references).
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function deepClone(obj) {
+  // Handle primitives and null
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+  
+  // Handle Date
+  if (obj instanceof Date) {
+    return new Date(obj.getTime());
+  }
+  
+  // Handle Array
+  if (Array.isArray(obj)) {
+    return obj.map(item => deepClone(item));
+  }
+  
+  // Handle Object
+  const cloned = {};
+  for (const key of Object.keys(obj)) {
+    cloned[key] = deepClone(obj[key]);
+  }
+  return cloned;
+}
+
+// Modern alternative:
+const clone = structuredClone(obj);  // Built-in deep clone
+```
+</details>
+
+**Challenge 2:** Write `pick(obj, keys)` that returns a new object with only specified keys.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function pick(obj, keys) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => keys.includes(key))
+  );
+}
+
+// Or:
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+// Usage
+const user = { name: 'Alice', age: 30, password: 'secret' };
+pick(user, ['name', 'age']);  // { name: 'Alice', age: 30 }
+```
+</details>
+
+**Challenge 3:** Create `defaults(target, ...sources)` that only sets missing properties (opposite of Object.assign).
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function defaults(target, ...sources) {
+  for (const source of sources) {
+    for (const key of Object.keys(source)) {
+      if (!(key in target)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+}
+
+// Usage
+const config = { port: 8080 };
+defaults(config, { port: 3000, host: 'localhost' });
+// { port: 8080, host: 'localhost' } — port wasn't overwritten
+```
+</details>
+
+---
+
 **End of Chapter 4: Objects**
 
 With object fundamentals mastered, you're ready to explore prototypes and inheritance.

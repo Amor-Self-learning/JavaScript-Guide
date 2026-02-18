@@ -10405,6 +10405,176 @@ class MyClass { }
 
 ---
 
+## Mastery Check
+
+Test your understanding with these challenges. Try to answer without running the code.
+
+### Quiz Questions
+
+**Q1:** What does this output?
+```javascript
+console.log(typeof null);
+console.log(typeof []);
+console.log(typeof function(){});
+```
+
+<details>
+<summary>Answer</summary>
+
+```
+"object"     // Historical bug in JavaScript
+"object"     // Arrays are objects
+"function"   // Functions get special treatment
+```
+</details>
+
+**Q2:** What's the output and why?
+```javascript
+let x = 1;
+{
+  console.log(x);
+  let x = 2;
+}
+```
+
+<details>
+<summary>Answer</summary>
+
+ReferenceError: Cannot access 'x' before initialization.
+
+The inner `let x` creates a new binding for the entire block (hoisting), but accessing it before the declaration triggers the Temporal Dead Zone error.
+</details>
+
+**Q3:** Predict the output:
+```javascript
+console.log(0.1 + 0.2 === 0.3);
+console.log(0.1 + 0.2);
+console.log(Number.EPSILON > Math.abs(0.1 + 0.2 - 0.3));
+```
+
+<details>
+<summary>Answer</summary>
+
+```javascript
+false               // IEEE 754 floating point imprecision
+0.30000000000000004 // The actual result
+true                // Using EPSILON for safe comparison
+```
+</details>
+
+**Q4:** What's the result?
+```javascript
+const result = [] + [];
+const result2 = [] + {};
+const result3 = {} + [];
+```
+
+<details>
+<summary>Answer</summary>
+
+```javascript
+""           // Both arrays coerce to "", "" + "" = ""
+"[object Object]"  // [] → "", {} → "[object Object]"
+0            // {} is parsed as empty block, +[] → 0
+             // (In expression context: "[object Object]")
+```
+</details>
+
+**Q5:** Fix this code so it works correctly:
+```javascript
+const config = {
+  api: {
+    // url might be undefined
+  }
+};
+const url = config.api.url || 'default';  // Problem with empty string
+```
+
+<details>
+<summary>Answer</summary>
+
+```javascript
+// Use nullish coalescing instead of ||
+const url = config.api.url ?? 'default';
+
+// ?? only falls back for null/undefined, not empty string or 0
+```
+</details>
+
+### Coding Challenges
+
+**Challenge 1:** Write a function that checks if two floating-point numbers are "close enough" to be considered equal.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function approximatelyEqual(a, b, epsilon = Number.EPSILON) {
+  return Math.abs(a - b) < epsilon;
+}
+
+// Or for larger tolerances:
+function approximatelyEqual(a, b, tolerance = 1e-10) {
+  return Math.abs(a - b) < tolerance;
+}
+```
+</details>
+
+**Challenge 2:** Without using `typeof`, write a function that returns the actual type of any value (distinguishing null, array, object, etc.).
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function realType(value) {
+  if (value === null) return 'null';
+  if (Array.isArray(value)) return 'array';
+  return typeof value;
+}
+
+// Or using Object.prototype.toString for all types:
+function realType(value) {
+  return Object.prototype.toString.call(value)
+    .slice(8, -1)
+    .toLowerCase();
+}
+// Returns: 'null', 'array', 'object', 'date', 'regexp', 'map', etc.
+```
+</details>
+
+**Challenge 3:** Explain what happens at each step:
+```javascript
+let a = 5;
+let b = a;
+a = 10;
+console.log(b);  // ?
+
+let obj1 = { x: 5 };
+let obj2 = obj1;
+obj1.x = 10;
+console.log(obj2.x);  // ?
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+// Primitives are copied by value
+let a = 5;      // a holds value 5
+let b = a;      // b gets a COPY of value 5
+a = 10;         // a changes, b is independent
+console.log(b); // 5 (unchanged)
+
+// Objects are copied by reference
+let obj1 = { x: 5 };  // obj1 holds reference to object
+let obj2 = obj1;       // obj2 gets same reference (not a copy!)
+obj1.x = 10;           // Modifies the shared object
+console.log(obj2.x);   // 10 (obj1 and obj2 point to same object)
+```
+</details>
+
+---
+
 **End of Chapter 1: Language Fundamentals**
 
 With these fundamentals internalized, you're ready to tackle functions, objects, and the advanced features built upon this foundation.
