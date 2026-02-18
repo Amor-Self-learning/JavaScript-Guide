@@ -320,32 +320,34 @@ let origin = { x: 0, y: 0 };
 **Common JSDoc Tags:**
 
 ```javascript
-@param       // Parameter description
-@returns     // Return value description
-@type        // Type of variable
-@typedef     // Custom type definition
-@property    // Object property
-@class       // Class description
-@constructor // Constructor function
-@throws      // Exceptions thrown
-@example     // Usage example
-@deprecated  // Mark as deprecated
-@author      // Author information
-@version     // Version information
-@see         // Cross-reference
-@link        // Link to resource
-@callback    // Callback function
-@async       // Async function
-@generator   // Generator function
-@private     // Private member
-@protected   // Protected member
-@public      // Public member
-@readonly    // Read-only property
-@static      // Static member
-@abstract    // Abstract method
-@override    // Override parent method
-@implements  // Implements interface
-@extends     // Extends parent
+/**
+* @param       // Parameter description
+* @returns     // Return value description
+* @type        // Type of variable
+* @typedef     // Custom type definition
+* @property    // Object property
+* @class       // Class description
+* @constructor // Constructor function
+* @throws      // Exceptions thrown
+* @example     // Usage example
+* @deprecated  // Mark as deprecated
+* @author      // Author information
+* @version     // Version information
+* @see         // Cross-reference
+* @link        // Link to resource
+* @callback    // Callback function
+* @async       // Async function
+* @generator   // Generator function
+* @private     // Private member
+* @protected   // Protected member
+* @public      // Public member
+* @readonly    // Read-only property
+* @static      // Static member
+* @abstract    // Abstract method
+* @override    // Override parent method
+* @implements  // Implements interface
+* @extends     // Extends parent
+*/
 ```
 
 **Comment Gotchas:**
