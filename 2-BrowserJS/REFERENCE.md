@@ -429,8 +429,8 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 17.1 | Payment Request API | `17-Payment-APIs/001-Payment-Request-API.md` | ⬜ |
-| 17.2 | Payment Handler API | `17-Payment-APIs/002-Payment-Handler-API.md` | ⬜ |
+| 17.1 | Payment Request API | `17-Payment-APIs/001-Payment-Request-API.md` | ✅ |
+| 17.2 | Payment Handler API | `17-Payment-APIs/002-Payment-Handler-API.md` | ✅ |
 
 **README coverage (§II.17):**
 - 17.1: PaymentRequest constructor; payment methods; `show`; payment response; complete/abort
@@ -442,9 +442,9 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 18.1 | Credentials | `18-Credential-Management-API/001-Credentials.md` | ⬜ |
-| 18.2 | Operations | `18-Credential-Management-API/002-Operations.md` | ⬜ |
-| 18.3 | Web Authentication (WebAuthn) | `18-Credential-Management-API/003-Web-Authentication.md` | ⬜ |
+| 18.1 | Credentials | `18-Credential-Management-API/001-Credentials.md` | ✅ |
+| 18.2 | Operations | `18-Credential-Management-API/002-Operations.md` | ✅ |
+| 18.3 | Web Authentication (WebAuthn) | `18-Credential-Management-API/003-Web-Authentication.md` | ✅ |
 
 **README coverage (§II.18):**
 - 18.1: PasswordCredential; FederatedCredential; PublicKeyCredential (WebAuthn)
@@ -457,8 +457,7 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 19.1 | Permission Queries | `19-Permissions-API/001-Permission-Queries.md` | ⬜ |
-| 19.2 | Permission Events | `19-Permissions-API/002-Permission-Events.md` | ⬜ |
+| 19.1 | Permission Queries | `19-Permissions-API/001-Permission-Queries.md` | ✅ |
 
 **README coverage (§II.19):**
 - 19.1: `navigator.permissions.query`; permission states (granted/denied/prompt); permission descriptors
