@@ -297,10 +297,10 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 9.1 | Dedicated Workers | `09-Web-Workers/001-Dedicated-Workers.md` | ⬜ |
-| 9.2 | Shared Workers | `09-Web-Workers/002-Shared-Workers.md` | ⬜ |
-| 9.3 | Service Workers | `09-Web-Workers/003-Service-Workers.md` | ⬜ |
-| 9.4 | Worklets | `09-Web-Workers/004-Worklets.md` | ⬜ |
+| 9.1 | Dedicated Workers | `09-Web-Workers/001-Dedicated-Workers.md` | ✅ |
+| 9.2 | Shared Workers | `09-Web-Workers/002-Shared-Workers.md` | ✅ |
+| 9.3 | Service Workers | `09-Web-Workers/003-Service-Workers.md` | ✅ |
+| 9.4 | Worklets | `09-Web-Workers/004-Worklets.md` | ✅ |
 
 **README coverage (§II.9):**
 - 9.1: Creating workers; `postMessage`/`onmessage`; transferable objects; worker scope; importing scripts; termination
