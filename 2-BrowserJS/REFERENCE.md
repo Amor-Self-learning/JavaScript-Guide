@@ -221,11 +221,11 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 5.1 | Web Storage | `05-Storage-APIs/001-Web-Storage.md` | ⬜ |
-| 5.2 | Cookies | `05-Storage-APIs/002-Cookies.md` | ⬜ |
-| 5.3 | IndexedDB | `05-Storage-APIs/003-IndexedDB.md` | ⬜ |
-| 5.4 | Cache API | `05-Storage-APIs/004-Cache-API.md` | ⬜ |
-| 5.5 | Storage Manager API | `05-Storage-APIs/005-Storage-Manager-API.md` | ⬜ |
+| 5.1 | Web Storage | `05-Storage-APIs/001-Web-Storage.md` | ✅ |
+| 5.2 | Cookies | `05-Storage-APIs/002-Cookies.md` | ✅ |
+| 5.3 | IndexedDB | `05-Storage-APIs/003-IndexedDB.md` | ✅ |
+| 5.4 | Cache API | `05-Storage-APIs/004-Cache-API.md` | ✅ |
+| 5.5 | Storage Manager | `05-Storage-APIs/005-Storage-Manager.md` | ✅ |
 
 **README coverage (§II.5):**
 - 5.1: localStorage (persistent) + sessionStorage (session-scoped); `setItem`/`getItem`/`removeItem`/`clear`/`key`; size limits; `storage` event
