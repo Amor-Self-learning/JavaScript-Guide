@@ -397,11 +397,11 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 15.1 | File API | `15-File-APIs/001-File-API.md` | ⬜ |
-| 15.2 | FileReader | `15-File-APIs/002-FileReader.md` | ⬜ |
-| 15.3 | Blob API | `15-File-APIs/003-Blob-API.md` | ⬜ |
-| 15.4 | File System Access API | `15-File-APIs/004-File-System-Access-API.md` | ⬜ |
-| 15.5 | Drag and Drop Files | `15-File-APIs/005-Drag-and-Drop-Files.md` | ⬜ |
+| 15.1 | File API | `15-File-APIs/001-File-API.md` | ✅ |
+| 15.2 | FileReader | `15-File-APIs/002-FileReader.md` | ✅ |
+| 15.3 | Blob API | `15-File-APIs/003-Blob-API.md` | ✅ |
+| 15.4 | File System Access API | `15-File-APIs/004-File-System-Access-API.md` | ✅ |
+| 15.5 | Drag and Drop Files | `15-File-APIs/005-Drag-and-Drop-Files.md` | ✅ |
 
 **README coverage (§II.15):**
 - 15.1: File object; FileList; reading from `<input type="file">`
@@ -416,8 +416,8 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 16.1 | Clipboard Operations | `16-Clipboard-API/001-Clipboard-Operations.md` | ⬜ |
-| 16.2 | Legacy Clipboard | `16-Clipboard-API/002-Legacy-Clipboard.md` | ⬜ |
+| 16.1 | Clipboard Operations | `16-Clipboard-API/001-Clipboard-Operations.md` | ✅ |
+| 16.2 | Legacy Clipboard | `16-Clipboard-API/002-Legacy-Clipboard.md` | ✅ |
 
 **README coverage (§II.16):**
 - 16.1: `navigator.clipboard.writeText`/`readText`; `write`/`read` (images/HTML); ClipboardItem; permissions
