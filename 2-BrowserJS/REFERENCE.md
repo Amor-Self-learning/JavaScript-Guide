@@ -204,10 +204,10 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 4.1 | Form Elements | `04-Forms/001-Form-Elements.md` | ⬜ |
-| 4.2 | Form API | `04-Forms/002-Form-API.md` | ⬜ |
-| 4.3 | Form Validation | `04-Forms/003-Form-Validation.md` | ⬜ |
-| 4.4 | FormData API | `04-Forms/004-FormData-API.md` | ⬜ |
+| 4.1 | Form Elements | `04-Forms/001-Form-Elements.md` | ✅ |
+| 4.2 | Form API | `04-Forms/002-Form-API.md` | ✅ |
+| 4.3 | Form Validation | `04-Forms/003-Form-Validation.md` | ✅ |
+| 4.4 | FormData API | `04-Forms/004-FormData-API.md` | ✅ |
 
 **README coverage (§II.4):**
 - 4.1: `<form>`, `<input>`, `<textarea>`, `<select>`, `<button>`; value/checked/selected/disabled
