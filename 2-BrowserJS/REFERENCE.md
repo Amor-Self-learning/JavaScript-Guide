@@ -284,8 +284,8 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 8.1 | SVG | `08-Graphics-and-Visualization/001-SVG.md` | ⬜ |
-| 8.2 | Web Animations API | `08-Graphics-and-Visualization/002-Web-Animations-API.md` | ⬜ |
+| 8.1 | SVG | `08-Graphics-and-Visualization/001-SVG.md` | ✅ |
+| 8.2 | Web Animations API | `08-Graphics-and-Visualization/002-Web-Animations-API.md` | ✅ |
 
 **README coverage (§II.8):**
 - 8.1: Inline SVG; SVG DOM manipulation; animating SVG; SVG paths; SVG filters
