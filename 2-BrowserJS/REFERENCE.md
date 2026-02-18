@@ -314,9 +314,9 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 10.1 | Web App Manifest | `10-Progressive-Web-Apps/001-Web-App-Manifest.md` | ⬜ |
-| 10.2 | Service Worker Strategies | `10-Progressive-Web-Apps/002-Service-Worker-Strategies.md` | ⬜ |
-| 10.3 | App Installation | `10-Progressive-Web-Apps/003-App-Installation.md` | ⬜ |
+| 10.1 | Web App Manifest | `10-Progressive-Web-Apps/001-Web-App-Manifest.md` | ✅ |
+| 10.2 | Service Worker Strategies | `10-Progressive-Web-Apps/002-Service-Worker-Strategies.md` | ✅ |
+| 10.3 | App Installation | `10-Progressive-Web-Apps/003-App-Installation.md` | ✅ |
 
 **README coverage (§II.10):**
 - 10.1: `manifest.json` structure; icons/colors/display modes; installation
