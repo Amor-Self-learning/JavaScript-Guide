@@ -1,2158 +1,6 @@
-<!-- TOC START -->
-## Table of Contents
-- [01-Language-Fundamentals.md](#toc-01-language-fundamentalsmd)
-- [1 Language Fundamentals](#toc-1-language-fundamentals)
-  - [1.1 Lexical Structure](#toc-11-lexical-structure)
-    - [1.1.1 Tokens and Keywords](#toc-111-tokens-and-keywords)
-    - [1.1.2 Reserved Words](#toc-112-reserved-words)
-    - [1.1.3 Identifiers and Naming Rules](#toc-113-identifiers-and-naming-rules)
-    - [1.1.4 Comments](#toc-114-comments)
-    - [1.1.5 Literals](#toc-115-literals)
-    - [1.1.6 Semicolons and ASI (Automatic Semicolon Insertion)](#toc-116-semicolons-and-asi-automatic-semicolon-insertion)
-    - [1.1.7 Unicode and Character Encoding](#toc-117-unicode-and-character-encoding)
-    - [1.1.8 Strict Mode](#toc-118-strict-mode)
-  - [1.2 Variables and Declarations](#toc-12-variables-and-declarations)
-    - [1.2.1 `var`: Function-Scoped Declaration](#toc-121-var-function-scoped-declaration)
-    - [Basic Syntax and Semantics](#toc-basic-syntax-and-semantics)
-    - [Function Scoping Deep Dive](#toc-function-scoping-deep-dive)
-    - [Global Scope Behavior](#toc-global-scope-behavior)
-    - [Hoisting Mechanics](#toc-hoisting-mechanics)
-    - [Re-declaration Semantics](#toc-re-declaration-semantics)
-    - [The Classic Loop Problem](#toc-the-classic-loop-problem)
-    - [1.2.2 `let`: Block-Scoped Declaration](#toc-122-let-block-scoped-declaration)
-    - [Basic Syntax and Semantics](#toc-basic-syntax-and-semantics-1)
-    - [Block Scoping](#toc-block-scoping)
-    - [Hoisting and the Temporal Dead Zone (TDZ)](#toc-hoisting-and-the-temporal-dead-zone-tdz)
-    - [No Re-declaration](#toc-no-re-declaration)
-    - [Loop Behavior and Per-Iteration Bindings](#toc-loop-behavior-and-per-iteration-bindings)
-    - [Global Scope Behavior](#toc-global-scope-behavior-1)
-    - [1.2.3 `const`: Immutable Binding](#toc-123-const-immutable-binding)
-    - [Basic Syntax and Semantics](#toc-basic-syntax-and-semantics-2)
-    - [Immutable Binding vs Immutable Value](#toc-immutable-binding-vs-immutable-value)
-    - [Initialization Required](#toc-initialization-required)
-    - [Object Immutability with `Object.freeze()`](#toc-object-immutability-with-objectfreeze)
-    - [Scoping, Hoisting, and TDZ](#toc-scoping-hoisting-and-tdz)
-    - [1.2.4 Hoisting Deep Dive](#toc-124-hoisting-deep-dive)
-    - [What is Hoisting?](#toc-what-is-hoisting)
-    - [`var` Hoisting](#toc-var-hoisting)
-    - [`let` and `const` Hoisting](#toc-let-and-const-hoisting)
-    - [Function Hoisting](#toc-function-hoisting)
-    - [Variable vs Function Hoisting Priority](#toc-variable-vs-function-hoisting-priority)
-    - [Hoisting in Different Scopes](#toc-hoisting-in-different-scopes)
-    - [1.2.5 Temporal Dead Zone (TDZ) Deep Dive](#toc-125-temporal-dead-zone-tdz-deep-dive)
-    - [Definition](#toc-definition)
-    - [TDZ Triggers](#toc-tdz-triggers)
-    - [TDZ and Default Parameters](#toc-tdz-and-default-parameters)
-    - [TDZ and `typeof`](#toc-tdz-and-typeof)
-    - [TDZ in Closures](#toc-tdz-in-closures)
-    - [Why TDZ Exists](#toc-why-tdz-exists)
-    - [1.2.6 Global Variables and `globalThis`](#toc-126-global-variables-and-globalthis)
-    - [Global Scope Mechanics](#toc-global-scope-mechanics)
-    - [The Global Object](#toc-the-global-object)
-    - [`globalThis`: Universal Global Access](#toc-globalthis-universal-global-access)
-    - [Global Pollution](#toc-global-pollution)
-    - [Global Variables Best Practices](#toc-global-variables-best-practices)
-    - [1.2.7 Practical Guidelines](#toc-127-practical-guidelines)
-    - [When to Use Each Declaration](#toc-when-to-use-each-declaration)
-    - [Common Patterns](#toc-common-patterns)
-    - [1.2.8 Edge Cases and Gotchas](#toc-128-edge-cases-and-gotchas)
-    - [1. Variable Shadowing](#toc-1-variable-shadowing)
-    - [2. Switch Statement Scope](#toc-2-switch-statement-scope)
-    - [3. Destructuring with `const`](#toc-3-destructuring-with-const)
-    - [4. Loop Variable Reassignment](#toc-4-loop-variable-reassignment)
-    - [5. TDZ and Class Methods](#toc-5-tdz-and-class-methods)
-    - [6. Closure Capture with `var` vs `let`](#toc-6-closure-capture-with-var-vs-let)
-    - [7. Global Object vs Global Lexical Environment](#toc-7-global-object-vs-global-lexical-environment)
-    - [8. Const with Object Methods](#toc-8-const-with-object-methods)
-    - [1.2.9 Performance Considerations](#toc-129-performance-considerations)
-    - [Variable Lookup Performance](#toc-variable-lookup-performance)
-    - [TDZ Overhead](#toc-tdz-overhead)
-    - [Memory Considerations](#toc-memory-considerations)
-    - [1.2.10 Summary](#toc-1210-summary)
-    - [Declaration Comparison Table](#toc-declaration-comparison-table)
-    - [Key Takeaways](#toc-key-takeaways)
-    - [Modern Best Practices](#toc-modern-best-practices)
-  - [1.3 Data Types](#toc-13-data-types)
-    - [1.3.1 Primitive vs Reference Types](#toc-131-primitive-vs-reference-types)
-    - [Fundamental Distinction](#toc-fundamental-distinction)
-    - [Value vs Reference Semantics](#toc-value-vs-reference-semantics)
-    - [Immutability of Primitives](#toc-immutability-of-primitives)
-    - [1.3.2 Primitive Types](#toc-132-primitive-types)
-    - [`undefined`](#toc-undefined)
-    - [`null`](#toc-null)
-    - [`Boolean`](#toc-boolean)
-    - [`Number`](#toc-number)
-    - [`BigInt`](#toc-bigint)
-    - [`String`](#toc-string)
-    - [`Symbol`](#toc-symbol)
-    - [1.3.3 Reference Types (Objects)](#toc-133-reference-types-objects)
-    - [`Object`](#toc-object)
-    - [`Array`](#toc-array)
-    - [`Function`](#toc-function)
-    - [`Date`](#toc-date)
-    - [`RegExp`](#toc-regexp)
-    - [`Map`](#toc-map)
-    - [`WeakMap`](#toc-weakmap)
-    - [`Set`](#toc-set)
-    - [`WeakSet`](#toc-weakset)
-    - [Typed Arrays](#toc-typed-arrays)
-    - [`ArrayBuffer`](#toc-arraybuffer)
-    - [`SharedArrayBuffer`](#toc-sharedarraybuffer)
-    - [`DataView`](#toc-dataview)
-    - [`Promise`](#toc-promise)
-    - [`Proxy`](#toc-proxy)
-    - [`WeakRef`](#toc-weakref)
-    - [`FinalizationRegistry`](#toc-finalizationregistry)
-    - [1.3.4 Type Summary](#toc-134-type-summary)
-    - [Primitive Types](#toc-primitive-types)
-    - [Reference Types](#toc-reference-types)
-  - [1.4 Type System](#toc-14-type-system)
-    - [1.4.1 Type Checking with `typeof`](#toc-141-type-checking-with-typeof)
-    - [Basic Behavior](#toc-basic-behavior)
-    - [Return Values](#toc-return-values)
-    - [The `typeof null` Bug](#toc-the-typeof-null-bug)
-    - [`typeof` with Undeclared Variables](#toc-typeof-with-undeclared-variables)
-    - [`typeof` with Arrays and Objects](#toc-typeof-with-arrays-and-objects)
-    - [`typeof` with Functions](#toc-typeof-with-functions)
-    - [Practical Usage Patterns](#toc-practical-usage-patterns)
-    - [1.4.2 Type Checking with `instanceof`](#toc-142-type-checking-with-instanceof)
-    - [Basic Behavior](#toc-basic-behavior-1)
-    - [How `instanceof` Works](#toc-how-instanceof-works)
-    - [Primitives and `instanceof`](#toc-primitives-and-instanceof)
-    - [Cross-Realm Issues](#toc-cross-realm-issues)
-    - [Custom `instanceof` Behavior](#toc-custom-instanceof-behavior)
-    - [Checking Constructor](#toc-checking-constructor)
-    - [`instanceof` vs `typeof`](#toc-instanceof-vs-typeof)
-    - [1.4.3 Type Coercion (Implicit Conversion)](#toc-143-type-coercion-implicit-conversion)
-    - [Why Coercion Causes Bugs](#toc-why-coercion-causes-bugs)
-    - [String Coercion](#toc-string-coercion)
-    - [Numeric Coercion](#toc-numeric-coercion)
-    - [Boolean Coercion](#toc-boolean-coercion)
-    - [Object to Primitive Coercion](#toc-object-to-primitive-coercion)
-    - [Date to Primitive](#toc-date-to-primitive)
-    - [Array to String Coercion](#toc-array-to-string-coercion)
-    - [1.4.4 Type Conversion (Explicit)](#toc-144-type-conversion-explicit)
-    - [To String](#toc-to-string)
-    - [To Number](#toc-to-number)
-    - [To Boolean](#toc-to-boolean)
-    - [To Object (Boxing)](#toc-to-object-boxing)
-    - [1.4.5 Truthiness and Falsiness](#toc-145-truthiness-and-falsiness)
-    - [Falsy Values](#toc-falsy-values)
-    - [Truthy Values](#toc-truthy-values)
-    - [Common Gotchas](#toc-common-gotchas)
-    - [Conditional Patterns](#toc-conditional-patterns)
-    - [1.4.6 Equality Operators](#toc-146-equality-operators)
-    - [Strict Equality (`===`)](#toc-strict-equality)
-    - [Loose Equality (`==`)](#toc-loose-equality)
-    - [Loose Equality Algorithm (Abstract Equality)](#toc-loose-equality-algorithm-abstract-equality)
-    - [Dangerous `==` Examples](#toc-dangerous-examples)
-    - [`null` and `undefined` with `==`](#toc-null-and-undefined-with)
-    - [Object Equality](#toc-object-equality)
-    - [`Object.is()`](#toc-objectis)
-    - [Polyfill for `Object.is()`](#toc-polyfill-for-objectis)
-    - [Equality Best Practices](#toc-equality-best-practices)
-    - [1.4.7 Type Conversion Cheatsheet](#toc-147-type-conversion-cheatsheet)
-    - [To String](#toc-to-string-1)
-    - [To Number](#toc-to-number-1)
-    - [To Boolean](#toc-to-boolean-1)
-    - [1.4.8 Summary](#toc-148-summary)
-    - [Type Checking](#toc-type-checking)
-    - [Type Coercion vs Conversion](#toc-type-coercion-vs-conversion)
-    - [Equality Operators](#toc-equality-operators)
-    - [Best Practices](#toc-best-practices)
-  - [1.5 Operators](#toc-15-operators)
-    - [1.5.1 Arithmetic Operators](#toc-151-arithmetic-operators)
-    - [Basic Arithmetic](#toc-basic-arithmetic)
-    - [Unary Arithmetic Operators](#toc-unary-arithmetic-operators)
-    - [Special Arithmetic Cases](#toc-special-arithmetic-cases)
-    - [1.5.2 Assignment Operators](#toc-152-assignment-operators)
-    - [Simple Assignment (`=`)](#toc-simple-assignment)
-    - [Compound Assignment Operators](#toc-compound-assignment-operators)
-    - [Logical Assignment Operators (ES2021)](#toc-logical-assignment-operators-es2021)
-    - [Short-Circuit Evaluation](#toc-short-circuit-evaluation)
-    - [1.5.3 Comparison Operators](#toc-153-comparison-operators)
-    - [Equality Operators](#toc-equality-operators-1)
-    - [Relational Operators](#toc-relational-operators)
-    - [Comparison Type Coercion](#toc-comparison-type-coercion)
-    - [1.5.4 Logical Operators](#toc-154-logical-operators)
-    - [Logical AND (`&&`)](#toc-logical-and)
-    - [Logical OR (`||`)](#toc-logical-or)
-    - [Logical NOT (`!`)](#toc-logical-not)
-    - [Logical Operator Precedence](#toc-logical-operator-precedence)
-    - [1.5.5 Nullish Coalescing Operator (`??`)](#toc-155-nullish-coalescing-operator)
-    - [1.5.6 Conditional (Ternary) Operator (`? :`)](#toc-156-conditional-ternary-operator)
-    - [1.5.7 Optional Chaining Operator (`?.`)](#toc-157-optional-chaining-operator)
-    - [1.5.8 Bitwise Operators](#toc-158-bitwise-operators)
-    - [Bitwise AND (`&`)](#toc-bitwise-and)
-    - [Bitwise OR (`|`)](#toc-bitwise-or)
-    - [Bitwise XOR (`^`)](#toc-bitwise-xor)
-    - [Bitwise NOT (`~`)](#toc-bitwise-not)
-    - [Left Shift (`<<`)](#toc-left-shift)
-    - [Sign-Propagating Right Shift (`>>`)](#toc-sign-propagating-right-shift)
-    - [Zero-Fill Right Shift (`>>>`)](#toc-zero-fill-right-shift)
-    - [Bitwise Assignment Operators](#toc-bitwise-assignment-operators)
-    - [Bitwise Operators with Non-Integers](#toc-bitwise-operators-with-non-integers)
-    - [1.5.9 Other Operators](#toc-159-other-operators)
-    - [Comma Operator (`,`)](#toc-comma-operator)
-    - [`typeof` Operator](#toc-typeof-operator)
-    - [`instanceof` Operator](#toc-instanceof-operator)
-    - [`in` Operator](#toc-in-operator)
-    - [`delete` Operator](#toc-delete-operator)
-    - [`void` Operator](#toc-void-operator)
-    - [Spread Operator (`...`)](#toc-spread-operator)
-    - [Destructuring](#toc-destructuring)
-    - [1.5.10 Operator Precedence](#toc-1510-operator-precedence)
-    - [Associativity](#toc-associativity)
-    - [1.5.11 Summary](#toc-1511-summary)
-    - [Operator Categories](#toc-operator-categories)
-    - [Key Takeaways](#toc-key-takeaways-1)
-  - [1.6 Expressions and Statements](#toc-16-expressions-and-statements)
-    - [1.6.1 Expressions vs Statements](#toc-161-expressions-vs-statements)
-    - [Definitions](#toc-definitions)
-    - [Key Differences](#toc-key-differences)
-    - [Expression Statements](#toc-expression-statements)
-    - [1.6.2 Primary Expressions](#toc-162-primary-expressions)
-    - [Literals](#toc-literals)
-    - [Identifiers](#toc-identifiers)
-    - [Reserved Words as Property Names](#toc-reserved-words-as-property-names)
-    - [1.6.3 Left-Hand-Side Expressions](#toc-163-left-hand-side-expressions)
-    - [Property Access](#toc-property-access)
-    - [Function Calls](#toc-function-calls)
-    - [`new` Expression](#toc-new-expression)
-    - [`super` Expression](#toc-super-expression)
-    - [`this` Expression](#toc-this-expression)
-    - [Import and Import.meta](#toc-import-and-importmeta)
-    - [1.6.4 Expression Composition](#toc-164-expression-composition)
-    - [Binary Expressions](#toc-binary-expressions)
-    - [Unary Expressions](#toc-unary-expressions)
-    - [Ternary Expression](#toc-ternary-expression)
-    - [Comma Expression](#toc-comma-expression)
-    - [Grouping Expression](#toc-grouping-expression)
-    - [1.6.5 Declaration Statements](#toc-165-declaration-statements)
-    - [Variable Declarations](#toc-variable-declarations)
-    - [Function Declarations](#toc-function-declarations)
-    - [Class Declarations](#toc-class-declarations)
-    - [Import/Export Declarations](#toc-importexport-declarations)
-    - [1.6.6 Control Flow Statements](#toc-166-control-flow-statements)
-    - [`if` Statement](#toc-if-statement)
-    - [`switch` Statement](#toc-switch-statement)
-    - [1.6.7 Loop Statements](#toc-167-loop-statements)
-    - [`while` Loop](#toc-while-loop)
-    - [`do-while` Loop](#toc-do-while-loop)
-    - [`for` Loop](#toc-for-loop)
-    - [`for-in` Loop](#toc-for-in-loop)
-    - [`for-of` Loop](#toc-for-of-loop)
-    - [`for await...of` Loop](#toc-for-awaitof-loop)
-    - [1.6.8 Jump Statements](#toc-168-jump-statements)
-    - [`break` Statement](#toc-break-statement)
-    - [`continue` Statement](#toc-continue-statement)
-    - [`return` Statement](#toc-return-statement)
-    - [`throw` Statement](#toc-throw-statement)
-    - [`try-catch-finally` Statement](#toc-try-catch-finally-statement)
-    - [1.6.9 Other Statements](#toc-169-other-statements)
-    - [Empty Statement](#toc-empty-statement)
-    - [Block Statement](#toc-block-statement)
-    - [Labeled Statement](#toc-labeled-statement)
-    - [`with` Statement (Deprecated)](#toc-with-statement-deprecated)
-    - [`debugger` Statement](#toc-debugger-statement)
-    - [1.6.10 Expression vs Statement Contexts](#toc-1610-expression-vs-statement-contexts)
-    - [Where Statements Expected](#toc-where-statements-expected)
-    - [Where Expressions Expected](#toc-where-expressions-expected)
-    - [Ambiguous Constructs](#toc-ambiguous-constructs)
-    - [1.6.11 Summary](#toc-1611-summary)
-    - [Expression Types](#toc-expression-types)
-    - [Statement Types](#toc-statement-types)
-    - [Key Takeaways](#toc-key-takeaways-2)
-  - [1.7 Language Fundamentals Summary](#toc-17-language-fundamentals-summary)
-    - [Core Concepts](#toc-core-concepts)
-    - [Essential Rules](#toc-essential-rules)
-  - [Mastery Check](#toc-mastery-check)
-    - [Quiz Questions](#toc-quiz-questions)
-    - [Coding Challenges](#toc-coding-challenges)
-- [02-Control-Flow.md](#toc-02-control-flowmd)
-- [2 Control Flow](#toc-2-control-flow)
-  - [2.1 Conditional Statements](#toc-21-conditional-statements)
-    - [2.1.1 `if` Statement](#toc-211-if-statement)
-    - [Basic Syntax](#toc-basic-syntax)
-    - [Truthiness in Conditions](#toc-truthiness-in-conditions)
-    - [Block Statements](#toc-block-statements)
-    - [`if...else`](#toc-ifelse)
-    - [`else if` Chains](#toc-else-if-chains)
-    - [Dangling `else` Problem](#toc-dangling-else-problem)
-    - [Nested Conditionals](#toc-nested-conditionals)
-    - [Assignment in Conditions (Common Bug)](#toc-assignment-in-conditions-common-bug)
-    - [2.1.2 Ternary Operator](#toc-212-ternary-operator)
-    - [Basic Syntax](#toc-basic-syntax-1)
-    - [When to Use](#toc-when-to-use)
-    - [Nested Ternary](#toc-nested-ternary)
-    - [Ternary vs Logical Operators](#toc-ternary-vs-logical-operators)
-    - [Operator Precedence](#toc-operator-precedence)
-    - [2.1.3 `switch` Statement](#toc-213-switch-statement)
-    - [Basic Syntax](#toc-basic-syntax-2)
-    - [Strict Equality Comparison](#toc-strict-equality-comparison)
-    - [Fall-Through Behavior](#toc-fall-through-behavior)
-    - [`default` Case](#toc-default-case)
-    - [Block Scope in Cases](#toc-block-scope-in-cases)
-    - [Expressions in Cases](#toc-expressions-in-cases)
-    - [Return in Switch](#toc-return-in-switch)
-    - [`switch` vs `if...else`](#toc-switch-vs-ifelse)
-    - [Object Lookup Alternative](#toc-object-lookup-alternative)
-    - [2.1.4 Common Patterns and Best Practices](#toc-214-common-patterns-and-best-practices)
-    - [Guard Clauses](#toc-guard-clauses)
-    - [Null/Undefined Checks](#toc-nullundefined-checks)
-    - [Boolean Conditions](#toc-boolean-conditions)
-    - [Type Checking](#toc-type-checking-1)
-    - [Logical Operators in Conditions](#toc-logical-operators-in-conditions)
-    - [Switch Statement Best Practices](#toc-switch-statement-best-practices)
-    - [Readability Guidelines](#toc-readability-guidelines)
-    - [2.1.5 Performance Considerations](#toc-215-performance-considerations)
-    - [Short-Circuit Evaluation](#toc-short-circuit-evaluation-1)
-    - [Switch vs If-Else Performance](#toc-switch-vs-if-else-performance)
-    - [2.1.6 Summary](#toc-216-summary)
-    - [Conditional Statement Comparison](#toc-conditional-statement-comparison)
-    - [Best Practices](#toc-best-practices-1)
-    - [Key Takeaways](#toc-key-takeaways-3)
-  - [2.2 Loops](#toc-22-loops)
-    - [2.2.1 `for` Loop](#toc-221-for-loop)
-    - [Basic Syntax](#toc-basic-syntax-3)
-    - [Execution Order](#toc-execution-order)
-    - [Parts Are Optional](#toc-parts-are-optional)
-    - [`let` vs `var` in Loops](#toc-let-vs-var-in-loops)
-    - [Common Patterns](#toc-common-patterns-1)
-    - [2.2.2 `while` Loop](#toc-222-while-loop)
-    - [Basic Syntax](#toc-basic-syntax-4)
-    - [Execution Order](#toc-execution-order-1)
-    - [When to Use](#toc-when-to-use-1)
-    - [Infinite Loop](#toc-infinite-loop)
-    - [2.2.3 `do...while` Loop](#toc-223-dowhile-loop)
-    - [Basic Syntax](#toc-basic-syntax-5)
-    - [Executes At Least Once](#toc-executes-at-least-once)
-    - [When to Use](#toc-when-to-use-2)
-    - [2.2.4 `for...in` Loop](#toc-224-forin-loop)
-    - [Basic Syntax](#toc-basic-syntax-6)
-    - [Enumerates Properties](#toc-enumerates-properties)
-    - [Arrays (Don't Use)](#toc-arrays-dont-use)
-    - [Order of Iteration](#toc-order-of-iteration)
-    - [2.2.5 `for...of` Loop](#toc-225-forof-loop)
-    - [Basic Syntax](#toc-basic-syntax-7)
-    - [Works with Iterables](#toc-works-with-iterables)
-    - [Not for Plain Objects](#toc-not-for-plain-objects)
-    - [Destructuring in `for...of`](#toc-destructuring-in-forof)
-    - [Custom Iterables](#toc-custom-iterables)
-    - [2.2.6 `for await...of` Loop](#toc-226-for-awaitof-loop)
-    - [Basic Syntax](#toc-basic-syntax-8)
-    - [Async Iterables](#toc-async-iterables)
-    - [Streams and Async Iteration](#toc-streams-and-async-iteration)
-    - [Error Handling](#toc-error-handling)
-    - [2.2.7 Loop Control Best Practices](#toc-227-loop-control-best-practices)
-    - [Avoid Modifying Loop Variable](#toc-avoid-modifying-loop-variable)
-    - [Cache Length in Performance-Critical Loops](#toc-cache-length-in-performance-critical-loops)
-    - [Prefer `for...of` for Arrays](#toc-prefer-forof-for-arrays)
-    - [Loop Choice Flowchart](#toc-loop-choice-flowchart)
-  - [2.3 Jump Statements](#toc-23-jump-statements)
-    - [2.3.1 `break` Statement](#toc-231-break-statement)
-    - [Exit Loop](#toc-exit-loop)
-    - [Exit Switch](#toc-exit-switch)
-    - [Labeled `break`](#toc-labeled-break)
-    - [Common Patterns](#toc-common-patterns-2)
-    - [2.3.2 `continue` Statement](#toc-232-continue-statement)
-    - [Skip to Next Iteration](#toc-skip-to-next-iteration)
-    - [In Different Loops](#toc-in-different-loops)
-    - [Labeled `continue`](#toc-labeled-continue)
-    - [Common Patterns](#toc-common-patterns-3)
-    - [2.3.3 `return` Statement](#toc-233-return-statement)
-    - [Exit Function](#toc-exit-function)
-    - [Early Return (Guard Clauses)](#toc-early-return-guard-clauses)
-    - [Multiple Return Points](#toc-multiple-return-points)
-    - [Arrow Function Returns](#toc-arrow-function-returns)
-    - [2.3.4 Labels](#toc-234-labels)
-    - [Syntax](#toc-syntax)
-    - [Label Loops](#toc-label-loops)
-    - [Label Blocks](#toc-label-blocks)
-    - [Common Use Cases](#toc-common-use-cases)
-    - [Best Practices](#toc-best-practices-2)
-  - [2.4 Exception Handling](#toc-24-exception-handling)
-    - [2.4.1 `try...catch...finally`](#toc-241-trycatchfinally)
-    - [Basic `try...catch`](#toc-basic-trycatch)
-    - [`finally` Block](#toc-finally-block)
-    - [Catch Without Binding (ES2019)](#toc-catch-without-binding-es2019)
-    - [Nested `try...catch`](#toc-nested-trycatch)
-    - [2.4.2 `throw` Statement](#toc-242-throw-statement)
-    - [Throw Errors](#toc-throw-errors)
-    - [Throw Any Value](#toc-throw-any-value)
-    - [Custom Error Messages](#toc-custom-error-messages)
-    - [2.4.3 Built-In Error Types](#toc-243-built-in-error-types)
-    - [`Error` (Base Type)](#toc-error-base-type)
-    - [`TypeError`](#toc-typeerror)
-    - [`ReferenceError`](#toc-referenceerror)
-    - [`SyntaxError`](#toc-syntaxerror)
-    - [`RangeError`](#toc-rangeerror)
-    - [`URIError`](#toc-urierror)
-    - [`EvalError`](#toc-evalerror)
-    - [`AggregateError`](#toc-aggregateerror)
-    - [2.4.4 Custom Errors](#toc-244-custom-errors)
-    - [Extend `Error`](#toc-extend-error)
-    - [With Additional Properties](#toc-with-additional-properties)
-    - [Catch Specific Errors](#toc-catch-specific-errors)
-    - [2.4.5 Error Stack Traces](#toc-245-error-stack-traces)
-    - [`stack` Property](#toc-stack-property)
-    - [`Error.captureStackTrace()` (V8)](#toc-errorcapturestacktrace-v8)
-    - [2.4.6 Error Handling Patterns](#toc-246-error-handling-patterns)
-    - [Fail Fast](#toc-fail-fast)
-    - [Try-Catch at Boundaries](#toc-try-catch-at-boundaries)
-    - [Rethrowing](#toc-rethrowing)
-    - [Wrapping Errors](#toc-wrapping-errors)
-    - [Error Boundaries (React Pattern)](#toc-error-boundaries-react-pattern)
-    - [Global Error Handlers](#toc-global-error-handlers)
-    - [2.4.7 Best Practices](#toc-247-best-practices)
-  - [Common Pitfalls](#toc-common-pitfalls)
-    - [Pitfall 1: for-in on Arrays](#toc-pitfall-1-for-in-on-arrays)
-    - [Pitfall 2: Switch Fallthrough](#toc-pitfall-2-switch-fallthrough)
-    - [Pitfall 3: Loop Variable Closure with var](#toc-pitfall-3-loop-variable-closure-with-var)
-    - [Pitfall 4: Catching Too Broadly](#toc-pitfall-4-catching-too-broadly)
-    - [Pitfall 5: finally with return](#toc-pitfall-5-finally-with-return)
-  - [Summary](#toc-summary)
-    - [Loop Comparison](#toc-loop-comparison)
-    - [Jump Statements](#toc-jump-statements)
-    - [Exception Handling](#toc-exception-handling)
-  - [2.5 Control Flow Summary](#toc-25-control-flow-summary)
-    - [Best Practices](#toc-best-practices-3)
-- [03-Functions.md](#toc-03-functionsmd)
-- [3 Functions](#toc-3-functions)
-  - [3.1 Function Basics](#toc-31-function-basics)
-    - [3.1.1 Function Declarations](#toc-311-function-declarations)
-    - [Basic Syntax](#toc-basic-syntax-9)
-    - [Characteristics](#toc-characteristics)
-    - [Function Hoisting](#toc-function-hoisting-1)
-    - [Block-Scoped Function Declarations (Strict Mode)](#toc-block-scoped-function-declarations-strict-mode)
-    - [3.1.2 Function Expressions](#toc-312-function-expressions)
-    - [Basic Syntax](#toc-basic-syntax-10)
-    - [Characteristics](#toc-characteristics-1)
-    - [3.1.3 Anonymous Functions](#toc-313-anonymous-functions)
-    - [Definition](#toc-definition-1)
-    - [Common Uses](#toc-common-uses)
-    - [Name Inference](#toc-name-inference)
-    - [Drawbacks of Anonymous Functions](#toc-drawbacks-of-anonymous-functions)
-    - [3.1.4 Named Function Expressions](#toc-314-named-function-expressions)
-    - [Syntax](#toc-syntax-1)
-    - [Name Scope](#toc-name-scope)
-    - [Self-Reference](#toc-self-reference)
-    - [Best Practice](#toc-best-practice)
-    - [3.1.5 Function Properties and Methods](#toc-315-function-properties-and-methods)
-    - [`name` Property](#toc-name-property)
-    - [`length` Property](#toc-length-property)
-    - [`prototype` Property](#toc-prototype-property)
-    - [`call()`, `apply()`, `bind()`](#toc-call-apply-bind)
-    - [3.1.6 IIFEs (Immediately Invoked Function Expressions)](#toc-316-iifes-immediately-invoked-function-expressions)
-    - [Syntax](#toc-syntax-2)
-    - [Use Cases](#toc-use-cases)
-    - [Modern Alternative: Blocks](#toc-modern-alternative-blocks)
-    - [3.1.7 Function Declaration vs Expression](#toc-317-function-declaration-vs-expression)
-    - [Comparison](#toc-comparison)
-    - [When to Use Each](#toc-when-to-use-each)
-  - [3.2 Arrow Functions](#toc-32-arrow-functions)
-    - [3.2.1 Syntax Variations](#toc-321-syntax-variations)
-    - [Basic Syntax](#toc-basic-syntax-11)
-    - [No Parameters](#toc-no-parameters)
-    - [Single Parameter (No Parentheses)](#toc-single-parameter-no-parentheses)
-    - [Multiple Parameters](#toc-multiple-parameters)
-    - [Default Parameters](#toc-default-parameters)
-    - [Rest Parameters](#toc-rest-parameters)
-    - [Destructuring Parameters](#toc-destructuring-parameters)
-    - [3.2.2 Implicit Return](#toc-322-implicit-return)
-    - [Single Expression (No Braces)](#toc-single-expression-no-braces)
-    - [Returning Object Literal](#toc-returning-object-literal)
-    - [Multi-Line Implicit Return](#toc-multi-line-implicit-return)
-    - [Block Body (Explicit Return)](#toc-block-body-explicit-return)
-    - [3.2.3 Lexical `this` Binding](#toc-323-lexical-this-binding)
-    - [No Own `this`](#toc-no-own-this)
-    - [Lexical Scope Example](#toc-lexical-scope-example)
-    - [Old Workaround (Pre-ES6)](#toc-old-workaround-pre-es6)
-    - [Cannot Bind `this`](#toc-cannot-bind-this)
-    - [Class Methods](#toc-class-methods)
-    - [3.2.4 No `arguments` Object](#toc-324-no-arguments-object)
-    - [Arrow Functions Don't Have `arguments`](#toc-arrow-functions-dont-have-arguments)
-    - [Use Rest Parameters Instead](#toc-use-rest-parameters-instead)
-    - [Accessing Outer `arguments`](#toc-accessing-outer-arguments)
-    - [3.2.5 Cannot Be Constructors](#toc-325-cannot-be-constructors)
-    - [No `new`](#toc-no-new)
-    - [No `prototype` Property](#toc-no-prototype-property)
-    - [Use Regular Functions for Constructors](#toc-use-regular-functions-for-constructors)
-    - [3.2.6 Other Differences](#toc-326-other-differences)
-    - [No `super`](#toc-no-super)
-    - [No `new.target`](#toc-no-newtarget)
-    - [No `yield`](#toc-no-yield)
-    - [3.2.7 When to Use Arrow Functions](#toc-327-when-to-use-arrow-functions)
-    - [Good Use Cases](#toc-good-use-cases)
-    - [When NOT to Use](#toc-when-not-to-use)
-  - [3.3 Parameters and Arguments](#toc-33-parameters-and-arguments)
-    - [3.3.1 Default Parameters](#toc-331-default-parameters)
-    - [Basic Syntax](#toc-basic-syntax-12)
-    - [Default Values Can Be Expressions](#toc-default-values-can-be-expressions)
-    - [Defaults Evaluated at Call Time](#toc-defaults-evaluated-at-call-time)
-    - [Previous Parameters in Defaults](#toc-previous-parameters-in-defaults)
-    - [`undefined` Triggers Default](#toc-undefined-triggers-default)
-    - [Defaults and `length` Property](#toc-defaults-and-length-property)
-    - [3.3.2 Rest Parameters](#toc-332-rest-parameters)
-    - [Basic Syntax](#toc-basic-syntax-13)
-    - [Rest is an Array](#toc-rest-is-an-array)
-    - [Combined with Regular Parameters](#toc-combined-with-regular-parameters)
-    - [Rest vs `arguments`](#toc-rest-vs-arguments)
-    - [Rest and `length`](#toc-rest-and-length)
-    - [3.3.3 `arguments` Object](#toc-333-arguments-object)
-    - [Basic Usage](#toc-basic-usage)
-    - [Not a Real Array](#toc-not-a-real-array)
-    - [Properties](#toc-properties)
-    - [Aliasing (Sloppy Mode)](#toc-aliasing-sloppy-mode)
-    - [Not Available in Arrow Functions](#toc-not-available-in-arrow-functions)
-    - [Modern Alternative: Rest Parameters](#toc-modern-alternative-rest-parameters)
-    - [3.3.4 Parameter Destructuring](#toc-334-parameter-destructuring)
-    - [Array Destructuring](#toc-array-destructuring)
-    - [Object Destructuring](#toc-object-destructuring)
-    - [Nested Destructuring](#toc-nested-destructuring)
-    - [Renaming](#toc-renaming)
-    - [With Rest](#toc-with-rest)
-    - [3.3.5 Spread in Function Calls](#toc-335-spread-in-function-calls)
-    - [Basic Usage](#toc-basic-usage-1)
-    - [Combining with Regular Arguments](#toc-combining-with-regular-arguments)
-    - [Multiple Spreads](#toc-multiple-spreads)
-    - [With Other Values](#toc-with-other-values)
-    - [Spread Any Iterable](#toc-spread-any-iterable)
-  - [3.4 Return Values](#toc-34-return-values)
-    - [3.4.1 Explicit Return](#toc-341-explicit-return)
-    - [Basic Syntax](#toc-basic-syntax-14)
-    - [Early Return](#toc-early-return)
-    - [Returning Different Types](#toc-returning-different-types)
-    - [No Return Value (Returns `undefined`)](#toc-no-return-value-returns-undefined)
-    - [Explicit `undefined` Return](#toc-explicit-undefined-return)
-    - [3.4.2 Implicit Return (Arrow Functions)](#toc-342-implicit-return-arrow-functions)
-    - [Single Expression](#toc-single-expression)
-    - [Object Literal (Must Wrap)](#toc-object-literal-must-wrap)
-    - [Multi-Line Expression](#toc-multi-line-expression)
-    - [Conditional Return](#toc-conditional-return)
-    - [3.4.3 Returning Multiple Values](#toc-343-returning-multiple-values)
-    - [Using Arrays](#toc-using-arrays)
-    - [Using Objects](#toc-using-objects)
-    - [Choosing Between Array and Object](#toc-choosing-between-array-and-object)
-    - [Nested Destructuring](#toc-nested-destructuring-1)
-    - [3.4.4 Return Value Best Practices](#toc-344-return-value-best-practices)
-    - [Be Consistent](#toc-be-consistent)
-    - [Document Return Types (JSDoc)](#toc-document-return-types-jsdoc)
-    - [Avoid Too Many Return Points](#toc-avoid-too-many-return-points)
-  - [Summary](#toc-summary-1)
-    - [Function Types](#toc-function-types)
-    - [Parameter Features](#toc-parameter-features)
-    - [Best Practices](#toc-best-practices-4)
-  - [3.5 Scope and Closures](#toc-35-scope-and-closures)
-    - [3.5.1 Lexical Scope](#toc-351-lexical-scope)
-    - [Definition](#toc-definition-2)
-    - [Scope Chain](#toc-scope-chain)
-    - [Shadowing](#toc-shadowing)
-    - [Lexical vs Dynamic Scope](#toc-lexical-vs-dynamic-scope)
-    - [3.5.2 Function Scope](#toc-352-function-scope)
-    - [`var` is Function-Scoped](#toc-var-is-function-scoped)
-    - [Functions Create Scope](#toc-functions-create-scope)
-    - [Nested Functions](#toc-nested-functions)
-    - [3.5.3 Block Scope](#toc-353-block-scope)
-    - [`let` and `const` are Block-Scoped](#toc-let-and-const-are-block-scoped)
-    - [Blocks Create Scope](#toc-blocks-create-scope)
-    - [Loop Iterations Create Separate Scopes](#toc-loop-iterations-create-separate-scopes)
-    - [Temporal Dead Zone (TDZ)](#toc-temporal-dead-zone-tdz)
-    - [3.5.4 Closure Mechanism](#toc-354-closure-mechanism)
-    - [Why Closures Matter](#toc-why-closures-matter)
-    - [Definition](#toc-definition-3)
-    - [How Closures Work](#toc-how-closures-work)
-    - [Closure Scope Chain](#toc-closure-scope-chain)
-    - [Closures Capture Variables, Not Values](#toc-closures-capture-variables-not-values)
-    - [3.5.5 Closure Use Cases](#toc-355-closure-use-cases)
-    - [Private Variables](#toc-private-variables)
-    - [Function Factories](#toc-function-factories)
-    - [Event Handlers](#toc-event-handlers)
-    - [Memoization](#toc-memoization)
-    - [Iterators and Generators](#toc-iterators-and-generators)
-    - [Partial Application](#toc-partial-application)
-    - [3.5.6 Module Pattern with Closures](#toc-356-module-pattern-with-closures)
-    - [Revealing Module Pattern](#toc-revealing-module-pattern)
-    - [Singleton Pattern](#toc-singleton-pattern)
-    - [Namespace Pattern](#toc-namespace-pattern)
-    - [3.5.7 Memory Considerations](#toc-357-memory-considerations)
-    - [Closures and Memory](#toc-closures-and-memory)
-    - [Memory Leaks](#toc-memory-leaks)
-    - [Only Capture What's Needed](#toc-only-capture-whats-needed)
-    - [WeakMap for Private Data](#toc-weakmap-for-private-data)
-    - [3.5.8 Best Practices](#toc-358-best-practices)
-  - [3.6 Advanced Function Concepts](#toc-36-advanced-function-concepts)
-    - [3.6.1 Higher-Order Functions](#toc-361-higher-order-functions)
-    - [Definition](#toc-definition-4)
-    - [Functions as Arguments](#toc-functions-as-arguments)
-    - [Functions as Return Values](#toc-functions-as-return-values)
-    - [Built-In Higher-Order Functions](#toc-built-in-higher-order-functions)
-    - [Creating Utilities](#toc-creating-utilities)
-    - [3.6.2 Callbacks](#toc-362-callbacks)
-    - [Definition](#toc-definition-5)
-    - [Synchronous Callbacks](#toc-synchronous-callbacks)
-    - [Asynchronous Callbacks](#toc-asynchronous-callbacks)
-    - [Error-First Callbacks (Node.js Convention)](#toc-error-first-callbacks-nodejs-convention)
-    - [Callback Hell (Pyramid of Doom)](#toc-callback-hell-pyramid-of-doom)
-    - [3.6.3 Function Composition](#toc-363-function-composition)
-    - [Definition](#toc-definition-6)
-    - [Basic Composition](#toc-basic-composition)
-    - [Compose Function](#toc-compose-function)
-    - [Pipe Function](#toc-pipe-function)
-    - [Practical Example](#toc-practical-example)
-    - [3.6.4 Currying](#toc-364-currying)
-    - [Definition](#toc-definition-7)
-    - [Manual Currying](#toc-manual-currying)
-    - [Curry Utility](#toc-curry-utility)
-    - [Practical Use Cases](#toc-practical-use-cases)
-    - [3.6.5 Partial Application](#toc-365-partial-application)
-    - [Definition](#toc-definition-8)
-    - [Manual Partial Application](#toc-manual-partial-application)
-    - [Partial vs Currying](#toc-partial-vs-currying)
-    - [Using `bind` for Partial Application](#toc-using-bind-for-partial-application)
-    - [3.6.6 Function Binding](#toc-366-function-binding)
-    - [`bind()` Method](#toc-bind-method)
-    - [Binding with Arguments](#toc-binding-with-arguments)
-    - [`call()` Method](#toc-call-method)
-    - [`apply()` Method](#toc-apply-method)
-    - [Comparison](#toc-comparison-1)
-    - [3.6.7 IIFE Revisited](#toc-367-iife-revisited)
-    - [Pattern](#toc-pattern)
-    - [Use Cases](#toc-use-cases-1)
-    - [3.6.8 Recursion](#toc-368-recursion)
-    - [Definition](#toc-definition-9)
-    - [Basic Recursion](#toc-basic-recursion)
-    - [Recursive Patterns](#toc-recursive-patterns)
-    - [Tail Call Optimization (TCO)](#toc-tail-call-optimization-tco)
-    - [Mutual Recursion](#toc-mutual-recursion)
-    - [Stack Overflow](#toc-stack-overflow)
-    - [3.6.9 Memoization](#toc-369-memoization)
-    - [Definition](#toc-definition-10)
-    - [Basic Memoization](#toc-basic-memoization)
-    - [Memoizing Recursive Functions](#toc-memoizing-recursive-functions)
-    - [Limitations](#toc-limitations)
-    - [Advanced Memoization](#toc-advanced-memoization)
-    - [3.6.10 Pure Functions and Side Effects](#toc-3610-pure-functions-and-side-effects)
-    - [Pure Functions](#toc-pure-functions)
-    - [Impure Functions](#toc-impure-functions)
-    - [Benefits of Pure Functions](#toc-benefits-of-pure-functions)
-    - [Managing Side Effects](#toc-managing-side-effects)
-    - [Immutability](#toc-immutability)
-  - [Summary](#toc-summary-2)
-    - [Scope and Closures](#toc-scope-and-closures)
-    - [Advanced Concepts](#toc-advanced-concepts)
-  - [3.7 Generator Functions](#toc-37-generator-functions)
-    - [3.7.1 `function*` Syntax](#toc-371-function-syntax)
-    - [Basic Syntax](#toc-basic-syntax-15)
-    - [Generator as Method](#toc-generator-as-method)
-    - [Generator as Class Method](#toc-generator-as-class-method)
-    - [Generator vs Regular Function](#toc-generator-vs-regular-function)
-    - [3.7.2 `yield` Keyword](#toc-372-yield-keyword)
-    - [Basic Usage](#toc-basic-usage-2)
-    - [`yield` is an Expression](#toc-yield-is-an-expression)
-    - [`yield` in Loops](#toc-yield-in-loops)
-    - [Multiple `yield` Statements](#toc-multiple-yield-statements)
-    - [3.7.3 `yield*` Delegation](#toc-373-yield-delegation)
-    - [Delegating to Another Generator](#toc-delegating-to-another-generator)
-    - [Delegating to Arrays](#toc-delegating-to-arrays)
-    - [Delegating to Strings](#toc-delegating-to-strings)
-    - [Nested Delegation](#toc-nested-delegation)
-    - [Return Value from Delegation](#toc-return-value-from-delegation)
-    - [3.7.4 Generator Methods](#toc-374-generator-methods)
-    - [`next(value)` Method](#toc-nextvalue-method)
-    - [`return(value)` Method](#toc-returnvalue-method)
-    - [`throw(error)` Method](#toc-throwerror-method)
-    - [3.7.5 Iterating Generators](#toc-375-iterating-generators)
-    - [Manual Iteration](#toc-manual-iteration)
-    - [`for...of` Loop](#toc-forof-loop)
-    - [Spread Operator](#toc-spread-operator-1)
-    - [Destructuring](#toc-destructuring-1)
-    - [`Array.from()`](#toc-arrayfrom)
-    - [3.7.6 Use Cases](#toc-376-use-cases)
-    - [Lazy Evaluation](#toc-lazy-evaluation)
-    - [Infinite Sequences](#toc-infinite-sequences)
-    - [Custom Iterables](#toc-custom-iterables-1)
-    - [Tree Traversal](#toc-tree-traversal)
-    - [State Machines](#toc-state-machines)
-    - [Pulling Data (Pull-Based)](#toc-pulling-data-pull-based)
-    - [Cooperative Multitasking](#toc-cooperative-multitasking)
-    - [3.7.7 Generator Best Practices](#toc-377-generator-best-practices)
-  - [3.8 Async Functions](#toc-38-async-functions)
-    - [3.8.1 `async` Keyword](#toc-381-async-keyword)
-    - [Basic Syntax](#toc-basic-syntax-16)
-    - [Async Function Expressions](#toc-async-function-expressions)
-    - [Async Methods](#toc-async-methods)
-    - [Throwing Errors](#toc-throwing-errors)
-    - [3.8.2 `await` Keyword](#toc-382-await-keyword)
-    - [Basic Usage](#toc-basic-usage-3)
-    - [`await` Unwraps Promises](#toc-await-unwraps-promises)
-    - [Multiple `await` Statements](#toc-multiple-await-statements)
-    - [`await` Only in Async Functions](#toc-await-only-in-async-functions)
-    - [`await` with Non-Promises](#toc-await-with-non-promises)
-    - [3.8.3 Error Handling](#toc-383-error-handling)
-    - [`try...catch`](#toc-trycatch)
-    - [Multiple Try-Catch Blocks](#toc-multiple-try-catch-blocks)
-    - [`.catch()` on Promises](#toc-catch-on-promises)
-    - [Uncaught Errors](#toc-uncaught-errors)
-    - [`finally` Block](#toc-finally-block-1)
-    - [3.8.4 Top-Level `await`](#toc-384-top-level-await)
-    - [ES2022 Feature](#toc-es2022-feature)
-    - [Dynamic Imports](#toc-dynamic-imports)
-    - [Module Initialization](#toc-module-initialization)
-    - [Limitations](#toc-limitations-1)
-    - [Load Order Dependencies](#toc-load-order-dependencies)
-    - [3.8.5 Async Generators](#toc-385-async-generators)
-    - [`async function*` Syntax](#toc-async-function-syntax)
-    - [Async Iteration](#toc-async-iteration)
-    - [Real-World Example: Streaming](#toc-real-world-example-streaming)
-    - [Async Generator Methods](#toc-async-generator-methods)
-    - [Delegating with `yield*`](#toc-delegating-with-yield)
-    - [3.8.6 Async Patterns](#toc-386-async-patterns)
-    - [Sequential Execution](#toc-sequential-execution)
-    - [Parallel Execution](#toc-parallel-execution)
-    - [Race Conditions](#toc-race-conditions)
-    - [Retry Logic](#toc-retry-logic)
-    - [Timeout](#toc-timeout)
-    - [Cancellation](#toc-cancellation)
-    - [3.8.7 Best Practices](#toc-387-best-practices)
-    - [3.8.8 Common Pitfalls](#toc-388-common-pitfalls)
-    - [Forgetting `await`](#toc-forgetting-await)
-    - [Sequential Instead of Parallel](#toc-sequential-instead-of-parallel)
-    - [Not Handling Rejections](#toc-not-handling-rejections)
-  - [Summary](#toc-summary-3)
-    - [Generators](#toc-generators)
-    - [Async Functions](#toc-async-functions)
-  - [3.9 Functions Summary](#toc-39-functions-summary)
-    - [Best Practices](#toc-best-practices-5)
-  - [Mastery Check](#toc-mastery-check-1)
-    - [Quiz Questions](#toc-quiz-questions-1)
-    - [Coding Challenges](#toc-coding-challenges-1)
-- [04-Objects.md](#toc-04-objectsmd)
-- [4 Objects](#toc-4-objects)
-- [4. Objects and Object-Oriented Programming](#toc-4-objects-and-object-oriented-programming)
-  - [4.1 Object Fundamentals](#toc-41-object-fundamentals)
-    - [4.1.1 Object Literals](#toc-411-object-literals)
-    - [Basic Syntax](#toc-basic-syntax-17)
-    - [Property Types](#toc-property-types)
-    - [Property Keys](#toc-property-keys)
-    - [Trailing Commas](#toc-trailing-commas)
-    - [Empty Objects](#toc-empty-objects)
-    - [4.1.2 Object Creation Methods](#toc-412-object-creation-methods)
-    - [`new Object()`](#toc-new-object)
-    - [`Object.create()`](#toc-objectcreate)
-    - [`Object.create()` with Property Descriptors](#toc-objectcreate-with-property-descriptors)
-    - [Constructor Functions (Pre-ES6)](#toc-constructor-functions-pre-es6)
-    - [4.1.3 Property Access](#toc-413-property-access)
-    - [Dot Notation](#toc-dot-notation)
-    - [Bracket Notation](#toc-bracket-notation)
-    - [Optional Chaining (`?.`)](#toc-optional-chaining)
-    - [Nested Property Access](#toc-nested-property-access)
-    - [4.1.4 Computed Property Names](#toc-414-computed-property-names)
-    - [Basic Syntax](#toc-basic-syntax-18)
-    - [Expressions](#toc-expressions)
-    - [Function Calls](#toc-function-calls-1)
-    - [Symbol Keys](#toc-symbol-keys)
-    - [Template Literals](#toc-template-literals)
-    - [Method Names](#toc-method-names)
-    - [4.1.5 Property Shorthand](#toc-415-property-shorthand)
-    - [Basic Shorthand](#toc-basic-shorthand)
-    - [Mixed Syntax](#toc-mixed-syntax)
-    - [Function Returns](#toc-function-returns)
-    - [Destructuring with Shorthand](#toc-destructuring-with-shorthand)
-    - [4.1.6 Method Shorthand](#toc-416-method-shorthand)
-    - [Basic Syntax](#toc-basic-syntax-19)
-    - [`this` Binding](#toc-this-binding)
-    - [Generator Methods](#toc-generator-methods)
-    - [Async Methods](#toc-async-methods-1)
-    - [Async Generator Methods](#toc-async-generator-methods-1)
-    - [Computed Method Names](#toc-computed-method-names)
-  - [4.2 Properties](#toc-42-properties)
-    - [4.2.1 Data Properties](#toc-421-data-properties)
-    - [Definition](#toc-definition-11)
-    - [Default Attributes](#toc-default-attributes)
-    - [Reading and Writing](#toc-reading-and-writing)
-    - [Deleting](#toc-deleting)
-    - [4.2.2 Accessor Properties](#toc-422-accessor-properties)
-    - [Getters and Setters](#toc-getters-and-setters)
-    - [Read-Only Properties (Getter Only)](#toc-read-only-properties-getter-only)
-    - [Write-Only Properties (Setter Only)](#toc-write-only-properties-setter-only)
-    - [Validation in Setters](#toc-validation-in-setters)
-    - [Computed Getters/Setters](#toc-computed-getterssetters)
-    - [4.2.3 Property Attributes](#toc-423-property-attributes)
-    - [Four Attributes](#toc-four-attributes)
-    - [Default Values](#toc-default-values)
-    - [4.2.4 Property Descriptors](#toc-424-property-descriptors)
-    - [Descriptor Objects](#toc-descriptor-objects)
-    - [Cannot Mix Data and Accessor](#toc-cannot-mix-data-and-accessor)
-    - [4.2.5 `Object.defineProperty()`](#toc-425-objectdefineproperty)
-    - [Basic Syntax](#toc-basic-syntax-20)
-    - [Defining Data Property](#toc-defining-data-property)
-    - [Read-Only Property](#toc-read-only-property)
-    - [Non-Enumerable Property](#toc-non-enumerable-property)
-    - [Non-Configurable Property](#toc-non-configurable-property)
-    - [Defining Accessor Property](#toc-defining-accessor-property)
-    - [Modifying Existing Property](#toc-modifying-existing-property)
-    - [4.2.6 `Object.defineProperties()`](#toc-426-objectdefineproperties)
-    - [Define Multiple Properties](#toc-define-multiple-properties)
-    - [Creating Immutable Objects](#toc-creating-immutable-objects)
-    - [4.2.7 `Object.getOwnPropertyDescriptor()`](#toc-427-objectgetownpropertydescriptor)
-    - [Get Single Property Descriptor](#toc-get-single-property-descriptor)
-    - [Inspecting Accessor Properties](#toc-inspecting-accessor-properties)
-    - [Non-Existent Property](#toc-non-existent-property)
-    - [Inherited Properties](#toc-inherited-properties)
-    - [4.2.8 `Object.getOwnPropertyDescriptors()`](#toc-428-objectgetownpropertydescriptors)
-    - [Get All Property Descriptors](#toc-get-all-property-descriptors)
-    - [Cloning Objects with Accessors](#toc-cloning-objects-with-accessors)
-    - [Shallow Clone Utility](#toc-shallow-clone-utility)
-    - [4.2.9 Property Attribute Interactions](#toc-429-property-attribute-interactions)
-    - [`writable` and `configurable`](#toc-writable-and-configurable)
-    - [`configurable: false` Restrictions](#toc-configurable-false-restrictions)
-    - [`enumerable` Effects](#toc-enumerable-effects)
-    - [4.2.10 Common Patterns](#toc-4210-common-patterns)
-    - [Private Properties (Convention)](#toc-private-properties-convention)
-    - [Truly Private with Symbols](#toc-truly-private-with-symbols)
-    - [Truly Private with WeakMap](#toc-truly-private-with-weakmap)
-    - [Immutable Properties](#toc-immutable-properties)
-    - [Lazy Properties](#toc-lazy-properties)
-    - [Self-Defining Properties](#toc-self-defining-properties)
-  - [Summary](#toc-summary-4)
-    - [Object Creation](#toc-object-creation)
-    - [Property Access](#toc-property-access-1)
-    - [Property Types](#toc-property-types-1)
-    - [Property Attributes](#toc-property-attributes)
-    - [Descriptor Methods](#toc-descriptor-methods)
-    - [Key Patterns](#toc-key-patterns)
-  - [4.3 Object Methods](#toc-43-object-methods)
-    - [4.3.1 Enumeration Methods](#toc-431-enumeration-methods)
-    - [`Object.keys()`](#toc-objectkeys)
-    - [`Object.values()`](#toc-objectvalues)
-    - [`Object.entries()`](#toc-objectentries)
-    - [`Object.fromEntries()`](#toc-objectfromentries)
-    - [4.3.2 Object Copying](#toc-432-object-copying)
-    - [`Object.assign()`](#toc-objectassign)
-    - [4.3.3 Immutability Controls](#toc-433-immutability-controls)
-    - [`Object.freeze()`](#toc-objectfreeze)
-    - [`Object.seal()`](#toc-objectseal)
-    - [`Object.preventExtensions()`](#toc-objectpreventextensions)
-    - [Comparison Table](#toc-comparison-table)
-    - [`Object.isFrozen()`](#toc-objectisfrozen)
-    - [`Object.isSealed()`](#toc-objectissealed)
-    - [`Object.isExtensible()`](#toc-objectisextensible)
-    - [4.3.4 Prototype Methods](#toc-434-prototype-methods)
-    - [`Object.getPrototypeOf()`](#toc-objectgetprototypeof)
-    - [`Object.setPrototypeOf()`](#toc-objectsetprototypeof)
-    - [4.3.5 Comparison](#toc-435-comparison)
-    - [`Object.is()`](#toc-objectis-1)
-    - [4.3.6 Property Existence](#toc-436-property-existence)
-    - [`Object.hasOwn()` (ES2022)](#toc-objecthasown-es2022)
-    - [4.3.7 Additional Methods](#toc-437-additional-methods)
-    - [`Object.getOwnPropertyNames()`](#toc-objectgetownpropertynames)
-    - [`Object.getOwnPropertySymbols()`](#toc-objectgetownpropertysymbols)
-    - [All Own Properties](#toc-all-own-properties)
-    - [4.3.8 Practical Patterns](#toc-438-practical-patterns)
-    - [Cloning Objects](#toc-cloning-objects)
-    - [Merging Objects](#toc-merging-objects)
-    - [Object Comparison](#toc-object-comparison)
-    - [Pick Properties](#toc-pick-properties)
-    - [Omit Properties](#toc-omit-properties)
-    - [Map Object Values](#toc-map-object-values)
-  - [Summary](#toc-summary-5)
-    - [Enumeration](#toc-enumeration)
-    - [Copying](#toc-copying)
-    - [Immutability](#toc-immutability-1)
-    - [Prototypes](#toc-prototypes)
-    - [Comparison](#toc-comparison-2)
-    - [Property Inspection](#toc-property-inspection)
-    - [Key Patterns](#toc-key-patterns-1)
-  - [4.4 Destructuring](#toc-44-destructuring)
-    - [Why Destructuring Changes How You Write JavaScript](#toc-why-destructuring-changes-how-you-write-javascript)
-    - [Object Destructuring](#toc-object-destructuring-1)
-    - [Nested Destructuring](#toc-nested-destructuring-2)
-    - [Default Values](#toc-default-values-1)
-    - [Rest in Destructuring](#toc-rest-in-destructuring)
-    - [Renaming During Destructuring](#toc-renaming-during-destructuring)
-  - [4.5 Spread and Rest](#toc-45-spread-and-rest)
-    - [Spread Operator with Objects](#toc-spread-operator-with-objects)
-    - [Rest Properties](#toc-rest-properties)
-    - [Shallow vs Deep Copying](#toc-shallow-vs-deep-copying)
-  - [4.6 `this` Keyword](#toc-46-this-keyword)
-    - [Why `this` Is Confusing (And Why It Matters)](#toc-why-this-is-confusing-and-why-it-matters)
-    - [The Core Rule](#toc-the-core-rule)
-    - [Global Context](#toc-global-context)
-    - [Function Context](#toc-function-context)
-    - [Method Context](#toc-method-context)
-    - [Constructor Context](#toc-constructor-context)
-    - [Arrow Functions and `this`](#toc-arrow-functions-and-this)
-    - [Explicit Binding (`call`, `apply`, `bind`)](#toc-explicit-binding-call-apply-bind)
-    - [`this` in Event Handlers](#toc-this-in-event-handlers)
-    - [`this` in Strict Mode](#toc-this-in-strict-mode)
-    - [Common Pitfalls and Solutions](#toc-common-pitfalls-and-solutions)
-  - [4.7 Objects Summary](#toc-47-objects-summary)
-    - [Best Practices](#toc-best-practices-6)
-  - [Mastery Check](#toc-mastery-check-2)
-    - [Quiz Questions](#toc-quiz-questions-2)
-    - [Coding Challenges](#toc-coding-challenges-2)
-- [05-Prototype.md](#toc-05-prototypemd)
-- [5 Prototypes](#toc-5-prototypes)
-  - [5.1 Prototype Chain](#toc-51-prototype-chain)
-    - [Why Prototypes Matter](#toc-why-prototypes-matter)
-    - [The Chain Explained](#toc-the-chain-explained)
-    - [`__proto__` vs `prototype`](#toc-__proto__-vs-prototype)
-    - [Prototype Lookup](#toc-prototype-lookup)
-    - [`Object.prototype`](#toc-objectprototype)
-    - [Constructor Functions](#toc-constructor-functions)
-    - [`new` Operator Mechanism](#toc-new-operator-mechanism)
-    - [Understanding the Prototype Chain Visually](#toc-understanding-the-prototype-chain-visually)
-  - [5.2 Prototypal Inheritance](#toc-52-prototypal-inheritance)
-    - [Setting Up Inheritance](#toc-setting-up-inheritance)
-    - [`Object.create()` for Inheritance](#toc-objectcreate-for-inheritance)
-    - [Constructor Stealing](#toc-constructor-stealing)
-    - [Combination Inheritance](#toc-combination-inheritance)
-    - [Parasitic Inheritance](#toc-parasitic-inheritance)
-    - [Performance Implications](#toc-performance-implications)
-  - [5.3 Property Inheritance](#toc-53-property-inheritance)
-    - [Own Properties vs Inherited Properties](#toc-own-properties-vs-inherited-properties)
-    - [`hasOwnProperty()`](#toc-hasownproperty)
-    - [`Object.hasOwn()`](#toc-objecthasown)
-    - [Property Enumeration and Inheritance](#toc-property-enumeration-and-inheritance)
-    - [Shadowing Properties](#toc-shadowing-properties)
-  - [5.4 Prototypes Summary](#toc-54-prototypes-summary)
-    - [Best Practices](#toc-best-practices-7)
-- [06-Classes.md](#toc-06-classesmd)
-- [6 Classes](#toc-6-classes)
-  - [6.1 Class Basics](#toc-61-class-basics)
-    - [Class Declarations](#toc-class-declarations-1)
-    - [Class Expressions](#toc-class-expressions)
-    - [Constructor Method](#toc-constructor-method)
-    - [Instance Methods](#toc-instance-methods)
-    - [Class Hoisting (Not Hoisted)](#toc-class-hoisting-not-hoisted)
-  - [6.2 Class Features](#toc-62-class-features)
-    - [Static Methods](#toc-static-methods)
-    - [Static Properties](#toc-static-properties)
-    - [Instance Properties](#toc-instance-properties)
-    - [Private Fields](#toc-private-fields)
-    - [Private Methods](#toc-private-methods)
-    - [Public Fields](#toc-public-fields)
-    - [Static Blocks](#toc-static-blocks)
-  - [6.3 Inheritance](#toc-63-inheritance)
-    - [`extends` Keyword](#toc-extends-keyword)
-    - [`super` Keyword (Constructor and Methods)](#toc-super-keyword-constructor-and-methods)
-    - [Method Overriding](#toc-method-overriding)
-    - [`super` in Static Methods](#toc-super-in-static-methods)
-    - [Inheritance Chains](#toc-inheritance-chains)
-  - [6.4 Class Patterns](#toc-64-class-patterns)
-    - [Mixins](#toc-mixins)
-    - [Abstract Classes (Pattern)](#toc-abstract-classes-pattern)
-    - [Getters and Setters in Classes](#toc-getters-and-setters-in-classes)
-    - [Factory Functions vs Classes](#toc-factory-functions-vs-classes)
-    - [Composition Over Inheritance](#toc-composition-over-inheritance)
-  - [Common Pitfalls](#toc-common-pitfalls-1)
-    - [Pitfall 1: Forgetting super() in Constructor](#toc-pitfall-1-forgetting-super-in-constructor)
-    - [Pitfall 2: Arrow Methods and Inheritance](#toc-pitfall-2-arrow-methods-and-inheritance)
-    - [Pitfall 3: Private Fields and Inheritance](#toc-pitfall-3-private-fields-and-inheritance)
-    - [Pitfall 4: this in Callbacks](#toc-pitfall-4-this-in-callbacks)
-    - [Pitfall 5: Class vs Object for Configuration](#toc-pitfall-5-class-vs-object-for-configuration)
-  - [Summary](#toc-summary-6)
-  - [6.5 Classes Summary](#toc-65-classes-summary)
-- [07-Arrays.md](#toc-07-arraysmd)
-- [7 Arrays](#toc-7-arrays)
-  - [7.1 Array Basics](#toc-71-array-basics)
-    - [7.1.1 Array Literals](#toc-711-array-literals)
-    - [7.1.2 Array Constructor](#toc-712-array-constructor)
-    - [7.1.3 Array length Property](#toc-713-array-length-property)
-    - [7.1.4 Sparse Arrays](#toc-714-sparse-arrays)
-    - [7.1.5 Array-like Objects](#toc-715-array-like-objects)
-    - [7.1.6 Converting Array-like to Arrays](#toc-716-converting-array-like-to-arrays)
-  - [7.2 Array Methods (Mutating)](#toc-72-array-methods-mutating)
-    - [7.2.1 push() and pop()](#toc-721-push-and-pop)
-    - [7.2.2 shift() and unshift()](#toc-722-shift-and-unshift)
-    - [7.2.3 splice()](#toc-723-splice)
-    - [7.2.4 sort()](#toc-724-sort)
-    - [7.2.5 reverse()](#toc-725-reverse)
-    - [7.2.6 fill()](#toc-726-fill)
-    - [7.2.7 copyWithin()](#toc-727-copywithin)
-  - [7.3 Array Methods (Non-mutating)](#toc-73-array-methods-non-mutating)
-    - [7.3.1 concat()](#toc-731-concat)
-    - [7.3.2 slice()](#toc-732-slice)
-    - [7.3.3 join()](#toc-733-join)
-    - [7.3.4 indexOf() and lastIndexOf()](#toc-734-indexof-and-lastindexof)
-    - [7.3.5 includes()](#toc-735-includes)
-    - [7.3.6 flat() and flatMap()](#toc-736-flat-and-flatmap)
-    - [7.3.7 toReversed(), toSorted(), toSpliced() (ES2023)](#toc-737-toreversed-tosorted-tospliced-es2023)
-    - [7.3.8 with() (ES2023)](#toc-738-with-es2023)
-  - [7.4 Iteration Methods](#toc-74-iteration-methods)
-    - [7.4.1 forEach()](#toc-741-foreach)
-    - [7.4.2 map()](#toc-742-map)
-    - [7.4.3 filter()](#toc-743-filter)
-    - [7.4.4 reduce() and reduceRight()](#toc-744-reduce-and-reduceright)
-    - [7.4.5 find() and findIndex()](#toc-745-find-and-findindex)
-    - [7.4.6 findLast() and findLastIndex() (ES2023)](#toc-746-findlast-and-findlastindex-es2023)
-    - [7.4.7 some() and every()](#toc-747-some-and-every)
-    - [7.4.8 keys(), values(), and entries()](#toc-748-keys-values-and-entries)
-  - [7.5 Array Destructuring](#toc-75-array-destructuring)
-    - [7.5.1 Basic Destructuring](#toc-751-basic-destructuring)
-    - [7.5.2 Skipping Elements](#toc-752-skipping-elements)
-    - [7.5.3 Rest in Destructuring](#toc-753-rest-in-destructuring)
-    - [7.5.4 Default Values](#toc-754-default-values)
-    - [7.5.5 Swapping Variables](#toc-755-swapping-variables)
-    - [7.5.6 Advanced Destructuring Patterns](#toc-756-advanced-destructuring-patterns)
-  - [7.6 Typed Arrays](#toc-76-typed-arrays)
-    - [7.6.1 Typed Array Types and Creation](#toc-761-typed-array-types-and-creation)
-    - [7.6.2 Typed Array Operations](#toc-762-typed-array-operations)
-    - [7.6.3 Converting Between Typed Arrays](#toc-763-converting-between-typed-arrays)
-    - [7.6.4 Uint8ClampedArray](#toc-764-uint8clampedarray)
-    - [7.6.5 BigInt64Array and BigUint64Array (ES2020)](#toc-765-bigint64array-and-biguint64array-es2020)
-    - [7.6.6 ArrayBuffer and Binary Data](#toc-766-arraybuffer-and-binary-data)
-    - [7.6.7 DataView for Mixed-Type Data](#toc-767-dataview-for-mixed-type-data)
-    - [7.6.8 Use Cases](#toc-768-use-cases)
-  - [7.9 Arrays Summary](#toc-79-arrays-summary)
-- [08-Strings.md](#toc-08-stringsmd)
-- [8 Strings](#toc-8-strings)
-  - [8.1 String Basics](#toc-81-string-basics)
-    - [8.1.1 String Literals](#toc-811-string-literals)
-    - [8.1.2 Template Literals](#toc-812-template-literals)
-    - [8.1.3 String Length Property](#toc-813-string-length-property)
-    - [8.1.4 Character Access](#toc-814-character-access)
-    - [8.1.5 Unicode and Code Points](#toc-815-unicode-and-code-points)
-    - [8.1.6 Converting Array-like to Strings](#toc-816-converting-array-like-to-strings)
-  - [8.2 String Methods](#toc-82-string-methods)
-    - [8.2.1 Character Code Methods](#toc-821-character-code-methods)
-    - [8.2.2 Searching and Matching](#toc-822-searching-and-matching)
-    - [8.2.3 String Replacement](#toc-823-string-replacement)
-    - [8.2.4 String Extraction](#toc-824-string-extraction)
-    - [8.2.5 String Transformation](#toc-825-string-transformation)
-    - [8.2.6 Advanced Pattern Matching](#toc-826-advanced-pattern-matching)
-  - [8.3 Template Literals and Tagged Templates](#toc-83-template-literals-and-tagged-templates)
-    - [8.3.1 Basic Template Literals](#toc-831-basic-template-literals)
-    - [8.3.2 Multi-line Strings and Formatting](#toc-832-multi-line-strings-and-formatting)
-- [${title}](#toc-title)
-  - [Overview](#toc-overview)
-  - [Features](#toc-features)
-  - [Usage](#toc-usage)
-    - [8.3.3 Tagged Templates](#toc-833-tagged-templates)
-    - [8.3.4 String.raw and Raw Strings](#toc-834-stringraw-and-raw-strings)
-    - [8.3.5 Practical Use Cases](#toc-835-practical-use-cases)
-  - [8.4 String Internationalization (i18n)](#toc-84-string-internationalization-i18n)
-    - [8.4.1 Intl.Collator](#toc-841-intlcollator)
-    - [8.4.2 Locale-Aware String Operations](#toc-842-locale-aware-string-operations)
-    - [8.4.3 Formatting with Locales](#toc-843-formatting-with-locales)
-    - [8.4.4 Best Practices and Gotchas](#toc-844-best-practices-and-gotchas)
-  - [Summary: String Internationalization](#toc-summary-string-internationalization)
-  - [8.5 Strings Summary](#toc-85-strings-summary)
-- [09-RegExp.md](#toc-09-regexpmd)
-- [9 Regular Expressions](#toc-9-regular-expressions)
-  - [9.1 RegExp Basics](#toc-91-regexp-basics)
-    - [9.1.1 Literal Syntax](#toc-911-literal-syntax)
-    - [9.1.2 Constructor Syntax](#toc-912-constructor-syntax)
-    - [9.1.3 Flags](#toc-913-flags)
-    - [9.1.4 RegExp Properties](#toc-914-regexp-properties)
-    - [9.1.5 Creating Regex Dynamically](#toc-915-creating-regex-dynamically)
-  - [Summary: RegExp Basics](#toc-summary-regexp-basics)
-  - [9.2 Pattern Syntax](#toc-92-pattern-syntax)
-    - [9.2.1 Literal Characters and Escaping](#toc-921-literal-characters-and-escaping)
-    - [9.2.2 Character Classes](#toc-922-character-classes)
-    - [9.2.3 Predefined Character Classes](#toc-923-predefined-character-classes)
-    - [9.2.4 Quantifiers](#toc-924-quantifiers)
-    - [9.2.5 Anchors](#toc-925-anchors)
-    - [9.2.6 Groups and Capture](#toc-926-groups-and-capture)
-    - [9.2.7 Alternation](#toc-927-alternation)
-    - [9.2.8 Lookahead and Lookbehind](#toc-928-lookahead-and-lookbehind)
-  - [Summary: Pattern Syntax](#toc-summary-pattern-syntax)
-  - [9.3 RegExp Methods](#toc-93-regexp-methods)
-    - [9.3.1 RegExp.prototype.test()](#toc-931-regexpprototypetest)
-    - [9.3.2 RegExp.prototype.exec()](#toc-932-regexpprototypeexec)
-    - [9.3.3 String Methods with RegExp](#toc-933-string-methods-with-regexp)
-  - [Summary: RegExp Methods](#toc-summary-regexp-methods)
-  - [9.4 Advanced RegExp](#toc-94-advanced-regexp)
-    - [9.4.1 Backreferences](#toc-941-backreferences)
-    - [9.4.2 Named Capture Groups](#toc-942-named-capture-groups)
-    - [9.4.3 Unicode and Property Escapes](#toc-943-unicode-and-property-escapes)
-    - [9.4.4 lastIndex and Stateful Regex](#toc-944-lastindex-and-stateful-regex)
-    - [9.4.5 Match Indices (d flag)](#toc-945-match-indices-d-flag)
-  - [Summary: Advanced RegExp](#toc-summary-advanced-regexp)
-  - [Common Pitfalls](#toc-common-pitfalls-2)
-    - [Pitfall 1: Forgetting to Escape Special Characters](#toc-pitfall-1-forgetting-to-escape-special-characters)
-    - [Pitfall 2: Global Flag and lastIndex](#toc-pitfall-2-global-flag-and-lastindex)
-    - [Pitfall 3: Greedy vs Lazy Matching](#toc-pitfall-3-greedy-vs-lazy-matching)
-    - [Pitfall 4: Backtracking Performance](#toc-pitfall-4-backtracking-performance)
-    - [Pitfall 5: Unicode Without the u Flag](#toc-pitfall-5-unicode-without-the-u-flag)
-    - [Pitfall 6: ^ and $ in Multiline](#toc-pitfall-6-and-in-multiline)
-  - [9.5 RegExp Summary](#toc-95-regexp-summary)
-- [10-Symbols.md](#toc-10-symbolsmd)
-- [10 Symbols](#toc-10-symbols)
-  - [10.1 Symbol Basics](#toc-101-symbol-basics)
-    - [10.1.1 Creating Symbols](#toc-1011-creating-symbols)
-    - [10.1.2 Symbol Description](#toc-1012-symbol-description)
-    - [10.1.3 Global Symbol Registry](#toc-1013-global-symbol-registry)
-    - [10.1.4 Symbols as Property Keys](#toc-1014-symbols-as-property-keys)
-    - [10.1.5 Symbol Uniqueness and Identity](#toc-1015-symbol-uniqueness-and-identity)
-  - [Summary: Symbol Basics](#toc-summary-symbol-basics)
-  - [10.2 Well-known Symbols](#toc-102-well-known-symbols)
-    - [10.2.1 Symbol.iterator](#toc-1021-symboliterator)
-    - [10.2.2 Symbol.asyncIterator](#toc-1022-symbolasynciterator)
-    - [10.2.3 Symbol.toStringTag](#toc-1023-symboltostringtag)
-    - [10.2.4 Symbol.toPrimitive](#toc-1024-symboltoprimitive)
-    - [10.2.5 Symbol.hasInstance](#toc-1025-symbolhasinstance)
-    - [10.2.6 Symbol.species](#toc-1026-symbolspecies)
-    - [10.2.7 String Pattern Symbols](#toc-1027-string-pattern-symbols)
-    - [10.2.8 Other Well-known Symbols](#toc-1028-other-well-known-symbols)
-  - [Summary: Well-known Symbols - Chapter 10](#toc-summary-well-known-symbols-chapter-10)
-  - [10.3 Symbols Summary](#toc-103-symbols-summary)
-- [11-Iterators-and-Generators.md](#toc-11-iterators-and-generatorsmd)
-- [11 Iterators and Generators](#toc-11-iterators-and-generators)
-  - [Iteration Protocols](#toc-iteration-protocols)
-  - [The Iterable Protocol](#toc-the-iterable-protocol)
-    - [What is the Iterable Protocol?](#toc-what-is-the-iterable-protocol)
-    - [Interface Definition](#toc-interface-definition)
-    - [Simple Example](#toc-simple-example)
-    - [Key Points](#toc-key-points)
-  - [The Iterator Protocol](#toc-the-iterator-protocol)
-    - [What is the Iterator Protocol?](#toc-what-is-the-iterator-protocol)
-    - [Result Object Structure](#toc-result-object-structure)
-    - [Simple Example](#toc-simple-example-1)
-    - [Iterator with Return Value](#toc-iterator-with-return-value)
-    - [Key Points](#toc-key-points-1)
-  - [Symbol.iterator](#toc-symboliterator)
-    - [Connecting Iterable and Iterator](#toc-connecting-iterable-and-iterator)
-    - [Complete Example](#toc-complete-example)
-    - [Checking if Something is Iterable](#toc-checking-if-something-is-iterable)
-    - [Symbol.iterator is a Symbol](#toc-symboliterator-is-a-symbol)
-  - [Making Objects Iterable](#toc-making-objects-iterable)
-    - [Pattern 1: Simple Object Iteration](#toc-pattern-1-simple-object-iteration)
-    - [Pattern 2: Iterating Object Entries](#toc-pattern-2-iterating-object-entries)
-    - [Pattern 3: Filtering Iteration](#toc-pattern-3-filtering-iteration)
-    - [Pattern 4: Stateful Iteration](#toc-pattern-4-stateful-iteration)
-    - [Pattern 5: Infinite Iterator](#toc-pattern-5-infinite-iterator)
-    - [Pattern 6: Multi-Value Iteration](#toc-pattern-6-multi-value-iteration)
-  - [Practical Examples](#toc-practical-examples)
-    - [Example 1: Range Iterator](#toc-example-1-range-iterator)
-    - [Example 2: Tree Traversal](#toc-example-2-tree-traversal)
-    - [Example 3: Linked List](#toc-example-3-linked-list)
-    - [Example 4: Filtered Iterator](#toc-example-4-filtered-iterator)
-  - [Common Patterns](#toc-common-patterns-4)
-    - [Pattern: Iterator Wrapper](#toc-pattern-iterator-wrapper)
-    - [Pattern: Lazy Iterator](#toc-pattern-lazy-iterator)
-    - [Pattern: Iterator Composition](#toc-pattern-iterator-composition)
-  - [Best Practices](#toc-best-practices-8)
-    - [✅ DO](#toc-✅-do)
-    - [❌ DON'T](#toc-❌-dont)
-    - [Performance Considerations](#toc-performance-considerations)
-  - [Summary](#toc-summary-7)
-    - [Key Concepts](#toc-key-concepts)
-    - [Protocol Requirements](#toc-protocol-requirements)
-    - [Common Use Cases](#toc-common-use-cases-1)
-    - [Next Steps](#toc-next-steps)
-  - [Generators, Built-in Iterables & Async Iterators](#toc-generators-built-in-iterables-async-iterators)
-  - [Part 1: Built-in Iterables (Module 11.2)](#toc-part-1-built-in-iterables-module-112)
-  - [Built-in Iterables Overview](#toc-built-in-iterables-overview)
-    - [What Objects are Iterable?](#toc-what-objects-are-iterable)
-  - [Arrays](#toc-arrays)
-    - [Array Iteration](#toc-array-iteration)
-    - [Array Iterator Details](#toc-array-iterator-details)
-    - [Array Subclass Iteration](#toc-array-subclass-iteration)
-  - [Strings](#toc-strings)
-    - [String Iteration](#toc-string-iteration)
-    - [Unicode-Aware String Iteration](#toc-unicode-aware-string-iteration)
-    - [String Processing with for...of](#toc-string-processing-with-forof)
-  - [Maps and Sets](#toc-maps-and-sets)
-    - [Map Iteration](#toc-map-iteration)
-    - [Set Iteration](#toc-set-iteration)
-    - [WeakMap and WeakSet](#toc-weakmap-and-weakset)
-  - [TypedArrays](#toc-typedarrays)
-    - [TypedArray Iteration](#toc-typedarray-iteration)
-    - [TypedArray Types](#toc-typedarray-types)
-  - [DOM NodeLists](#toc-dom-nodelists)
-    - [NodeList Iteration](#toc-nodelist-iteration)
-    - [HTMLCollection vs NodeList](#toc-htmlcollection-vs-nodelist)
-  - [Part 2: Generator Functions (Module 11.3)](#toc-part-2-generator-functions-module-113)
-  - [Generator Function Basics](#toc-generator-function-basics)
-    - [What are Generator Functions?](#toc-what-are-generator-functions)
-    - [Generator Syntax Variations](#toc-generator-syntax-variations)
-  - [The yield Mechanism](#toc-the-yield-mechanism)
-    - [Basic yield](#toc-basic-yield)
-    - [Return Value from Generator](#toc-return-value-from-generator)
-    - [Early Exit with return](#toc-early-exit-with-return)
-    - [yield Expression Value](#toc-yield-expression-value)
-  - [Generator Delegation (yield*)](#toc-generator-delegation-yield)
-    - [What is yield*?](#toc-what-is-yield)
-    - [Recursive Generators with yield*](#toc-recursive-generators-with-yield)
-    - [yield* with Arrays](#toc-yield-with-arrays)
-    - [Bidirectional Communication with yield*](#toc-bidirectional-communication-with-yield)
-  - [Passing Values to Generators](#toc-passing-values-to-generators)
-    - [Sending Values with next()](#toc-sending-values-with-next)
-    - [Practical Example: Range with Step](#toc-practical-example-range-with-step)
-  - [Error Handling in Generators](#toc-error-handling-in-generators)
-    - [Throwing Errors into Generators](#toc-throwing-errors-into-generators)
-    - [Generator Error Recovery](#toc-generator-error-recovery)
-    - [Generator finally Block](#toc-generator-finally-block)
-  - [Infinite Sequences](#toc-infinite-sequences-1)
-    - [Infinite Counter](#toc-infinite-counter)
-    - [Fibonacci Sequence](#toc-fibonacci-sequence)
-    - [Prime Numbers](#toc-prime-numbers)
-  - [Practical Generator Examples](#toc-practical-generator-examples)
-    - [Example 1: File Reading Simulation](#toc-example-1-file-reading-simulation)
-    - [Example 2: Permutations](#toc-example-2-permutations)
-    - [Example 3: API Pagination](#toc-example-3-api-pagination)
-    - [Example 4: Generator Composition](#toc-example-4-generator-composition)
-  - [Part 3: Async Iterators (Module 11.4)](#toc-part-3-async-iterators-module-114)
-  - [Async Iterable Protocol](#toc-async-iterable-protocol)
-    - [What is the Async Iterable Protocol?](#toc-what-is-the-async-iterable-protocol)
-    - [Synchronous vs Asynchronous Iteration](#toc-synchronous-vs-asynchronous-iteration)
-  - [Symbol.asyncIterator](#toc-symbolasynciterator)
-    - [Creating Async Iterables](#toc-creating-async-iterables)
-    - [Checking for Async Iterability](#toc-checking-for-async-iterability)
-  - [for await...of Loops](#toc-for-awaitof-loops)
-    - [Basic for await...of](#toc-basic-for-awaitof)
-    - [for await...of with Promises](#toc-for-awaitof-with-promises)
-    - [Error Handling in for await...of](#toc-error-handling-in-for-awaitof)
-  - [Async Generators](#toc-async-generators)
-    - [Async Generator Syntax](#toc-async-generator-syntax)
-    - [Combining async and yield](#toc-combining-async-and-yield)
-    - [Yielding Promises](#toc-yielding-promises)
-  - [Streaming Data](#toc-streaming-data)
-    - [Example 1: Reading File Chunks (Node.js)](#toc-example-1-reading-file-chunks-nodejs)
-    - [Example 2: Custom Stream Generator](#toc-example-2-custom-stream-generator)
-    - [Example 3: Database Cursor Iteration](#toc-example-3-database-cursor-iteration)
-  - [Pagination with Async](#toc-pagination-with-async)
-    - [Example 1: API Pagination](#toc-example-1-api-pagination)
-    - [Example 2: Cursor-Based Pagination](#toc-example-2-cursor-based-pagination)
-  - [Error Handling](#toc-error-handling-1)
-    - [Try-Catch in Async Generators](#toc-try-catch-in-async-generators)
-    - [Handling Individual Item Errors](#toc-handling-individual-item-errors)
-  - [Summary](#toc-summary-8)
-    - [Key Concepts Across All Modules](#toc-key-concepts-across-all-modules)
-    - [Common Use Cases](#toc-common-use-cases-2)
-    - [Next Steps](#toc-next-steps-1)
-  - [11.3 Iterators Summary](#toc-113-iterators-summary)
-- [12-Collections.md](#toc-12-collectionsmd)
-- [12 Collections](#toc-12-collections)
-  - [Maps and WeakMaps](#toc-maps-and-weakmaps)
-  - [Creating Maps](#toc-creating-maps)
-    - [Basic Map Creation](#toc-basic-map-creation)
-    - [Creating Maps with Different Key Types](#toc-creating-maps-with-different-key-types)
-    - [Map with Complex Initialization](#toc-map-with-complex-initialization)
-  - [Map Methods: set(), get(), has(), delete(), clear()](#toc-map-methods-set-get-has-delete-clear)
-    - [set() - Adding and Updating Values](#toc-set-adding-and-updating-values)
-    - [get() - Retrieving Values](#toc-get-retrieving-values)
-    - [has() - Checking for Keys](#toc-has-checking-for-keys)
-    - [delete() - Removing Values](#toc-delete-removing-values)
-    - [clear() - Removing All Values](#toc-clear-removing-all-values)
-  - [Map Size and Properties](#toc-map-size-and-properties)
-    - [The size Property](#toc-the-size-property)
-    - [Constructor Property](#toc-constructor-property)
-  - [Iterating Maps](#toc-iterating-maps)
-    - [Iterating with for...of](#toc-iterating-with-forof)
-    - [keys() - Iterating Keys Only](#toc-keys-iterating-keys-only)
-    - [values() - Iterating Values Only](#toc-values-iterating-values-only)
-    - [entries() - Explicit Entry Iteration](#toc-entries-explicit-entry-iteration)
-    - [forEach() - Functional Iteration](#toc-foreach-functional-iteration)
-  - [Maps vs Objects](#toc-maps-vs-objects)
-    - [Feature Comparison](#toc-feature-comparison)
-    - [Size Property](#toc-size-property)
-    - [Iteration](#toc-iteration)
-    - [Performance](#toc-performance)
-    - [When to Use Each](#toc-when-to-use-each-1)
-  - [Practical Map Examples](#toc-practical-map-examples)
-    - [Example 1: User Registry](#toc-example-1-user-registry)
-    - [Example 2: Frequency Counter](#toc-example-2-frequency-counter)
-    - [Example 3: Graph Adjacency List](#toc-example-3-graph-adjacency-list)
-    - [Example 4: Command Handler Registry](#toc-example-4-command-handler-registry)
-  - [WeakMap: Weak References](#toc-weakmap-weak-references)
-    - [What is a WeakMap?](#toc-what-is-a-weakmap)
-    - [Weak References Explained](#toc-weak-references-explained)
-    - [WeakMap Methods and Behavior](#toc-weakmap-methods-and-behavior)
-  - [WeakMap Use Cases](#toc-weakmap-use-cases)
-    - [Use Case 1: Private Data Storage](#toc-use-case-1-private-data-storage)
-    - [Use Case 2: Caching with Automatic Cleanup](#toc-use-case-2-caching-with-automatic-cleanup)
-    - [Use Case 3: Object Metadata](#toc-use-case-3-object-metadata)
-    - [Use Case 4: DOM Element Events](#toc-use-case-4-dom-element-events)
-  - [Best Practices](#toc-best-practices-9)
-    - [✅ DO](#toc-✅-do-1)
-    - [❌ DON'T](#toc-❌-dont-1)
-    - [Performance Considerations](#toc-performance-considerations-1)
-  - [Summary](#toc-summary-9)
-    - [Maps Key Points](#toc-maps-key-points)
-    - [WeakMaps Key Points](#toc-weakmaps-key-points)
-    - [Quick Comparison](#toc-quick-comparison)
-    - [Next Steps](#toc-next-steps-2)
-  - [Sets and WeakSets](#toc-sets-and-weaksets)
-  - [Creating Sets](#toc-creating-sets)
-    - [Basic Set Creation](#toc-basic-set-creation)
-    - [Creating Sets with Different Value Types](#toc-creating-sets-with-different-value-types)
-  - [Set Methods: add(), has(), delete(), clear()](#toc-set-methods-add-has-delete-clear)
-    - [add() - Adding Values](#toc-add-adding-values)
-    - [has() - Checking for Values](#toc-has-checking-for-values)
-    - [delete() - Removing Values](#toc-delete-removing-values-1)
-    - [clear() - Removing All Values](#toc-clear-removing-all-values-1)
-  - [Set Size and Properties](#toc-set-size-and-properties)
-    - [The size Property](#toc-the-size-property-1)
-    - [Constructor Property](#toc-constructor-property-1)
-  - [Iterating Sets](#toc-iterating-sets)
-    - [for...of Loop](#toc-forof-loop-1)
-    - [values() - Iterating Values](#toc-values-iterating-values)
-    - [keys() - Same as values()](#toc-keys-same-as-values)
-    - [entries() - [value, value] Pairs](#toc-entries-value-value-pairs)
-    - [forEach() - Functional Iteration](#toc-foreach-functional-iteration-1)
-  - [Set Operations](#toc-set-operations)
-    - [Union (Combine Two Sets)](#toc-union-combine-two-sets)
-    - [Intersection (Common Elements)](#toc-intersection-common-elements)
-    - [Difference (Elements in A but not in B)](#toc-difference-elements-in-a-but-not-in-b)
-    - [Symmetric Difference (Elements in either A or B, but not both)](#toc-symmetric-difference-elements-in-either-a-or-b-but-not-both)
-    - [Subset Check (All of A in B)](#toc-subset-check-all-of-a-in-b)
-  - [Sets vs Arrays](#toc-sets-vs-arrays)
-    - [Performance Comparison](#toc-performance-comparison)
-    - [When to Use Each](#toc-when-to-use-each-2)
-    - [Converting Between Set and Array](#toc-converting-between-set-and-array)
-  - [Practical Set Examples](#toc-practical-set-examples)
-    - [Example 1: Unique Items Tracking](#toc-example-1-unique-items-tracking)
-    - [Example 2: Finding Unique Elements](#toc-example-2-finding-unique-elements)
-    - [Example 3: Tag System](#toc-example-3-tag-system)
-    - [Example 4: Word Frequency Analysis](#toc-example-4-word-frequency-analysis)
-  - [WeakSet: Weak References](#toc-weakset-weak-references)
-    - [What is a WeakSet?](#toc-what-is-a-weakset)
-    - [WeakSet Methods and Behavior](#toc-weakset-methods-and-behavior)
-  - [WeakSet Use Cases](#toc-weakset-use-cases)
-    - [Use Case 1: Object Tagging](#toc-use-case-1-object-tagging)
-    - [Use Case 2: Detecting Cycles in Graphs](#toc-use-case-2-detecting-cycles-in-graphs)
-    - [Use Case 3: Tracking DOM Elements](#toc-use-case-3-tracking-dom-elements)
-    - [Use Case 4: Request Tracking](#toc-use-case-4-request-tracking)
-  - [Best Practices](#toc-best-practices-10)
-    - [✅ DO](#toc-✅-do-2)
-    - [❌ DON'T](#toc-❌-dont-2)
-  - [Summary](#toc-summary-10)
-    - [Sets Key Points](#toc-sets-key-points)
-    - [WeakSets Key Points](#toc-weaksets-key-points)
-    - [Quick Comparison](#toc-quick-comparison-1)
-  - [Common Pitfalls](#toc-common-pitfalls-3)
-    - [Pitfall 1: Object Keys in Map](#toc-pitfall-1-object-keys-in-map)
-    - [Pitfall 2: WeakMap with Primitives](#toc-pitfall-2-weakmap-with-primitives)
-    - [Pitfall 3: Set Doesn't Dedupe Objects](#toc-pitfall-3-set-doesnt-dedupe-objects)
-    - [Pitfall 4: Map vs Object Performance](#toc-pitfall-4-map-vs-object-performance)
-    - [Pitfall 5: WeakMap Doesn't Prevent Closure Leaks](#toc-pitfall-5-weakmap-doesnt-prevent-closure-leaks)
-    - [Next Steps](#toc-next-steps-3)
-  - [12.3 Collections Summary](#toc-123-collections-summary)
-- [13-Async-JavaScript.md](#toc-13-async-javascriptmd)
-- [13 Asynchronous JavaScript](#toc-13-asynchronous-javascript)
-    - [Why Async Matters](#toc-why-async-matters)
-  - [13.1 Event Loop](#toc-131-event-loop)
-    - [Call Stack](#toc-call-stack)
-    - [Call Stack Overflow](#toc-call-stack-overflow)
-    - [Stack Trace](#toc-stack-trace)
-  - [Task Queue (Macrotasks)](#toc-task-queue-macrotasks)
-    - [What is a Macrotask?](#toc-what-is-a-macrotask)
-    - [Processing Macrotasks](#toc-processing-macrotasks)
-    - [Macrotask Order](#toc-macrotask-order)
-  - [Microtask Queue](#toc-microtask-queue)
-    - [What is a Microtask?](#toc-what-is-a-microtask)
-    - [Microtask Priority](#toc-microtask-priority)
-  - [Event Loop Phases](#toc-event-loop-phases)
-    - [The Event Loop Algorithm](#toc-the-event-loop-algorithm)
-    - [Phase Breakdown](#toc-phase-breakdown)
-    - [Multiple Macrotasks and Microtasks](#toc-multiple-macrotasks-and-microtasks)
-  - [setTimeout and setInterval Timing](#toc-settimeout-and-setinterval-timing)
-    - [How setTimeout Works](#toc-how-settimeout-works)
-    - [setTimeout(0) ≠ Immediate Execution](#toc-settimeout0-≠-immediate-execution)
-    - [Blocking Delays](#toc-blocking-delays)
-    - [setInterval Behavior](#toc-setinterval-behavior)
-    - [Nested Timers](#toc-nested-timers)
-  - [queueMicrotask()](#toc-queuemicrotask)
-    - [Basic Usage](#toc-basic-usage-4)
-    - [Comparison with Promise.then()](#toc-comparison-with-promisethen)
-    - [Nested Microtasks](#toc-nested-microtasks)
-    - [Use Cases](#toc-use-cases-2)
-  - [Execution Order](#toc-execution-order-2)
-    - [Complete Example](#toc-complete-example-1)
-    - [Execution Timeline](#toc-execution-timeline)
-  - [Visual Mental Models](#toc-visual-mental-models)
-    - [Model 1: Stack and Queues](#toc-model-1-stack-and-queues)
-    - [Model 2: Event Loop Cycle](#toc-model-2-event-loop-cycle)
-    - [Model 3: Priority Levels](#toc-model-3-priority-levels)
-  - [Common Pitfalls](#toc-common-pitfalls-4)
-    - [Pitfall 1: Confusing setTimeout(0)](#toc-pitfall-1-confusing-settimeout0)
-    - [Pitfall 2: Promise Timing](#toc-pitfall-2-promise-timing)
-    - [Pitfall 3: Forgetting Microtasks](#toc-pitfall-3-forgetting-microtasks)
-    - [Pitfall 4: Race Conditions](#toc-pitfall-4-race-conditions)
-  - [Node.js Event Loop Phases (Deep Dive)](#toc-nodejs-event-loop-phases-deep-dive)
-    - [The Six Phases](#toc-the-six-phases)
-    - [Phase Details](#toc-phase-details)
-    - [setImmediate vs setTimeout(0)](#toc-setimmediate-vs-settimeout0)
-    - [process.nextTick vs setImmediate](#toc-processnexttick-vs-setimmediate)
-    - [Node.js Microtask Priority](#toc-nodejs-microtask-priority)
-    - [Danger: nextTick Starvation](#toc-danger-nexttick-starvation)
-  - [queueMicrotask vs Promise.then](#toc-queuemicrotask-vs-promisethen)
-    - [The Difference](#toc-the-difference)
-    - [When to Use Each](#toc-when-to-use-each-3)
-    - [Performance Comparison](#toc-performance-comparison-1)
-    - [Error Handling Difference](#toc-error-handling-difference)
-  - [Browser Render Pipeline](#toc-browser-render-pipeline)
-    - [Event Loop and Rendering](#toc-event-loop-and-rendering)
-    - [requestAnimationFrame Timing](#toc-requestanimationframe-timing)
-    - [Avoiding Layout Thrashing](#toc-avoiding-layout-thrashing)
-    - [requestIdleCallback for Non-Critical Work](#toc-requestidlecallback-for-non-critical-work)
-    - [Animation Frame vs setTimeout for Animation](#toc-animation-frame-vs-settimeout-for-animation)
-  - [Summary](#toc-summary-11)
-    - [Key Concepts](#toc-key-concepts-1)
-    - [Execution Rules](#toc-execution-rules)
-    - [Quick Reference](#toc-quick-reference)
-    - [Next Steps](#toc-next-steps-4)
-  - [Callbacks](#toc-callbacks)
-  - [Callback Pattern](#toc-callback-pattern)
-    - [Basic Callback Pattern](#toc-basic-callback-pattern)
-    - [Callback with Multiple Parameters](#toc-callback-with-multiple-parameters)
-    - [Array Methods with Callbacks](#toc-array-methods-with-callbacks)
-    - [Event Listeners with Callbacks](#toc-event-listeners-with-callbacks)
-  - [Error-First Callbacks](#toc-error-first-callbacks)
-    - [The Error-First Convention](#toc-the-error-first-convention)
-    - [Multiple Callbacks for Different States](#toc-multiple-callbacks-for-different-states)
-    - [Callback with Finally](#toc-callback-with-finally)
-  - [Callback Hell](#toc-callback-hell)
-    - [What is Callback Hell?](#toc-what-is-callback-hell)
-    - [Problems with Callback Hell](#toc-problems-with-callback-hell)
-    - [Solutions to Callback Hell](#toc-solutions-to-callback-hell)
-  - [Inversion of Control](#toc-inversion-of-control)
-    - [What is Inversion of Control?](#toc-what-is-inversion-of-control)
-    - [Risks of IoC with Callbacks](#toc-risks-of-ioc-with-callbacks)
-    - [IoC Solutions with Promises](#toc-ioc-solutions-with-promises)
-  - [Advanced Callback Patterns](#toc-advanced-callback-patterns)
-    - [Continuation-Passing Style (CPS)](#toc-continuation-passing-style-cps)
-    - [Transforming Callbacks to Promises (Promisification)](#toc-transforming-callbacks-to-promises-promisification)
-    - [Callback Composition](#toc-callback-composition)
-  - [Best Practices](#toc-best-practices-11)
-    - [✅ DO](#toc-✅-do-3)
-    - [❌ DON'T](#toc-❌-dont-3)
-  - [Summary](#toc-summary-12)
-    - [Callback Key Points](#toc-callback-key-points)
-    - [When to Use Callbacks](#toc-when-to-use-callbacks)
-    - [Callback vs Promises vs Async/Await](#toc-callback-vs-promises-vs-asyncawait)
-    - [Next Steps](#toc-next-steps-5)
-  - [Promises](#toc-promises)
-  - [Promise States](#toc-promise-states)
-    - [The Three States](#toc-the-three-states)
-    - [State Transitions](#toc-state-transitions)
-  - [Creating Promises](#toc-creating-promises)
-    - [Basic Promise Creation](#toc-basic-promise-creation)
-    - [Promise Executor Function](#toc-promise-executor-function)
-    - [Common Promise Patterns](#toc-common-promise-patterns)
-  - [then(), catch(), finally()](#toc-then-catch-finally)
-    - [then() - Handle Fulfilled State](#toc-then-handle-fulfilled-state)
-    - [catch() - Handle Rejected State](#toc-catch-handle-rejected-state)
-    - [finally() - Always Execute](#toc-finally-always-execute)
-  - [Promise Chaining](#toc-promise-chaining)
-    - [Method Chaining](#toc-method-chaining)
-    - [Returning Promises from Handlers](#toc-returning-promises-from-handlers)
-    - [Flattening Chains](#toc-flattening-chains)
-  - [Error Propagation](#toc-error-propagation)
-    - [Error Handling in Chains](#toc-error-handling-in-chains)
-    - [Re-throwing Errors](#toc-re-throwing-errors)
-  - [Promise.resolve() and Promise.reject()](#toc-promiseresolve-and-promisereject)
-    - [Promise.resolve()](#toc-promiseresolve)
-    - [Promise.reject()](#toc-promisereject)
-  - [Promise.all()](#toc-promiseall)
-    - [Execute Multiple Promises in Parallel](#toc-execute-multiple-promises-in-parallel)
-    - [Practical Promise.all() Examples](#toc-practical-promiseall-examples)
-  - [Promise.race()](#toc-promiserace)
-    - [First Promise to Settle Wins](#toc-first-promise-to-settle-wins)
-    - [Practical Race Examples](#toc-practical-race-examples)
-  - [Promise.allSettled()](#toc-promiseallsettled)
-    - [Wait for All Promises Regardless of Outcome](#toc-wait-for-all-promises-regardless-of-outcome)
-    - [Use Cases](#toc-use-cases-3)
-  - [Promise.any()](#toc-promiseany)
-    - [First Fulfilled Promise Wins](#toc-first-fulfilled-promise-wins)
-    - [Practical Examples](#toc-practical-examples-1)
-  - [Promise.try() (Proposal)](#toc-promisetry-proposal)
-    - [Wrapping Sync and Async Code](#toc-wrapping-sync-and-async-code)
-  - [Practical Examples](#toc-practical-examples-2)
-    - [Example 1: Sequential Fetch](#toc-example-1-sequential-fetch)
-    - [Example 2: Parallel Requests with Fallback](#toc-example-2-parallel-requests-with-fallback)
-    - [Example 3: Retry Logic](#toc-example-3-retry-logic)
-  - [Best Practices](#toc-best-practices-12)
-    - [✅ DO](#toc-✅-do-4)
-    - [❌ DON'T](#toc-❌-dont-4)
-  - [Summary](#toc-summary-13)
-    - [Promise Methods Overview](#toc-promise-methods-overview)
-    - [When to Use Each Combinator](#toc-when-to-use-each-combinator)
-    - [Next Steps](#toc-next-steps-6)
-  - [Async/Await](#toc-asyncawait)
-  - [async Functions](#toc-async-functions-1)
-    - [Declaring async Functions](#toc-declaring-async-functions)
-    - [What async Does](#toc-what-async-does)
-    - [Async Function Scope](#toc-async-function-scope)
-  - [await Expression](#toc-await-expression)
-    - [Basic await](#toc-basic-await)
-    - [await with Different Promise States](#toc-await-with-different-promise-states)
-    - [await with Non-Promise Values](#toc-await-with-non-promise-values)
-    - [Multiple Awaits](#toc-multiple-awaits)
-  - [Error Handling with try/catch](#toc-error-handling-with-trycatch)
-    - [Basic try/catch](#toc-basic-trycatch-1)
-    - [Error Propagation](#toc-error-propagation-1)
-    - [finally Block](#toc-finally-block-2)
-  - [Parallel Execution](#toc-parallel-execution-1)
-    - [Running Awaits in Parallel](#toc-running-awaits-in-parallel)
-    - [Partial Parallelization](#toc-partial-parallelization)
-  - [Sequential vs Concurrent Patterns](#toc-sequential-vs-concurrent-patterns)
-    - [Sequential Pattern (Dependent Operations)](#toc-sequential-pattern-dependent-operations)
-    - [Concurrent Pattern (Independent Operations)](#toc-concurrent-pattern-independent-operations)
-    - [Mixed Pattern (Some Dependent, Some Independent)](#toc-mixed-pattern-some-dependent-some-independent)
-  - [Top-Level await](#toc-top-level-await)
-    - [Using await Outside async Function](#toc-using-await-outside-async-function)
-    - [Use Cases](#toc-use-cases-4)
-    - [Browser Support](#toc-browser-support)
-  - [Async Function Return Values](#toc-async-function-return-values)
-    - [Return Types](#toc-return-types)
-    - [Type Inference](#toc-type-inference)
-  - [Common Patterns](#toc-common-patterns-5)
-    - [Pattern 1: Retry with Exponential Backoff](#toc-pattern-1-retry-with-exponential-backoff)
-    - [Pattern 2: Timeout](#toc-pattern-2-timeout)
-    - [Pattern 3: Batch Processing](#toc-pattern-3-batch-processing)
-    - [Pattern 4: Sequential Operations](#toc-pattern-4-sequential-operations)
-  - [Best Practices](#toc-best-practices-13)
-    - [✅ DO](#toc-✅-do-5)
-    - [❌ DON'T](#toc-❌-dont-5)
-  - [Summary](#toc-summary-14)
-    - [Async/Await Key Points](#toc-asyncawait-key-points)
-    - [Execution Flow](#toc-execution-flow)
-    - [Quick Comparison](#toc-quick-comparison-2)
-    - [Next Steps](#toc-next-steps-7)
-  - [Async Patterns](#toc-async-patterns)
-  - [Promisification](#toc-promisification)
-    - [Converting Callbacks to Promises](#toc-converting-callbacks-to-promises)
-    - [Generic Promisification Helper](#toc-generic-promisification-helper)
-    - [Built-in Promisification](#toc-built-in-promisification)
-  - [Throttling](#toc-throttling)
-    - [What is Throttling?](#toc-what-is-throttling)
-    - [Advanced Throttle with Trailing Call](#toc-advanced-throttle-with-trailing-call)
-    - [Use Cases](#toc-use-cases-5)
-  - [Debouncing](#toc-debouncing)
-    - [What is Debouncing?](#toc-what-is-debouncing)
-    - [Advanced Debounce with Immediate Option](#toc-advanced-debounce-with-immediate-option)
-    - [Debounce vs Throttle](#toc-debounce-vs-throttle)
-  - [Retry Logic](#toc-retry-logic-1)
-    - [Simple Retry](#toc-simple-retry)
-    - [Retry with Exponential Backoff](#toc-retry-with-exponential-backoff)
-    - [Conditional Retry](#toc-conditional-retry)
-  - [Timeout Patterns](#toc-timeout-patterns)
-    - [Promise with Timeout](#toc-promise-with-timeout)
-    - [AbortController for Native Timeouts](#toc-abortcontroller-for-native-timeouts)
-  - [Concurrency Control](#toc-concurrency-control)
-    - [Limit Concurrent Promises](#toc-limit-concurrent-promises)
-    - [Worker Pool Pattern](#toc-worker-pool-pattern)
-  - [Queue Management](#toc-queue-management)
-    - [Simple Task Queue](#toc-simple-task-queue)
-    - [Priority Queue](#toc-priority-queue)
-  - [Race Conditions and Solutions](#toc-race-conditions-and-solutions)
-    - [Identifying Race Conditions](#toc-identifying-race-conditions)
-    - [Solution 1: Deduplication](#toc-solution-1-deduplication)
-    - [Solution 2: Request Deduplication Map](#toc-solution-2-request-deduplication-map)
-    - [Solution 3: Abort Stale Requests](#toc-solution-3-abort-stale-requests)
-  - [Advanced Patterns](#toc-advanced-patterns)
-    - [Pattern: Timeout with Fallback](#toc-pattern-timeout-with-fallback)
-    - [Pattern: Circuit Breaker](#toc-pattern-circuit-breaker)
-  - [Best Practices](#toc-best-practices-14)
-    - [✅ DO](#toc-✅-do-6)
-    - [❌ DON'T](#toc-❌-dont-6)
-  - [Summary](#toc-summary-15)
-    - [Async Patterns Overview](#toc-async-patterns-overview)
-    - [Quick Reference](#toc-quick-reference-1)
-    - [Next Steps](#toc-next-steps-8)
-  - [13.6 Async Summary](#toc-136-async-summary)
-  - [Mastery Check](#toc-mastery-check-3)
-    - [Quiz Questions](#toc-quiz-questions-3)
-    - [Coding Challenges](#toc-coding-challenges-3)
-- [14-Modules.md](#toc-14-modulesmd)
-- [14 Modules](#toc-14-modules)
-- [ES Modules (ESM)](#toc-es-modules-esm)
-  - [import Statement](#toc-import-statement)
-    - [Basic Imports](#toc-basic-imports)
-    - [Import Paths](#toc-import-paths)
-    - [Import Side Effects](#toc-import-side-effects)
-    - [Hoisting Behavior](#toc-hoisting-behavior)
-  - [export Statement](#toc-export-statement)
-    - [Named Exports](#toc-named-exports)
-    - [Default Export](#toc-default-export)
-    - [Mixed Exports](#toc-mixed-exports)
-  - [Default Exports vs Named Exports](#toc-default-exports-vs-named-exports)
-    - [Comparison](#toc-comparison-3)
-    - [When to Use Each](#toc-when-to-use-each-4)
-  - [Re-exporting](#toc-re-exporting)
-    - [Basic Re-export](#toc-basic-re-export)
-    - [Re-exporting Default](#toc-re-exporting-default)
-    - [Barrel Exports (Index Pattern)](#toc-barrel-exports-index-pattern)
-    - [Namespace Exports](#toc-namespace-exports)
-  - [Dynamic Imports](#toc-dynamic-imports-1)
-    - [Basic Dynamic Import](#toc-basic-dynamic-import)
-    - [Use Cases](#toc-use-cases-6)
-    - [Error Handling](#toc-error-handling-2)
-  - [import.meta](#toc-importmeta)
-    - [What is import.meta?](#toc-what-is-importmeta)
-    - [Use Cases](#toc-use-cases-7)
-  - [Module Scope](#toc-module-scope)
-    - [Module Scope Isolation](#toc-module-scope-isolation)
-    - [Global Scope vs Module Scope](#toc-global-scope-vs-module-scope)
-    - [Shared State](#toc-shared-state)
-  - [Top-Level await](#toc-top-level-await-1)
-    - [Using await Outside async Function](#toc-using-await-outside-async-function-1)
-    - [Module Loading Order](#toc-module-loading-order)
-    - [Use Cases](#toc-use-cases-8)
-  - [Practical Examples](#toc-practical-examples-3)
-    - [Example 1: Calculator Module with Namespace](#toc-example-1-calculator-module-with-namespace)
-    - [Example 2: Component with Re-exports](#toc-example-2-component-with-re-exports)
-    - [Example 3: Feature Flags with Dynamic Import](#toc-example-3-feature-flags-with-dynamic-import)
-  - [Best Practices](#toc-best-practices-15)
-    - [✅ DO](#toc-✅-do-7)
-    - [❌ DON'T](#toc-❌-dont-7)
-  - [Summary](#toc-summary-16)
-    - [Import/Export Quick Reference](#toc-importexport-quick-reference)
-    - [Module System Comparison](#toc-module-system-comparison)
-    - [Next Steps](#toc-next-steps-9)
-  - [CommonJS (Node.js)](#toc-commonjs-nodejs)
-  - [require() Function](#toc-require-function)
-    - [Basic require()](#toc-basic-require)
-    - [Destructuring Imports](#toc-destructuring-imports)
-    - [Module Paths](#toc-module-paths)
-    - [Conditional Imports](#toc-conditional-imports)
-  - [module.exports and exports](#toc-moduleexports-and-exports)
-    - [module.exports](#toc-moduleexports)
-    - [exports Shorthand](#toc-exports-shorthand)
-    - [When to Use Each](#toc-when-to-use-each-5)
-  - [Module Caching](#toc-module-caching)
-    - [How Module Caching Works](#toc-how-module-caching-works)
-    - [Cache Behavior](#toc-cache-behavior)
-    - [Clearing Cache](#toc-clearing-cache)
-    - [Cache ID](#toc-cache-id)
-  - [Circular Dependencies](#toc-circular-dependencies)
-    - [The Problem](#toc-the-problem)
-    - [Solution 1: Restructure](#toc-solution-1-restructure)
-    - [Solution 2: Lazy Load](#toc-solution-2-lazy-load)
-    - [Solution 3: Dependency Injection](#toc-solution-3-dependency-injection)
-  - [ESM vs CommonJS](#toc-esm-vs-commonjs)
-    - [Comparison](#toc-comparison-4)
-    - [Code Comparison](#toc-code-comparison)
-  - [ESM/CommonJS Interoperability](#toc-esmcommonjs-interoperability)
-    - [ESM Importing CommonJS](#toc-esm-importing-commonjs)
-    - [CommonJS Requiring ESM](#toc-commonjs-requiring-esm)
-    - [Dual Package Support](#toc-dual-package-support)
-  - [Best Practices](#toc-best-practices-16)
-    - [✅ DO](#toc-✅-do-8)
-    - [❌ DON'T](#toc-❌-dont-8)
-  - [Summary](#toc-summary-17)
-    - [CommonJS Quick Reference](#toc-commonjs-quick-reference)
-    - [Module.exports vs exports](#toc-moduleexports-vs-exports)
-    - [When to Use CommonJS vs ESM](#toc-when-to-use-commonjs-vs-esm)
-    - [Next Steps](#toc-next-steps-10)
-  - [Module Patterns](#toc-module-patterns)
-  - [Module Pattern (IIFE)](#toc-module-pattern-iife)
-    - [Basic Module Pattern](#toc-basic-module-pattern)
-    - [Private vs Public](#toc-private-vs-public)
-    - [Shared State with Module Pattern](#toc-shared-state-with-module-pattern)
-    - [Module Parameters](#toc-module-parameters)
-    - [Advanced Module Pattern](#toc-advanced-module-pattern)
-  - [Revealing Module Pattern](#toc-revealing-module-pattern-1)
-    - [What is Revealing Module Pattern?](#toc-what-is-revealing-module-pattern)
-    - [Revealing with Aliases](#toc-revealing-with-aliases)
-    - [Revealing with Dependencies](#toc-revealing-with-dependencies)
-  - [Singleton Pattern](#toc-singleton-pattern-1)
-    - [What is Singleton Pattern?](#toc-what-is-singleton-pattern)
-    - [Lazy Initialization](#toc-lazy-initialization)
-    - [Singleton with Methods](#toc-singleton-with-methods)
-    - [Singleton Counter](#toc-singleton-counter)
-  - [Namespace Pattern](#toc-namespace-pattern-1)
-    - [Basic Namespace](#toc-basic-namespace)
-    - [Nested Namespaces](#toc-nested-namespaces)
-    - [Namespace Extension](#toc-namespace-extension)
-  - [Comparison of Patterns](#toc-comparison-of-patterns)
-    - [Feature Comparison](#toc-feature-comparison-1)
-    - [When to Use Each](#toc-when-to-use-each-6)
-  - [Modern Approach](#toc-modern-approach)
-    - [Why Modern ES Modules are Better](#toc-why-modern-es-modules-are-better)
-    - [Migration Path](#toc-migration-path)
-  - [Best Practices](#toc-best-practices-17)
-    - [✅ DO](#toc-✅-do-9)
-    - [❌ DON'T](#toc-❌-dont-9)
-  - [Summary](#toc-summary-18)
-    - [Module Pattern Overview](#toc-module-pattern-overview)
-    - [Quick Reference](#toc-quick-reference-2)
-    - [Modern Alternative](#toc-modern-alternative)
-    - [When to Use Patterns](#toc-when-to-use-patterns)
-  - [Common Pitfalls](#toc-common-pitfalls-5)
-    - [Pitfall 1: import Not at Top Level](#toc-pitfall-1-import-not-at-top-level)
-    - [Pitfall 2: Circular Dependencies](#toc-pitfall-2-circular-dependencies)
-    - [Pitfall 3: Named vs Default Import Mismatch](#toc-pitfall-3-named-vs-default-import-mismatch)
-    - [Pitfall 4: Live Bindings Surprise](#toc-pitfall-4-live-bindings-surprise)
-    - [Pitfall 5: Missing File Extensions](#toc-pitfall-5-missing-file-extensions)
-    - [Pitfall 6: this in Modules](#toc-pitfall-6-this-in-modules)
-    - [Next Steps](#toc-next-steps-11)
-  - [14.4 Modules Summary](#toc-144-modules-summary)
-- [15-Proxy-and-Reflection.md](#toc-15-proxy-and-reflectionmd)
-- [15 Proxy and Reflection](#toc-15-proxy-and-reflection)
-- [Proxy and Reflection](#toc-proxy-and-reflection)
-  - [15.1 Proxy](#toc-151-proxy)
-    - [Proxy Constructor](#toc-proxy-constructor)
-    - [Handler Traps: `get`, `set`, `has`](#toc-handler-traps-get-set-has)
-    - [Handler Traps: `deleteProperty`](#toc-handler-traps-deleteproperty)
-    - [Handler Traps: `ownKeys`, `getOwnPropertyDescriptor`](#toc-handler-traps-ownkeys-getownpropertydescriptor)
-    - [Handler Traps: `defineProperty`](#toc-handler-traps-defineproperty)
-    - [Handler Traps: `preventExtensions`, `isExtensible`](#toc-handler-traps-preventextensions-isextensible)
-    - [Handler Traps: `getPrototypeOf`, `setPrototypeOf`](#toc-handler-traps-getprototypeof-setprototypeof)
-    - [Handler Traps: `apply`, `construct`](#toc-handler-traps-apply-construct)
-    - [Revocable Proxies](#toc-revocable-proxies)
-    - [Use Cases (Validation, Logging, Virtualization)](#toc-use-cases-validation-logging-virtualization)
-    - [Observable Pattern with Proxy](#toc-observable-pattern-with-proxy)
-  - [15.2 Reflect](#toc-152-reflect)
-    - [`Reflect` Methods (Mirror Proxy Traps)](#toc-reflect-methods-mirror-proxy-traps)
-    - [Why Use Reflect Over Object Methods](#toc-why-use-reflect-over-object-methods)
-    - [Reflect as Receiver in Proxy](#toc-reflect-as-receiver-in-proxy)
-  - [Summary](#toc-summary-19)
-- [16-Meta-Programming.md](#toc-16-meta-programmingmd)
-- [16 Meta Programming](#toc-16-meta-programming)
-- [Meta-programming](#toc-meta-programming)
-  - [16.1 Property Descriptors](#toc-161-property-descriptors)
-    - [Configuring Object Properties](#toc-configuring-object-properties)
-    - [Property Attributes Manipulation](#toc-property-attributes-manipulation)
-  - [16.2 Object Introspection](#toc-162-object-introspection)
-    - [`Object.getOwnPropertyNames()`](#toc-objectgetownpropertynames-1)
-    - [`Object.getOwnPropertySymbols()`](#toc-objectgetownpropertysymbols-1)
-    - [Enumerability and Iteration](#toc-enumerability-and-iteration)
-  - [16.3 Function Introspection](#toc-163-function-introspection)
-    - [Function `name` Property](#toc-function-name-property)
-    - [Function `length` Property](#toc-function-length-property)
-    - [`toString()` Method](#toc-tostring-method)
-    - [Accessing Function Source](#toc-accessing-function-source)
-  - [Summary](#toc-summary-20)
-- [17-Memory-Management.md](#toc-17-memory-managementmd)
-- [17 Memory Management](#toc-17-memory-management)
-- [JavaScript Deep Dive: Memory Management](#toc-javascript-deep-dive-memory-management)
-  - [17.1 Garbage Collection](#toc-171-garbage-collection)
-    - [Mark-and-Sweep Algorithm](#toc-mark-and-sweep-algorithm)
-    - [Reference Counting](#toc-reference-counting)
-    - [Generational Collection](#toc-generational-collection)
-    - [Memory Leaks (Common Causes)](#toc-memory-leaks-common-causes)
-    - [Memory Profiling Tools](#toc-memory-profiling-tools)
-  - [17.2 WeakRef](#toc-172-weakref)
-    - [Creating Weak References](#toc-creating-weak-references)
-    - [`deref()` Method](#toc-deref-method)
-    - [Use Cases](#toc-use-cases-9)
-  - [17.3 FinalizationRegistry](#toc-173-finalizationregistry)
-    - [Registering Cleanup Callbacks](#toc-registering-cleanup-callbacks)
-    - [Use Cases (Resource Management)](#toc-use-cases-resource-management)
-  - [17.4 Memory Optimization](#toc-174-memory-optimization)
-    - [Object Pooling](#toc-object-pooling)
-    - [Avoiding Memory Leaks](#toc-avoiding-memory-leaks)
-    - [Closure Memory Implications](#toc-closure-memory-implications)
-    - [Large Data Structure Strategies](#toc-large-data-structure-strategies)
-  - [Summary](#toc-summary-21)
-- [18-Internationalization.md](#toc-18-internationalizationmd)
-- [18 Internationalization](#toc-18-internationalization)
-- [Internationalization (Intl)](#toc-internationalization-intl)
-  - [18.1 Intl.DateTimeFormat](#toc-181-intldatetimeformat)
-    - [Locale-Aware Date Formatting](#toc-locale-aware-date-formatting)
-    - [Options (dateStyle, timeStyle, etc.)](#toc-options-datestyle-timestyle-etc)
-  - [18.2 Intl.NumberFormat](#toc-182-intlnumberformat)
-    - [Number Formatting](#toc-number-formatting)
-    - [Currency Formatting](#toc-currency-formatting)
-    - [Unit Formatting](#toc-unit-formatting)
-    - [Compact Notation](#toc-compact-notation)
-  - [18.3 Intl.Collator](#toc-183-intlcollator)
-    - [String Comparison](#toc-string-comparison)
-    - [Sorting with Locale Awareness](#toc-sorting-with-locale-awareness)
-  - [18.4 Intl.PluralRules](#toc-184-intlpluralrules)
-    - [Plural Form Selection](#toc-plural-form-selection)
-  - [18.5 Intl.RelativeTimeFormat](#toc-185-intlrelativetimeformat)
-    - [Relative Time Formatting ("2 days ago")](#toc-relative-time-formatting-2-days-ago)
-  - [18.6 Intl.ListFormat](#toc-186-intllistformat)
-    - [List Formatting](#toc-list-formatting)
-  - [18.7 Intl.Locale](#toc-187-intllocale)
-    - [Locale Identification](#toc-locale-identification)
-  - [18.8 Intl.Segmenter](#toc-188-intlsegmenter)
-    - [Text Segmentation (Graphemes, Words, Sentences)](#toc-text-segmentation-graphemes-words-sentences)
-  - [Summary](#toc-summary-22)
-- [19-Atomics-and-SharedArrayBuffer.md](#toc-19-atomics-and-sharedarraybuffermd)
-- [19 Atomics and SharedArrayBuffer](#toc-19-atomics-and-sharedarraybuffer)
-- [JavaScript Deep Dive: Atomics and SharedArrayBuffer](#toc-javascript-deep-dive-atomics-and-sharedarraybuffer)
-  - [19.1 SharedArrayBuffer](#toc-191-sharedarraybuffer)
-    - [Creating Shared Memory](#toc-creating-shared-memory)
-    - [Sharing Between Workers](#toc-sharing-between-workers)
-    - [Security Considerations (COOP/COEP Headers)](#toc-security-considerations-coopcoep-headers)
-  - [19.2 Atomics](#toc-192-atomics)
-    - [Atomic Operations](#toc-atomic-operations)
-    - [`Atomics.add()`, `Atomics.sub()`, `Atomics.and()`, etc.](#toc-atomicsadd-atomicssub-atomicsand-etc)
-    - [`Atomics.load()` / `Atomics.store()`](#toc-atomicsload-atomicsstore)
-    - [`Atomics.wait()` / `Atomics.notify()`](#toc-atomicswait-atomicsnotify)
-    - [`Atomics.isLockFree()`](#toc-atomicsislockfree)
-    - [Use Cases (Multi-threaded Coordination)](#toc-use-cases-multi-threaded-coordination)
-  - [19.3 Race Conditions Deep Dive](#toc-193-race-conditions-deep-dive)
-    - [The Classic Race Condition](#toc-the-classic-race-condition)
-    - [Check-Then-Act Race Condition](#toc-check-then-act-race-condition)
-    - [Read-Modify-Write Patterns](#toc-read-modify-write-patterns)
-  - [19.4 Lock-Free Data Structures](#toc-194-lock-free-data-structures)
-    - [Lock-Free Stack (LIFO)](#toc-lock-free-stack-lifo)
-    - [Lock-Free Queue (FIFO)](#toc-lock-free-queue-fifo)
-    - [Lock-Free Counter with Statistics](#toc-lock-free-counter-with-statistics)
-  - [19.5 Mutex and Semaphore Implementation](#toc-195-mutex-and-semaphore-implementation)
-    - [Spinlock (Simple Mutex)](#toc-spinlock-simple-mutex)
-    - [Blocking Mutex (with wait/notify)](#toc-blocking-mutex-with-waitnotify)
-    - [Semaphore](#toc-semaphore)
-    - [Read-Write Lock](#toc-read-write-lock)
-  - [19.6 Real-World Patterns](#toc-196-real-world-patterns)
-    - [Parallel Map-Reduce](#toc-parallel-map-reduce)
-    - [Progress Reporting](#toc-progress-reporting)
-  - [19.7 Common Pitfalls](#toc-197-common-pitfalls)
-    - [Pitfall 1: Forgetting Memory Barriers](#toc-pitfall-1-forgetting-memory-barriers)
-    - [Pitfall 2: ABA Problem](#toc-pitfall-2-aba-problem)
-    - [Pitfall 3: Deadlock](#toc-pitfall-3-deadlock)
-  - [19.8 Summary](#toc-198-summary)
-    - [When to Use](#toc-when-to-use-3)
-    - [Best Practices](#toc-best-practices-18)
-- [20-Temporal-API-S3.md](#toc-20-temporal-api-s3md)
-- [20 Temporal API (Stage 3)](#toc-20-temporal-api-stage-3)
-  - [Why Temporal Matters](#toc-why-temporal-matters)
-    - [Problems with Date](#toc-problems-with-date)
-    - [How Temporal Fixes Everything](#toc-how-temporal-fixes-everything)
-  - [20.1 Temporal.Instant](#toc-201-temporalinstant)
-    - [Absolute Point in Time](#toc-absolute-point-in-time)
-    - [UTC Timestamps](#toc-utc-timestamps)
-  - [20.2 Temporal.ZonedDateTime](#toc-202-temporalzoneddatetime)
-    - [Date/Time with Timezone](#toc-datetime-with-timezone)
-  - [20.3 Temporal.PlainDate](#toc-203-temporalplaindate)
-    - [Calendar Date (No Time)](#toc-calendar-date-no-time)
-  - [20.4 Temporal.PlainTime](#toc-204-temporalplaintime)
-    - [Clock Time (No Date)](#toc-clock-time-no-date)
-  - [20.5 Temporal.PlainDateTime](#toc-205-temporalplaindatetime)
-    - [Date and Time (No Timezone)](#toc-date-and-time-no-timezone)
-  - [20.6 Temporal.Duration](#toc-206-temporalduration)
-    - [Time Duration](#toc-time-duration)
-  - [20.7 Temporal.Calendar](#toc-207-temporalcalendar)
-    - [Calendar Systems](#toc-calendar-systems)
-  - [20.8 Temporal.TimeZone](#toc-208-temporaltimezone)
-    - [Timezone Handling](#toc-timezone-handling)
-  - [20.9 Migrating from Date to Temporal](#toc-209-migrating-from-date-to-temporal)
-    - [Common Migration Patterns](#toc-common-migration-patterns)
-    - [Converting Between Date and Temporal](#toc-converting-between-date-and-temporal)
-  - [20.10 Duration Deep Dive](#toc-2010-duration-deep-dive)
-    - [Understanding Duration Components](#toc-understanding-duration-components)
-    - [Duration Balancing](#toc-duration-balancing)
-    - [Duration Arithmetic](#toc-duration-arithmetic)
-    - [Duration with Relative Context](#toc-duration-with-relative-context)
-    - [Common Duration Patterns](#toc-common-duration-patterns)
-  - [20.11 Timezone Gotchas](#toc-2011-timezone-gotchas)
-    - [DST Transitions](#toc-dst-transitions)
-    - [Duration Across DST](#toc-duration-across-dst)
-    - [Common Timezone Mistakes](#toc-common-timezone-mistakes)
-  - [Summary](#toc-summary-23)
-    - [Migration Checklist](#toc-migration-checklist)
-- [21-Decorators-S3.md](#toc-21-decorators-s3md)
-- [21 Decorators (Stage 3)](#toc-21-decorators-stage-3)
-  - [Why Decorators Matter](#toc-why-decorators-matter)
-    - [The Problem Decorators Solve](#toc-the-problem-decorators-solve)
-    - [When to Use Decorators](#toc-when-to-use-decorators)
-  - [21.1 Class Decorators](#toc-211-class-decorators)
-    - [Modifying Class Behavior](#toc-modifying-class-behavior)
-  - [21.2 Method Decorators](#toc-212-method-decorators)
-    - [Modifying Methods](#toc-modifying-methods)
-  - [21.3 Accessor Decorators](#toc-213-accessor-decorators)
-    - [Modifying Getters/Setters](#toc-modifying-getterssetters)
-  - [21.4 Field Decorators](#toc-214-field-decorators)
-    - [Modifying Class Fields](#toc-modifying-class-fields)
-  - [21.5 Auto-accessor Decorators](#toc-215-auto-accessor-decorators)
-    - [Combined Getter/Setter Decorators](#toc-combined-gettersetter-decorators)
-  - [Combining Multiple Decorators](#toc-combining-multiple-decorators)
-  - [21.6 Dependency Injection with Decorators](#toc-216-dependency-injection-with-decorators)
-    - [Simple DI Container](#toc-simple-di-container)
-    - [Singleton Pattern](#toc-singleton-pattern-2)
-    - [Scoped Dependencies](#toc-scoped-dependencies)
-  - [21.7 Real-World Decorator Patterns](#toc-217-real-world-decorator-patterns)
-    - [Validation Decorators](#toc-validation-decorators)
-    - [API Route Decorators (Express-style)](#toc-api-route-decorators-express-style)
-    - [ORM-Style Entity Decorators](#toc-orm-style-entity-decorators)
-  - [21.8 Common Pitfalls](#toc-218-common-pitfalls)
-    - [Pitfall 1: Decorator Order Matters](#toc-pitfall-1-decorator-order-matters)
-    - [Pitfall 2: this Binding in Decorators](#toc-pitfall-2-this-binding-in-decorators)
-    - [Pitfall 3: Async Method Decoration](#toc-pitfall-3-async-method-decoration)
-  - [Summary](#toc-summary-24)
-    - [Context Object Properties](#toc-context-object-properties)
-    - [Best Practices](#toc-best-practices-19)
-- [22-Design-Patterns.md](#toc-22-design-patternsmd)
-- [22 Design Patterns](#toc-22-design-patterns)
-- [Creational Patterns](#toc-creational-patterns)
-  - [Creational Patterns](#toc-creational-patterns-1)
-  - [Factory Pattern](#toc-factory-pattern)
-    - [Simple Factory](#toc-simple-factory)
-    - [Factory Method Pattern](#toc-factory-method-pattern)
-    - [Abstract Factory Pattern](#toc-abstract-factory-pattern)
-    - [Practical Factory Example](#toc-practical-factory-example)
-  - [Constructor Pattern](#toc-constructor-pattern)
-    - [Function Constructor](#toc-function-constructor)
-    - [Constructor with Prototype](#toc-constructor-with-prototype)
-    - [ES6 Class Constructor](#toc-es6-class-constructor)
-    - [Constructor with Private Properties](#toc-constructor-with-private-properties)
-    - [Constructor with Validation](#toc-constructor-with-validation)
-  - [Singleton Pattern](#toc-singleton-pattern-3)
-    - [Basic Singleton](#toc-basic-singleton)
-    - [Singleton with Private Constructor](#toc-singleton-with-private-constructor)
-    - [Lazy Singleton](#toc-lazy-singleton)
-    - [Singleton Module Pattern](#toc-singleton-module-pattern)
-  - [Prototype Pattern](#toc-prototype-pattern)
-    - [Basic Prototype](#toc-basic-prototype)
-    - [Prototype with Clone Method](#toc-prototype-with-clone-method)
-    - [Prototype Registry](#toc-prototype-registry)
-    - [Deep Clone Pattern](#toc-deep-clone-pattern)
-  - [Builder Pattern](#toc-builder-pattern)
-    - [Basic Builder](#toc-basic-builder)
-    - [Director Pattern](#toc-director-pattern)
-    - [Fluent Builder with Validation](#toc-fluent-builder-with-validation)
-  - [Module Pattern](#toc-module-pattern)
-    - [Basic Module Pattern](#toc-basic-module-pattern-1)
-    - [Revealing Module Pattern](#toc-revealing-module-pattern-2)
-    - [Module with Dependencies](#toc-module-with-dependencies)
-    - [ES6 Module Pattern](#toc-es6-module-pattern)
-  - [Summary](#toc-summary-25)
-- [Structural Patterns](#toc-structural-patterns)
-  - [Structural Patterns](#toc-structural-patterns-1)
-  - [Decorator Pattern](#toc-decorator-pattern)
-    - [Basic Decorator](#toc-basic-decorator)
-    - [Functional Decorator](#toc-functional-decorator)
-    - [Class Method Decorator](#toc-class-method-decorator)
-    - [UI Component Decorator](#toc-ui-component-decorator)
-  - [Facade Pattern](#toc-facade-pattern)
-    - [Basic Facade](#toc-basic-facade)
-    - [API Facade](#toc-api-facade)
-    - [DOM Manipulation Facade](#toc-dom-manipulation-facade)
-  - [Flyweight Pattern](#toc-flyweight-pattern)
-    - [Basic Flyweight](#toc-basic-flyweight)
-    - [Particle System Flyweight](#toc-particle-system-flyweight)
-    - [String Interning (Flyweight)](#toc-string-interning-flyweight)
-  - [Adapter Pattern](#toc-adapter-pattern)
-    - [Basic Adapter](#toc-basic-adapter)
-    - [API Adapter](#toc-api-adapter)
-    - [Payment Gateway Adapter](#toc-payment-gateway-adapter)
-    - [Data Format Adapter](#toc-data-format-adapter)
-  - [Proxy Pattern](#toc-proxy-pattern)
-    - [Virtual Proxy (Lazy Loading)](#toc-virtual-proxy-lazy-loading)
-    - [Protection Proxy (Access Control)](#toc-protection-proxy-access-control)
-    - [Caching Proxy](#toc-caching-proxy)
-    - [Logging Proxy](#toc-logging-proxy)
-  - [Composite Pattern](#toc-composite-pattern)
-    - [Basic Composite](#toc-basic-composite)
-    - [UI Component Composite](#toc-ui-component-composite)
-    - [Organization Hierarchy](#toc-organization-hierarchy)
-  - [Bridge Pattern](#toc-bridge-pattern)
-    - [Basic Bridge](#toc-basic-bridge)
-    - [Device Control Bridge](#toc-device-control-bridge)
-  - [Summary](#toc-summary-26)
-- [Design Patterns - Behavioral Patterns](#toc-design-patterns-behavioral-patterns)
-  - [Behavioral Patterns](#toc-behavioral-patterns)
-  - [Observer Pattern (Pub/Sub)](#toc-observer-pattern-pubsub)
-    - [Basic Observer](#toc-basic-observer)
-    - [Event Emitter Pattern](#toc-event-emitter-pattern)
-    - [Pub/Sub Pattern](#toc-pubsub-pattern)
-    - [Real-World Example: Store](#toc-real-world-example-store)
-  - [Iterator Pattern](#toc-iterator-pattern)
-    - [Basic Iterator](#toc-basic-iterator)
-    - [ES6 Iterator Protocol](#toc-es6-iterator-protocol)
-    - [Generator Iterator](#toc-generator-iterator)
-    - [Tree Iterator](#toc-tree-iterator)
-  - [Strategy Pattern](#toc-strategy-pattern)
-    - [Basic Strategy](#toc-basic-strategy)
-    - [Validation Strategy](#toc-validation-strategy)
-    - [Sorting Strategy](#toc-sorting-strategy)
-  - [Command Pattern](#toc-command-pattern)
-    - [Basic Command](#toc-basic-command)
-    - [Text Editor with Undo/Redo](#toc-text-editor-with-undoredo)
-    - [Macro Command](#toc-macro-command)
-  - [Chain of Responsibility](#toc-chain-of-responsibility)
-    - [Basic Chain](#toc-basic-chain)
-    - [Middleware Chain](#toc-middleware-chain)
-    - [Support Ticket System](#toc-support-ticket-system)
-  - [State Pattern](#toc-state-pattern)
-    - [Basic State](#toc-basic-state)
-    - [Document State Machine](#toc-document-state-machine)
-    - [Vending Machine](#toc-vending-machine)
-  - [Template Method Pattern](#toc-template-method-pattern)
-    - [Basic Template Method](#toc-basic-template-method)
-    - [Game Template](#toc-game-template)
-    - [Report Generator](#toc-report-generator)
-  - [Mediator Pattern](#toc-mediator-pattern)
-    - [Basic Mediator](#toc-basic-mediator)
-    - [Chat Room Mediator](#toc-chat-room-mediator)
-    - [Air Traffic Control](#toc-air-traffic-control)
-  - [Memento Pattern](#toc-memento-pattern)
-    - [Basic Memento](#toc-basic-memento)
-    - [Game State Memento](#toc-game-state-memento)
-  - [Visitor Pattern](#toc-visitor-pattern)
-    - [Basic Visitor](#toc-basic-visitor)
-    - [File System Visitor](#toc-file-system-visitor)
-  - [Summary](#toc-summary-27)
-- [Functional Patterns](#toc-functional-patterns)
-  - [Functional Patterns](#toc-functional-patterns-1)
-  - [Function Composition](#toc-function-composition)
-    - [Basic Composition](#toc-basic-composition-1)
-    - [String Processing Pipeline](#toc-string-processing-pipeline)
-    - [Data Transformation Pipeline](#toc-data-transformation-pipeline)
-    - [Async Function Composition](#toc-async-function-composition)
-    - [Point-Free Style](#toc-point-free-style)
-  - [Higher-Order Functions](#toc-higher-order-functions)
-    - [Map, Filter, Reduce](#toc-map-filter-reduce)
-    - [Custom Higher-Order Functions](#toc-custom-higher-order-functions)
-    - [Function Decorators](#toc-function-decorators)
-    - [Array Methods as HOFs](#toc-array-methods-as-hofs)
-  - [Currying and Partial Application](#toc-currying-and-partial-application)
-    - [Basic Currying](#toc-basic-currying)
-    - [Auto-Curry Function](#toc-auto-curry-function)
-    - [Partial Application](#toc-partial-application-1)
-    - [Curried Utility Functions](#toc-curried-utility-functions)
-    - [Practical Currying Examples](#toc-practical-currying-examples)
-  - [Memoization](#toc-memoization-1)
-    - [Basic Memoization](#toc-basic-memoization-1)
-    - [Advanced Memoization](#toc-advanced-memoization-1)
-    - [Recursive Memoization](#toc-recursive-memoization)
-    - [Practical Memoization](#toc-practical-memoization)
-  - [Pure Functions](#toc-pure-functions-1)
-    - [Pure vs Impure Functions](#toc-pure-vs-impure-functions)
-    - [Benefits of Pure Functions](#toc-benefits-of-pure-functions-1)
-    - [Making Functions Pure](#toc-making-functions-pure)
-    - [Pure Function Patterns](#toc-pure-function-patterns)
-  - [Immutability Patterns](#toc-immutability-patterns)
-    - [Immutable Arrays](#toc-immutable-arrays)
-    - [Immutable Objects](#toc-immutable-objects)
-    - [Immutable Data Structures](#toc-immutable-data-structures)
-    - [Object.freeze and Const](#toc-objectfreeze-and-const)
-    - [Immutability Helpers](#toc-immutability-helpers)
-  - [Summary](#toc-summary-28)
-- [Async Patterns](#toc-async-patterns-1)
-  - [Async Patterns](#toc-async-patterns-2)
-  - [Promise Patterns](#toc-promise-patterns)
-    - [Basic Promise Patterns](#toc-basic-promise-patterns)
-    - [Promise.all - Parallel Execution](#toc-promiseall-parallel-execution)
-    - [Promise.race - First to Complete](#toc-promiserace-first-to-complete)
-    - [Promise.allSettled - All Results](#toc-promiseallsettled-all-results)
-    - [Promise.any - First Successful](#toc-promiseany-first-successful)
-    - [Sequential Promise Execution](#toc-sequential-promise-execution)
-    - [Promise Retry Pattern](#toc-promise-retry-pattern)
-    - [Promise Queue](#toc-promise-queue)
-    - [Promisify Pattern](#toc-promisify-pattern)
-  - [Async/Await Patterns](#toc-asyncawait-patterns)
-    - [Basic Async/Await](#toc-basic-asyncawait)
-    - [Parallel Async Operations](#toc-parallel-async-operations)
-    - [Async Error Handling](#toc-async-error-handling)
-    - [Async Iteration](#toc-async-iteration-1)
-    - [Async Control Flow](#toc-async-control-flow)
-    - [Async Memoization](#toc-async-memoization)
-    - [Async Pipeline](#toc-async-pipeline)
-  - [Observable Pattern](#toc-observable-pattern)
-    - [Basic Observable](#toc-basic-observable)
-    - [Event Observable](#toc-event-observable)
-    - [Observable Operators](#toc-observable-operators)
-    - [Subject (Hot Observable)](#toc-subject-hot-observable)
-  - [Reactive Programming Concepts](#toc-reactive-programming-concepts)
-    - [Stream Composition](#toc-stream-composition)
-    - [Reactive State Management](#toc-reactive-state-management)
-    - [Reactive Forms](#toc-reactive-forms)
-    - [Reactive Data Flow](#toc-reactive-data-flow)
-  - [Summary](#toc-summary-29)
-  - [22.6 Design Patterns Summary](#toc-226-design-patterns-summary)
-- [23-Performance-Optimization.md](#toc-23-performance-optimizationmd)
-- [23 Performance Optimization](#toc-23-performance-optimization)
-- [Table of Contents](#toc-table-of-contents)
-  - [23.1 JavaScript Engine Optimization](#toc-231-javascript-engine-optimization)
-    - [V8 Optimization Tips](#toc-v8-optimization-tips)
-    - [JIT Compilation](#toc-jit-compilation)
-    - [Hidden Classes and Inline Caching](#toc-hidden-classes-and-inline-caching)
-    - [Deoptimization Triggers](#toc-deoptimization-triggers)
-    - [Engine Internals Deep Dive](#toc-engine-internals-deep-dive)
-  - [23.2 Algorithm Optimization](#toc-232-algorithm-optimization)
-    - [Time Complexity (Big O)](#toc-time-complexity-big-o)
-    - [Space Complexity](#toc-space-complexity)
-    - [Common Algorithm Patterns](#toc-common-algorithm-patterns)
-    - [Choosing Appropriate Data Structures](#toc-choosing-appropriate-data-structures)
-  - [Summary](#toc-summary-30)
-- [Code & Memory](#toc-code-memory)
-  - [23.3 Code-Level Optimization](#toc-233-code-level-optimization)
-    - [Loop Optimization](#toc-loop-optimization)
-    - [Function Call Overhead](#toc-function-call-overhead)
-    - [Variable Scope Optimization](#toc-variable-scope-optimization)
-    - [Avoiding Unnecessary Work](#toc-avoiding-unnecessary-work)
-    - [Lazy Evaluation](#toc-lazy-evaluation-1)
-  - [23.4 Memory Optimization](#toc-234-memory-optimization)
-    - [Reducing Memory Allocations](#toc-reducing-memory-allocations)
-    - [Object Pooling](#toc-object-pooling-1)
-    - [WeakMap/WeakSet Usage](#toc-weakmapweakset-usage)
-    - [Avoiding Memory Leaks](#toc-avoiding-memory-leaks-1)
-  - [Summary](#toc-summary-31)
-- [Rendering & Bundle](#toc-rendering-bundle)
-  - [23.5 Rendering Performance](#toc-235-rendering-performance)
-    - [Reflow and Repaint](#toc-reflow-and-repaint)
-    - [Layout Thrashing](#toc-layout-thrashing)
-    - [requestAnimationFrame](#toc-requestanimationframe)
-    - [Virtual Scrolling](#toc-virtual-scrolling)
-    - [Debouncing and Throttling](#toc-debouncing-and-throttling)
-  - [23.6 Bundle Optimization](#toc-236-bundle-optimization)
-    - [Code Splitting](#toc-code-splitting)
-    - [Tree Shaking](#toc-tree-shaking)
-    - [Minification](#toc-minification)
-    - [Compression](#toc-compression)
-  - [Summary](#toc-summary-32)
-  - [23.7 Performance Summary](#toc-237-performance-summary)
-- [24-Security-Best-Practices.md](#toc-24-security-best-practicesmd)
-- [24 Security Best Practices](#toc-24-security-best-practices)
-- [JavaScript Deep Dive: Security](#toc-javascript-deep-dive-security)
-  - [24.1 Common Vulnerabilities](#toc-241-common-vulnerabilities)
-    - [Cross-Site Scripting (XSS)](#toc-cross-site-scripting-xss)
-    - [Cross-Site Request Forgery (CSRF)](#toc-cross-site-request-forgery-csrf)
-    - [Injection Attacks](#toc-injection-attacks)
-    - [Prototype Pollution](#toc-prototype-pollution)
-    - [Insecure Dependencies](#toc-insecure-dependencies)
-- [npm audit - check for known vulnerabilities](#toc-npm-audit-check-for-known-vulnerabilities)
-- [View detailed report](#toc-view-detailed-report)
-- [Automatically fix vulnerabilities](#toc-automatically-fix-vulnerabilities)
-- [Force fix (may include breaking changes)](#toc-force-fix-may-include-breaking-changes)
-- [yarn alternative](#toc-yarn-alternative)
-- [snyk - more comprehensive](#toc-snyk-more-comprehensive)
-  - [24.2 Secure Coding Practices](#toc-242-secure-coding-practices)
-    - [Input Validation and Sanitization](#toc-input-validation-and-sanitization)
-    - [Output Encoding](#toc-output-encoding)
-    - [Content Security Policy (CSP)](#toc-content-security-policy-csp)
-    - [Subresource Integrity (SRI)](#toc-subresource-integrity-sri)
-- [Generate SRI hash](#toc-generate-sri-hash)
-- [Or use online tool](#toc-or-use-online-tool)
-- [https://www.srihash.org/](#toc-httpswwwsrihashorg)
-    - [HTTPS Enforcement](#toc-https-enforcement)
-    - [Secure Cookie Practices](#toc-secure-cookie-practices)
-  - [Summary](#toc-summary-33)
-- [Authentication & Data Protection](#toc-authentication-data-protection)
-  - [24.3 Authentication & Authorization](#toc-243-authentication-authorization)
-    - [Token-based Authentication (JWT)](#toc-token-based-authentication-jwt)
-    - [OAuth 2.0 / OpenID Connect](#toc-oauth-20-openid-connect)
-    - [Session Management](#toc-session-management)
-    - [Password Hashing (bcrypt)](#toc-password-hashing-bcrypt)
-    - [Multi-factor Authentication](#toc-multi-factor-authentication)
-  - [24.4 Data Protection](#toc-244-data-protection)
-    - [Encryption in Transit and at Rest](#toc-encryption-in-transit-and-at-rest)
-    - [Secure Storage Practices](#toc-secure-storage-practices)
-    - [Privacy Considerations](#toc-privacy-considerations)
-    - [GDPR Compliance Basics](#toc-gdpr-compliance-basics)
-  - [Summary](#toc-summary-34)
-  - [24.5 Security Summary](#toc-245-security-summary)
-- [25-Other-Proposals-and-Future-Features.md](#toc-25-other-proposals-and-future-featuresmd)
-- [25 Other Proposals and Future Features](#toc-25-other-proposals-and-future-features)
-- [Future Features & Proposals](#toc-future-features-proposals)
-  - [25.1 Pattern Matching (Stage 1)](#toc-251-pattern-matching-stage-1)
-    - [Match Expression](#toc-match-expression)
-    - [Pattern Syntax](#toc-pattern-syntax)
-  - [25.2 Records and Tuples (Stage 2)](#toc-252-records-and-tuples-stage-2)
-    - [Immutable Data Structures](#toc-immutable-data-structures-1)
-    - [Deep Equality](#toc-deep-equality)
-  - [25.3 Pipeline Operator (Stage 2)](#toc-253-pipeline-operator-stage-2)
-    - [Function Chaining with `|>`](#toc-function-chaining-with)
-  - [25.4 Throw Expressions (Stage 2)](#toc-254-throw-expressions-stage-2)
-    - [`throw` as Expression](#toc-throw-as-expression)
-  - [Summary](#toc-summary-35)
-<!-- TOC END -->
-
-
-
-<a id="toc-01-language-fundamentalsmd"></a>
+# ECMAScript Full Guide
 # 01-Language-Fundamentals.md
 
-<a id="toc-1-language-fundamentals"></a>
 # 1 Language Fundamentals
 
 **JavaScript's foundation rests on six pillars:** 
@@ -2167,10 +15,8 @@ This chapter dissects each pillar without shortcuts. We examine internal mechani
 
 ---
 
-<a id="toc-11-lexical-structure"></a>
 ## 1.1 Lexical Structure
 
-<a id="toc-111-tokens-and-keywords"></a>
 ### 1.1.1 Tokens and Keywords
 
 JavaScript source code is parsed into a sequence of **tokens**. A token is the smallest meaningful unit of code.
@@ -2227,7 +73,6 @@ var return = 10;   // SyntaxError
 
 ---
 
-<a id="toc-112-reserved-words"></a>
 ### 1.1.2 Reserved Words
 
 Reserved words include **keywords** plus additional words reserved for future use or specific contexts.
@@ -2283,7 +128,6 @@ var class = {};        // SyntaxError in all modes
 
 ---
 
-<a id="toc-113-identifiers-and-naming-rules"></a>
 ### 1.1.3 Identifiers and Naming Rules
 
 An **identifier** is a name used to identify a variable, function, property, or label.
@@ -2399,7 +243,6 @@ let my\u200BVar = 2;  // Different variable! (zero-width space)
 
 ---
 
-<a id="toc-114-comments"></a>
 ### 1.1.4 Comments
 
 Comments are ignored by the JavaScript interpreter. They document code for humans.
@@ -2596,7 +439,6 @@ console.log("Executable script");
 
 ---
 
-<a id="toc-115-literals"></a>
 ### 1.1.5 Literals
 
 A **literal** is a fixed value directly written in source code.
@@ -2950,7 +792,6 @@ tag`C:\new\tab`;    // strings.raw[0] = "C:\\new\\tab"
 
 ---
 
-<a id="toc-116-semicolons-and-asi-automatic-semicolon-insertion"></a>
 ### 1.1.6 Semicolons and ASI (Automatic Semicolon Insertion)
 
 JavaScript has a mechanism called **Automatic Semicolon Insertion (ASI)** that automatically inserts semicolons in certain situations.
@@ -3205,7 +1046,6 @@ Most linters (ESLint) can enforce semicolon style:
 
 ---
 
-<a id="toc-117-unicode-and-character-encoding"></a>
 ### 1.1.7 Unicode and Character Encoding
 
 JavaScript strings are sequences of **UTF-16 code units**.
@@ -3458,7 +1298,6 @@ JSON.stringify({ emoji: '😀' }).replace(/[\u007F-\uFFFF]/g, char =>
 
 ---
 
-<a id="toc-118-strict-mode"></a>
 ### 1.1.8 Strict Mode
 
 **Strict mode** is a way to opt into a restricted variant of JavaScript, which:
@@ -3861,13 +1700,10 @@ Or use ES6 modules (always strict).
 
 ---
 
-<a id="toc-12-variables-and-declarations"></a>
 ## 1.2 Variables and Declarations
 
-<a id="toc-121-var-function-scoped-declaration"></a>
 ### 1.2.1 `var`: Function-Scoped Declaration
 
-<a id="toc-basic-syntax-and-semantics"></a>
 ### Basic Syntax and Semantics
 
 `var` declares function-scoped variables. It's the oldest declaration keyword, predating ES6.
@@ -3889,7 +1725,6 @@ var m = 1, n = 2, o = 3;  // Multiple declarations with initialization
 
 ---
 
-<a id="toc-function-scoping-deep-dive"></a>
 ### Function Scoping Deep Dive
 
 `var` declarations are scoped to the **nearest enclosing function**, not block:
@@ -3927,7 +1762,6 @@ All `var` declarations in a function exist throughout the entire function, creat
 
 ---
 
-<a id="toc-global-scope-behavior"></a>
 ### Global Scope Behavior
 
 `var` at the top level creates a **property on the global object**:
@@ -3959,7 +1793,6 @@ console.log(globalThis.globalVar); // undefined
 
 ---
 
-<a id="toc-hoisting-mechanics"></a>
 ### Hoisting Mechanics
 
 Hoisting is often misunderstood. It's not that code is literally "moved" to the top—it's about how the JavaScript engine processes declarations during the compilation phase.
@@ -4023,7 +1856,6 @@ test();
 
 ---
 
-<a id="toc-re-declaration-semantics"></a>
 ### Re-declaration Semantics
 
 `var` allows re-declaration in the same scope:
@@ -4069,7 +1901,6 @@ This silent overwrites are why `var` is problematic in large codebases.
 
 ---
 
-<a id="toc-the-classic-loop-problem"></a>
 ### The Classic Loop Problem
 
 One of `var`'s most infamous issues:
@@ -4142,10 +1973,8 @@ for (let i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-122-let-block-scoped-declaration"></a>
 ### 1.2.2 `let`: Block-Scoped Declaration
 
-<a id="toc-basic-syntax-and-semantics-1"></a>
 ### Basic Syntax and Semantics
 
 `let` declares block-scoped variables with proper temporal semantics:
@@ -4167,7 +1996,6 @@ let m = 1, n = 2;  // Multiple declarations with initialization
 
 ---
 
-<a id="toc-block-scoping"></a>
 ### Block Scoping
 
 `let` creates bindings that exist only within the nearest enclosing block `{}`:
@@ -4231,7 +2059,6 @@ function example(x) {  // Parameter x
 
 ---
 
-<a id="toc-hoisting-and-the-temporal-dead-zone-tdz"></a>
 ### Hoisting and the Temporal Dead Zone (TDZ)
 
 `let` declarations **are hoisted** to the top of their block, but unlike `var`, they are **not initialized**. Accessing them before the declaration line results in a `ReferenceError`.
@@ -4294,7 +2121,6 @@ console.log(typeof completelyUndeclared);  // "undefined"
 
 ---
 
-<a id="toc-no-re-declaration"></a>
 ### No Re-declaration
 
 `let` forbids re-declaration in the same scope:
@@ -4348,7 +2174,6 @@ function g(x) {
 
 ---
 
-<a id="toc-loop-behavior-and-per-iteration-bindings"></a>
 ### Loop Behavior and Per-Iteration Bindings
 
 With `let`, each loop iteration creates a **new binding**:
@@ -4429,7 +2254,6 @@ console.log(funcs[2]());  // 3
 
 ---
 
-<a id="toc-global-scope-behavior-1"></a>
 ### Global Scope Behavior
 
 `let` at the global level does **not** create a property on the global object:
@@ -4457,10 +2281,8 @@ console.log(window.globalLet);  // undefined
 
 ---
 
-<a id="toc-123-const-immutable-binding"></a>
 ### 1.2.3 `const`: Immutable Binding
 
-<a id="toc-basic-syntax-and-semantics-2"></a>
 ### Basic Syntax and Semantics
 
 `const` declares block-scoped constants—variables with an **immutable binding**:
@@ -4482,7 +2304,6 @@ const config = { apiUrl: "https://api.example.com" };
 
 ---
 
-<a id="toc-immutable-binding-vs-immutable-value"></a>
 ### Immutable Binding vs Immutable Value
 
 **Critical distinction:** `const` creates an **immutable binding**, not an immutable value.
@@ -4543,7 +2364,6 @@ obj = { x: 3 };  // TypeError
 
 ---
 
-<a id="toc-initialization-required"></a>
 ### Initialization Required
 
 `const` **must** be initialized at declaration:
@@ -4565,7 +2385,6 @@ x = 10;   // Cannot assign to const
 
 ---
 
-<a id="toc-object-immutability-with-objectfreeze"></a>
 ### Object Immutability with `Object.freeze()`
 
 To make an object's properties immutable, use `Object.freeze()`:
@@ -4641,7 +2460,6 @@ For complex immutability needs, use libraries like:
 
 ---
 
-<a id="toc-scoping-hoisting-and-tdz"></a>
 ### Scoping, Hoisting, and TDZ
 
 `const` follows the same rules as `let`:
@@ -4680,10 +2498,8 @@ console.log(window.globalConst);  // undefined
 
 ---
 
-<a id="toc-124-hoisting-deep-dive"></a>
 ### 1.2.4 Hoisting Deep Dive
 
-<a id="toc-what-is-hoisting"></a>
 ### What is Hoisting?
 
 Hoisting is a **mental model** for understanding how JavaScript's engine processes variable and function declarations during the **compilation phase** before execution.
@@ -4702,7 +2518,6 @@ Hoisting is a **mental model** for understanding how JavaScript's engine process
 
 ---
 
-<a id="toc-var-hoisting"></a>
 ### `var` Hoisting
 
 **Source code:**
@@ -4736,7 +2551,6 @@ console.log(x);  // 5
 
 ---
 
-<a id="toc-let-and-const-hoisting"></a>
 ### `let` and `const` Hoisting
 
 `let` and `const` **are hoisted**, but unlike `var`, they are **not initialized**. This creates the TDZ.
@@ -4776,7 +2590,6 @@ If `let x` were not hoisted, `console.log(x)` would print `'outer'`. Instead, it
 
 ---
 
-<a id="toc-function-hoisting"></a>
 ### Function Hoisting
 
 **Function declarations are fully hoisted:**
@@ -4819,7 +2632,6 @@ let greet = function() {
 
 ---
 
-<a id="toc-variable-vs-function-hoisting-priority"></a>
 ### Variable vs Function Hoisting Priority
 
 **When both variable and function have the same name:**
@@ -4852,7 +2664,6 @@ console.log(typeof foo);  // "string"
 
 ---
 
-<a id="toc-hoisting-in-different-scopes"></a>
 ### Hoisting in Different Scopes
 
 **Global scope:**
@@ -4901,10 +2712,8 @@ console.log(blockConst); // ReferenceError
 
 ---
 
-<a id="toc-125-temporal-dead-zone-tdz-deep-dive"></a>
 ### 1.2.5 Temporal Dead Zone (TDZ) Deep Dive
 
-<a id="toc-definition"></a>
 ### Definition
 
 The **Temporal Dead Zone** is the period between entering a scope and the point where a `let` or `const` variable is declared and initialized. During this time, the variable exists but cannot be accessed.
@@ -4923,7 +2732,6 @@ The **Temporal Dead Zone** is the period between entering a scope and the point 
 
 ---
 
-<a id="toc-tdz-triggers"></a>
 ### TDZ Triggers
 
 **Accessing variable before declaration:**
@@ -4958,7 +2766,6 @@ The **Temporal Dead Zone** is the period between entering a scope and the point 
 
 ---
 
-<a id="toc-tdz-and-default-parameters"></a>
 ### TDZ and Default Parameters
 
 Function parameters are evaluated **left-to-right**, and each parameter is in TDZ until it's initialized:
@@ -5007,7 +2814,6 @@ f();  // 20
 
 ---
 
-<a id="toc-tdz-and-typeof"></a>
 ### TDZ and `typeof`
 
 Before ES6, `typeof` was "safe" for undeclared variables:
@@ -5066,7 +2872,6 @@ if (typeof myVar !== 'undefined') {
 
 ---
 
-<a id="toc-tdz-in-closures"></a>
 ### TDZ in Closures
 
 Closures capture variables, including their TDZ state:
@@ -5107,7 +2912,6 @@ Closures capture variables, including their TDZ state:
 
 ---
 
-<a id="toc-why-tdz-exists"></a>
 ### Why TDZ Exists
 
 **1. Catch errors early:**
@@ -5163,10 +2967,8 @@ Most block-scoped languages (Java, C#, Rust) forbid use-before-declaration. TDZ 
 
 ---
 
-<a id="toc-126-global-variables-and-globalthis"></a>
 ### 1.2.6 Global Variables and `globalThis`
 
-<a id="toc-global-scope-mechanics"></a>
 ### Global Scope Mechanics
 
 JavaScript has **two types of global variables**:
@@ -5196,7 +2998,6 @@ ES6 needed backward compatibility with `var` (which creates global properties) w
 
 ---
 
-<a id="toc-the-global-object"></a>
 ### The Global Object
 
 The global object is environment-dependent:
@@ -5221,7 +3022,6 @@ var global = self;
 
 ---
 
-<a id="toc-globalthis-universal-global-access"></a>
 ### `globalThis`: Universal Global Access
 
 ES2020 introduced `globalThis` as a **standardized way** to access the global object across all environments:
@@ -5261,7 +3061,6 @@ var globalObj = globalThis;
 
 ---
 
-<a id="toc-global-pollution"></a>
 ### Global Pollution
 
 **Problem:**
@@ -5342,7 +3141,6 @@ let config = { theme: 'dark' };
 
 ---
 
-<a id="toc-global-variables-best-practices"></a>
 ### Global Variables Best Practices
 
 1. **Minimize globals**: Use modules or IIFEs
@@ -5369,10 +3167,8 @@ if (typeof MyLibrary === 'undefined') {
 
 ---
 
-<a id="toc-127-practical-guidelines"></a>
 ### 1.2.7 Practical Guidelines
 
-<a id="toc-when-to-use-each-declaration"></a>
 ### When to Use Each Declaration
 
 **Use `const` by default:**
@@ -5424,7 +3220,6 @@ if (condition) {
 
 ---
 
-<a id="toc-common-patterns"></a>
 ### Common Patterns
 
 **1. Loop iteration:**
@@ -5503,10 +3298,8 @@ config.timeout = 10000;
 
 ---
 
-<a id="toc-128-edge-cases-and-gotchas"></a>
 ### 1.2.8 Edge Cases and Gotchas
 
-<a id="toc-1-variable-shadowing"></a>
 ### 1. Variable Shadowing
 
 **Shadowing occurs when an inner scope declares a variable with the same name as an outer scope:**
@@ -5563,7 +3356,6 @@ function g(x) {
 
 ---
 
-<a id="toc-2-switch-statement-scope"></a>
 ### 2. Switch Statement Scope
 
 **`switch` creates a single block scope for all cases:**
@@ -5598,7 +3390,6 @@ switch (value) {
 
 ---
 
-<a id="toc-3-destructuring-with-const"></a>
 ### 3. Destructuring with `const`
 
 **Each destructured binding is individually `const`:**
@@ -5627,7 +3418,6 @@ console.log(b);  // 20 (default)
 
 ---
 
-<a id="toc-4-loop-variable-reassignment"></a>
 ### 4. Loop Variable Reassignment
 
 **`for` loops with `const` in the loop body:**
@@ -5665,7 +3455,6 @@ for (let i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-5-tdz-and-class-methods"></a>
 ### 5. TDZ and Class Methods
 
 ```javascript
@@ -5698,7 +3487,6 @@ class Example {
 
 ---
 
-<a id="toc-6-closure-capture-with-var-vs-let"></a>
 ### 6. Closure Capture with `var` vs `let`
 
 **`var` captures reference to single variable:**
@@ -5731,7 +3519,6 @@ console.log(funcs[2]());  // 2
 
 ---
 
-<a id="toc-7-global-object-vs-global-lexical-environment"></a>
 ### 7. Global Object vs Global Lexical Environment
 
 **`var` creates property on global object:**
@@ -5756,7 +3543,6 @@ console.log(x);   // 10 (still exists)
 
 ---
 
-<a id="toc-8-const-with-object-methods"></a>
 ### 8. Const with Object Methods
 
 **`const` only prevents reassignment, not mutation:**
@@ -5777,10 +3563,8 @@ obj = { count: 10 };  // TypeError: cannot reassign
 
 ---
 
-<a id="toc-129-performance-considerations"></a>
 ### 1.2.9 Performance Considerations
 
-<a id="toc-variable-lookup-performance"></a>
 ### Variable Lookup Performance
 
 **Block-scoped variables (`let`, `const`) are generally faster:**
@@ -5825,7 +3609,6 @@ for (let i = 0; i < 1000; i++) {
 
 ---
 
-<a id="toc-tdz-overhead"></a>
 ### TDZ Overhead
 
 **TDZ checks have minimal overhead:**
@@ -5834,7 +3617,6 @@ Modern engines optimize TDZ checks efficiently. The performance cost is negligib
 
 ---
 
-<a id="toc-memory-considerations"></a>
 ### Memory Considerations
 
 **Closures and memory:**
@@ -5858,10 +3640,8 @@ No significant difference in memory usage. Block-scoped variables may be garbage
 
 ---
 
-<a id="toc-1210-summary"></a>
 ### 1.2.10 Summary
 
-<a id="toc-declaration-comparison-table"></a>
 ### Declaration Comparison Table
 
 |Feature|`var`|`let`|`const`|
@@ -5877,7 +3657,6 @@ No significant difference in memory usage. Block-scoped variables may be garbage
 
 ---
 
-<a id="toc-key-takeaways"></a>
 ### Key Takeaways
 
 1. **`const` is the default choice**: Use unless reassignment is needed
@@ -5893,7 +3672,6 @@ No significant difference in memory usage. Block-scoped variables may be garbage
 
 ---
 
-<a id="toc-modern-best-practices"></a>
 ### Modern Best Practices
 
 ```javascript
@@ -5928,13 +3706,10 @@ const CONSTANTS = Object.freeze({
 
 ---
 
-<a id="toc-13-data-types"></a>
 ## 1.3 Data Types
 
-<a id="toc-131-primitive-vs-reference-types"></a>
 ### 1.3.1 Primitive vs Reference Types
 
-<a id="toc-fundamental-distinction"></a>
 ### Fundamental Distinction
 
 **Primitives:**
@@ -5953,7 +3728,6 @@ const CONSTANTS = Object.freeze({
 
 ---
 
-<a id="toc-value-vs-reference-semantics"></a>
 ### Value vs Reference Semantics
 
 **Primitives are copied:**
@@ -6001,7 +3775,6 @@ let arr2 = arr1;
 
 ---
 
-<a id="toc-immutability-of-primitives"></a>
 ### Immutability of Primitives
 
 Primitives **cannot be mutated**. Operations on primitives always create new values:
@@ -6030,10 +3803,8 @@ console.log(str);  // "Test"
 
 ---
 
-<a id="toc-132-primitive-types"></a>
 ### 1.3.2 Primitive Types
 
-<a id="toc-undefined"></a>
 ### `undefined`
 
 **Meaning:** Variable declared but not initialized, or property that doesn't exist.
@@ -6101,7 +3872,6 @@ void anything; // undefined
 
 ---
 
-<a id="toc-null"></a>
 ### `null`
 
 **Meaning:** Intentional absence of value. Represents "no object."
@@ -6165,7 +3935,6 @@ Boolean(undefined);// false
 
 ---
 
-<a id="toc-boolean"></a>
 ### `Boolean`
 
 **Values:** `true` and `false` (only two values).
@@ -6246,7 +4015,6 @@ if (falseObject) {
 
 ---
 
-<a id="toc-number"></a>
 ### `Number`
 
 **Range:** ±1.7976931348623157 × 10^308 (approximately)
@@ -6504,7 +4272,6 @@ Number.isSafeInteger(9007199254740991);  // true
 
 ---
 
-<a id="toc-bigint"></a>
 ### `BigInt`
 
 **Purpose:** Arbitrary-precision integers (no size limit).
@@ -6601,7 +4368,6 @@ BigInt.asUintN(64, 2n ** 64n);  // Convert to unsigned 64-bit
 
 ---
 
-<a id="toc-string"></a>
 ### `String`
 
 **Type:** Immutable sequence of UTF-16 code units.
@@ -6795,7 +4561,6 @@ console.log(path2);  // "C:Usersame\file.txt" (\U and \n interpreted)
 
 ---
 
-<a id="toc-symbol"></a>
 ### `Symbol`
 
 **Purpose:** Unique, immutable primitive for property keys.
@@ -6928,12 +4693,10 @@ console.log(Symbol.keyFor(local));  // undefined
 
 ---
 
-<a id="toc-133-reference-types-objects"></a>
 ### 1.3.3 Reference Types (Objects)
 
 All reference types are objects. They're mutable and compared by reference.
 
-<a id="toc-object"></a>
 ### `Object`
 
 **The base type for all objects:**
@@ -7073,7 +4836,6 @@ console.log(obj.name);  // Still "Alice"
 
 ---
 
-<a id="toc-array"></a>
 ### `Array`
 
 **Ordered collection of elements:**
@@ -7197,7 +4959,6 @@ let arr3 = Array.prototype.slice.call(arrayLike);
 
 ---
 
-<a id="toc-function"></a>
 ### `Function`
 
 **Functions are first-class objects:**
@@ -7259,7 +5020,6 @@ We'll cover functions in depth in later chapters.
 
 ---
 
-<a id="toc-date"></a>
 ### `Date`
 
 **Represents dates and times:**
@@ -7345,7 +5105,6 @@ date.toLocaleTimeString();  // Locale-specific
 
 ---
 
-<a id="toc-regexp"></a>
 ### `RegExp`
 
 **Pattern matching:**
@@ -7415,7 +5174,6 @@ We'll cover regex in detail in Chapter 7.
 
 ---
 
-<a id="toc-map"></a>
 ### `Map`
 
 **Key-value pairs with any key type:**
@@ -7503,7 +5261,6 @@ console.log(map);  // Map { { key: "object" } => "value" }
 
 ---
 
-<a id="toc-weakmap"></a>
 ### `WeakMap`
 
 **Like Map, but:**
@@ -7553,7 +5310,6 @@ console.log(user.getName());  // "Alice"
 
 ---
 
-<a id="toc-set"></a>
 ### `Set`
 
 **Collection of unique values:**
@@ -7617,7 +5373,6 @@ console.log(unique);  // [1, 2, 3]
 
 ---
 
-<a id="toc-weakset"></a>
 ### `WeakSet`
 
 **Like Set, but:**
@@ -7656,7 +5411,6 @@ function traverse(node) {
 
 ---
 
-<a id="toc-typed-arrays"></a>
 ### Typed Arrays
 
 **Binary data in array-like structures:**
@@ -7719,7 +5473,6 @@ console.log(arr);  // Uint8ClampedArray [255, 0, 3]
 
 ---
 
-<a id="toc-arraybuffer"></a>
 ### `ArrayBuffer`
 
 **Raw binary data (fixed-length):**
@@ -7749,7 +5502,6 @@ console.log(view3[0]);  // 255 (same bytes)
 
 ---
 
-<a id="toc-sharedarraybuffer"></a>
 ### `SharedArrayBuffer`
 
 **Shared memory between workers:**
@@ -7784,7 +5536,6 @@ Atomics.store(view, 0, 42); // Atomically write
 
 ---
 
-<a id="toc-dataview"></a>
 ### `DataView`
 
 **Low-level reading/writing with explicit endianness:**
@@ -7808,7 +5559,6 @@ view.getUint32(3, false);  // 5678
 
 ---
 
-<a id="toc-promise"></a>
 ### `Promise`
 
 **Represents asynchronous operation result:**
@@ -7856,7 +5606,6 @@ We'll cover Promises in depth in Chapter 10.
 
 ---
 
-<a id="toc-proxy"></a>
 ### `Proxy`
 
 **Intercept operations on objects:**
@@ -7909,7 +5658,6 @@ person.age = "30";  // TypeError: Age must be a number
 
 ---
 
-<a id="toc-weakref"></a>
 ### `WeakRef`
 
 **Weak reference to object (doesn't prevent garbage collection):**
@@ -7931,7 +5679,6 @@ console.log(weakRef.deref());  // undefined (object was GC'd)
 
 ---
 
-<a id="toc-finalizationregistry"></a>
 ### `FinalizationRegistry`
 
 **Run callback when object is garbage collected:**
@@ -7953,10 +5700,8 @@ obj = null;
 
 ---
 
-<a id="toc-134-type-summary"></a>
 ### 1.3.4 Type Summary
 
-<a id="toc-primitive-types"></a>
 ### Primitive Types
 
 |Type|typeof|Values|Mutable|Example|
@@ -7969,7 +5714,6 @@ obj = null;
 |`string`|`string`|UTF-16 code units|No|`"hello"`|
 |`symbol`|`symbol`|Unique values|No|`Symbol("id")`|
 
-<a id="toc-reference-types"></a>
 ### Reference Types
 
 |Type|typeof|Description|
@@ -7994,13 +5738,10 @@ obj = null;
 
 ---
 
-<a id="toc-14-type-system"></a>
 ## 1.4 Type System
 
-<a id="toc-141-type-checking-with-typeof"></a>
 ### 1.4.1 Type Checking with `typeof`
 
-<a id="toc-basic-behavior"></a>
 ### Basic Behavior
 
 `typeof` returns a **string** indicating the type of the operand:
@@ -8020,7 +5761,6 @@ typeof function(){};     // "function"
 
 ---
 
-<a id="toc-return-values"></a>
 ### Return Values
 
 `typeof` returns exactly **8 possible strings**:
@@ -8036,7 +5776,6 @@ typeof function(){};     // "function"
 
 ---
 
-<a id="toc-the-typeof-null-bug"></a>
 ### The `typeof null` Bug
 
 This is JavaScript's most famous bug:
@@ -8080,7 +5819,6 @@ if (typeof value === "object" && value !== null) {
 
 ---
 
-<a id="toc-typeof-with-undeclared-variables"></a>
 ### `typeof` with Undeclared Variables
 
 `typeof` is "safe" for undeclared variables (doesn't throw ReferenceError):
@@ -8106,7 +5844,6 @@ Variables in the Temporal Dead Zone throw ReferenceError even with `typeof`.
 
 ---
 
-<a id="toc-typeof-with-arrays-and-objects"></a>
 ### `typeof` with Arrays and Objects
 
 **Cannot distinguish arrays from objects:**
@@ -8132,7 +5869,6 @@ typeof new Map();     // "object"
 
 ---
 
-<a id="toc-typeof-with-functions"></a>
 ### `typeof` with Functions
 
 Functions are detected separately:
@@ -8160,7 +5896,6 @@ typeof callable;  // "object" (not "function")
 
 ---
 
-<a id="toc-practical-usage-patterns"></a>
 ### Practical Usage Patterns
 
 **Type guards:**
@@ -8196,10 +5931,8 @@ if (typeof Promise !== "undefined") {
 
 ---
 
-<a id="toc-142-type-checking-with-instanceof"></a>
 ### 1.4.2 Type Checking with `instanceof`
 
-<a id="toc-basic-behavior-1"></a>
 ### Basic Behavior
 
 `instanceof` checks if an object's prototype chain contains a constructor's prototype:
@@ -8222,7 +5955,6 @@ object instanceof Constructor
 
 ---
 
-<a id="toc-how-instanceof-works"></a>
 ### How `instanceof` Works
 
 `instanceof` walks the prototype chain:
@@ -8257,7 +5989,6 @@ arr instanceof String;  // false (String.prototype not in chain)
 
 ---
 
-<a id="toc-primitives-and-instanceof"></a>
 ### Primitives and `instanceof`
 
 **Primitives are not objects, so `instanceof` returns `false`:**
@@ -8275,7 +6006,6 @@ new Boolean(true) instanceof Boolean;   // true
 
 ---
 
-<a id="toc-cross-realm-issues"></a>
 ### Cross-Realm Issues
 
 `instanceof` fails across different execution contexts (iframes, windows):
@@ -8294,7 +6024,6 @@ Array.isArray(arr);  // true (works cross-realm)
 
 ---
 
-<a id="toc-custom-instanceof-behavior"></a>
 ### Custom `instanceof` Behavior
 
 **Use `Symbol.hasInstance` to customize:**
@@ -8312,7 +6041,6 @@ console.log(obj instanceof MyClass);  // true (custom logic!)
 
 ---
 
-<a id="toc-checking-constructor"></a>
 ### Checking Constructor
 
 **Right-hand side must be a function with `prototype` property:**
@@ -8328,7 +6056,6 @@ console.log(obj instanceof MyClass);  // true (custom logic!)
 
 ---
 
-<a id="toc-instanceof-vs-typeof"></a>
 ### `instanceof` vs `typeof`
 
 |Check|`typeof`|`instanceof`|
@@ -8343,10 +6070,8 @@ console.log(obj instanceof MyClass);  // true (custom logic!)
 
 ---
 
-<a id="toc-143-type-coercion-implicit-conversion"></a>
 ### 1.4.3 Type Coercion (Implicit Conversion)
 
-<a id="toc-why-coercion-causes-bugs"></a>
 ### Why Coercion Causes Bugs
 
 Type coercion is **automatic type conversion** performed by JavaScript. It's the source of infamous quirks like:
@@ -8368,7 +6093,6 @@ Understanding coercion rules prevents:
 
 ---
 
-<a id="toc-string-coercion"></a>
 ### String Coercion
 
 **Triggered by `+` operator with a string:**
@@ -8403,7 +6127,6 @@ Understanding coercion rules prevents:
 
 ---
 
-<a id="toc-numeric-coercion"></a>
 ### Numeric Coercion
 
 **Triggered by arithmetic operators (except `+`):**
@@ -8456,7 +6179,6 @@ let obj = {
 
 ---
 
-<a id="toc-boolean-coercion"></a>
 ### Boolean Coercion
 
 **Triggered by logical contexts:**
@@ -8515,7 +6237,6 @@ if (arr.length) {
 
 ---
 
-<a id="toc-object-to-primitive-coercion"></a>
 ### Object to Primitive Coercion
 
 Objects convert to primitives via these steps:
@@ -8574,7 +6295,6 @@ obj == true;    // Logs: "hint: default", returns true
 
 ---
 
-<a id="toc-date-to-primitive"></a>
 ### Date to Primitive
 
 **`Date` is special:** Default hint is `"string"` (not `"number"`):
@@ -8596,7 +6316,6 @@ date + "";        // "Fri Feb 06 2026 ..." (not timestamp!)
 
 ---
 
-<a id="toc-array-to-string-coercion"></a>
 ### Array to String Coercion
 
 Arrays convert to comma-separated string:
@@ -8624,14 +6343,12 @@ String([[]]);          // ""
 
 ---
 
-<a id="toc-144-type-conversion-explicit"></a>
 ### 1.4.4 Type Conversion (Explicit)
 
 Explicit conversion uses constructors or functions to convert types.
 
 ---
 
-<a id="toc-to-string"></a>
 ### To String
 
 ```javascript
@@ -8657,7 +6374,6 @@ true.toString();         // "true"
 
 ---
 
-<a id="toc-to-number"></a>
 ### To Number
 
 ```javascript
@@ -8705,7 +6421,6 @@ parseInt("08", 10);      // 8 (explicit decimal)
 
 ---
 
-<a id="toc-to-boolean"></a>
 ### To Boolean
 
 ```javascript
@@ -8730,7 +6445,6 @@ if (value) { }           // Implicit conversion
 
 ---
 
-<a id="toc-to-object-boxing"></a>
 ### To Object (Boxing)
 
 Primitives can be wrapped in objects:
@@ -8764,10 +6478,8 @@ if (new Boolean(false)) {
 
 ---
 
-<a id="toc-145-truthiness-and-falsiness"></a>
 ### 1.4.5 Truthiness and Falsiness
 
-<a id="toc-falsy-values"></a>
 ### Falsy Values
 
 Exactly **8 falsy values** in JavaScript:
@@ -8798,7 +6510,6 @@ console.log(!!NaN);        // false
 
 ---
 
-<a id="toc-truthy-values"></a>
 ### Truthy Values
 
 **Everything else is truthy:**
@@ -8826,7 +6537,6 @@ console.log(!!NaN);        // false
 
 ---
 
-<a id="toc-common-gotchas"></a>
 ### Common Gotchas
 
 **Empty array/object:**
@@ -8873,7 +6583,6 @@ if (all) { }         // Doesn't run (all is falsy!)
 
 ---
 
-<a id="toc-conditional-patterns"></a>
 ### Conditional Patterns
 
 **Default values:**
@@ -8908,7 +6617,6 @@ null || "no";        // "no"
 
 ---
 
-<a id="toc-146-equality-operators"></a>
 ### 1.4.6 Equality Operators
 
 JavaScript has **three equality operators:**
@@ -8919,7 +6627,6 @@ JavaScript has **three equality operators:**
 
 ---
 
-<a id="toc-strict-equality"></a>
 ### Strict Equality (`===`)
 
 **No type coercion. Values must be same type AND same value:**
@@ -8956,7 +6663,6 @@ obj === obj;         // true (same reference)
 
 ---
 
-<a id="toc-loose-equality"></a>
 ### Loose Equality (`==`)
 
 **Performs type coercion before comparison:**
@@ -8983,7 +6689,6 @@ false == "0";        // true (false → 0, "0" → 0)
 
 ---
 
-<a id="toc-loose-equality-algorithm-abstract-equality"></a>
 ### Loose Equality Algorithm (Abstract Equality)
 
 When comparing `x == y`:
@@ -9009,7 +6714,6 @@ When comparing `x == y`:
 
 ---
 
-<a id="toc-dangerous-examples"></a>
 ### Dangerous `==` Examples
 
 ```javascript
@@ -9033,7 +6737,6 @@ false == [];         // false → 0, [] → "" → 0
 
 ---
 
-<a id="toc-null-and-undefined-with"></a>
 ### `null` and `undefined` with `==`
 
 **Special rule:** `null == undefined` (and vice versa):
@@ -9069,7 +6772,6 @@ if (value === null || value === undefined) {
 
 ---
 
-<a id="toc-object-equality"></a>
 ### Object Equality
 
 **Both `==` and `===` compare references:**
@@ -9102,7 +6804,6 @@ obj === 42;          // false (different types)
 
 ---
 
-<a id="toc-objectis"></a>
 ### `Object.is()`
 
 **Same-value equality (ES6):**
@@ -9136,7 +6837,6 @@ Object.is(42, "42");         // false
 
 ---
 
-<a id="toc-polyfill-for-objectis"></a>
 ### Polyfill for `Object.is()`
 
 ```javascript
@@ -9156,7 +6856,6 @@ if (!Object.is) {
 
 ---
 
-<a id="toc-equality-best-practices"></a>
 ### Equality Best Practices
 
 **Prefer `===`:**
@@ -9208,10 +6907,8 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-147-type-conversion-cheatsheet"></a>
 ### 1.4.7 Type Conversion Cheatsheet
 
-<a id="toc-to-string-1"></a>
 ### To String
 
 |Value|String()|toString()|+ ""|
@@ -9230,7 +6927,6 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-to-number-1"></a>
 ### To Number
 
 |Value|Number()|+value|parseInt()|
@@ -9251,7 +6947,6 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-to-boolean-1"></a>
 ### To Boolean
 
 |Value|Boolean()|!!value|if (value)|
@@ -9274,10 +6969,8 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-148-summary"></a>
 ### 1.4.8 Summary
 
-<a id="toc-type-checking"></a>
 ### Type Checking
 
 **`typeof`:**
@@ -9297,7 +6990,6 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-type-coercion-vs-conversion"></a>
 ### Type Coercion vs Conversion
 
 **Coercion (implicit):**
@@ -9314,7 +7006,6 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-equality-operators"></a>
 ### Equality Operators
 
 |Operator|Coercion|NaN === NaN|0 === -0|null == undefined|Use Case|
@@ -9325,7 +7016,6 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-best-practices"></a>
 ### Best Practices
 
 1. **Always use `===`** unless you have a specific reason for `==`
@@ -9339,13 +7029,10 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-15-operators"></a>
 ## 1.5 Operators
 
-<a id="toc-151-arithmetic-operators"></a>
 ### 1.5.1 Arithmetic Operators
 
-<a id="toc-basic-arithmetic"></a>
 ### Basic Arithmetic
 
 **Addition (`+`):**
@@ -9445,7 +7132,6 @@ if (value) { }  // Truthy check
 
 ---
 
-<a id="toc-unary-arithmetic-operators"></a>
 ### Unary Arithmetic Operators
 
 **Unary Plus (`+`):**
@@ -9543,7 +7229,6 @@ result++;
 
 ---
 
-<a id="toc-special-arithmetic-cases"></a>
 ### Special Arithmetic Cases
 
 **`+` operator ambiguity:**
@@ -9591,10 +7276,8 @@ NaN ** 5;         // NaN
 
 ---
 
-<a id="toc-152-assignment-operators"></a>
 ### 1.5.2 Assignment Operators
 
-<a id="toc-simple-assignment"></a>
 ### Simple Assignment (`=`)
 
 Assigns value to variable:
@@ -9627,7 +7310,6 @@ if (x = y) {     // Should be x === y
 
 ---
 
-<a id="toc-compound-assignment-operators"></a>
 ### Compound Assignment Operators
 
 **Arithmetic assignment:**
@@ -9679,7 +7361,6 @@ getObj().x = getObj().x + 5;  // Logs "called" twice
 
 ---
 
-<a id="toc-logical-assignment-operators-es2021"></a>
 ### Logical Assignment Operators (ES2021)
 
 **Logical AND assignment (`&&=`):**
@@ -9766,7 +7447,6 @@ z ??= "default";   // "default" (null is nullish)
 
 ---
 
-<a id="toc-short-circuit-evaluation"></a>
 ### Short-Circuit Evaluation
 
 Logical assignment operators **short-circuit**:
@@ -9787,10 +7467,8 @@ z ??= expensiveOperation();  // expensiveOperation() NOT called
 
 ---
 
-<a id="toc-153-comparison-operators"></a>
 ### 1.5.3 Comparison Operators
 
-<a id="toc-equality-operators-1"></a>
 ### Equality Operators
 
 **Strict equality (`===`):**
@@ -9841,7 +7519,6 @@ See Chapter 1.4 for detailed equality behavior.
 
 ---
 
-<a id="toc-relational-operators"></a>
 ### Relational Operators
 
 **Less than (`<`):**
@@ -9896,7 +7573,6 @@ NaN > NaN;         // false
 
 ---
 
-<a id="toc-comparison-type-coercion"></a>
 ### Comparison Type Coercion
 
 **Both operands strings:** Lexicographic comparison:
@@ -9947,10 +7623,8 @@ obj1 == obj3;      // true (same reference)
 
 ---
 
-<a id="toc-154-logical-operators"></a>
 ### 1.5.4 Logical Operators
 
-<a id="toc-logical-and"></a>
 ### Logical AND (`&&`)
 
 Returns first falsy value or last value:
@@ -9995,7 +7669,6 @@ function divide(a, b) {
 
 ---
 
-<a id="toc-logical-or"></a>
 ### Logical OR (`||`)
 
 Returns first truthy value or last value:
@@ -10039,7 +7712,6 @@ let count = userCount ?? 0;  // Correct: use nullish coalescing
 
 ---
 
-<a id="toc-logical-not"></a>
 ### Logical NOT (`!`)
 
 Converts to boolean and negates:
@@ -10074,7 +7746,6 @@ Converts to boolean and negates:
 
 ---
 
-<a id="toc-logical-operator-precedence"></a>
 ### Logical Operator Precedence
 
 ```javascript
@@ -10092,7 +7763,6 @@ a < b < c;             // Wrong! (a < b) < c (chaining doesn't work)
 
 ---
 
-<a id="toc-155-nullish-coalescing-operator"></a>
 ### 1.5.5 Nullish Coalescing Operator (`??`)
 
 Returns right operand when left is `null` or `undefined`:
@@ -10147,7 +7817,6 @@ null ?? ("default" || "fallback");  // OK
 
 ---
 
-<a id="toc-156-conditional-ternary-operator"></a>
 ### 1.5.6 Conditional (Ternary) Operator (`? :`)
 
 Only ternary operator in JavaScript (three operands):
@@ -10210,7 +7879,6 @@ array.length > 0 ? array.sort() : null;
 
 ---
 
-<a id="toc-157-optional-chaining-operator"></a>
 ### 1.5.7 Optional Chaining Operator (`?.`)
 
 Safely access nested properties (ES2020):
@@ -10300,12 +7968,10 @@ obj?.value ?? console.log("Logged");      // Doesn't log (0 is not nullish)
 
 ---
 
-<a id="toc-158-bitwise-operators"></a>
 ### 1.5.8 Bitwise Operators
 
 Operate on 32-bit integers (convert operands to 32-bit signed integers):
 
-<a id="toc-bitwise-and"></a>
 ### Bitwise AND (`&`)
 
 ```javascript
@@ -10329,7 +7995,6 @@ num & 1;  // 1 if odd, 0 if even
 6 & 1;    // 0 (even)
 ```
 
-<a id="toc-bitwise-or"></a>
 ### Bitwise OR (`|`)
 
 ```javascript
@@ -10351,7 +8016,6 @@ num & 1;  // 1 if odd, 0 if even
 -3.14 | 0; // -3
 ```
 
-<a id="toc-bitwise-xor"></a>
 ### Bitwise XOR (`^`)
 
 ```javascript
@@ -10383,7 +8047,6 @@ a ^= b;
 console.log(a, b);  // 3, 5
 ```
 
-<a id="toc-bitwise-not"></a>
 ### Bitwise NOT (`~`)
 
 ```javascript
@@ -10409,7 +8072,6 @@ if (~str.indexOf("hello")) {
 if (str.includes("hello")) { }
 ```
 
-<a id="toc-left-shift"></a>
 ### Left Shift (`<<`)
 
 ```javascript
@@ -10423,7 +8085,6 @@ if (str.includes("hello")) { }
 
 **Formula:** `n << m` === `n * 2^m`
 
-<a id="toc-sign-propagating-right-shift"></a>
 ### Sign-Propagating Right Shift (`>>`)
 
 ```javascript
@@ -10438,7 +8099,6 @@ if (str.includes("hello")) { }
 
 **Formula:** `n >> m` ≈ `Math.floor(n / 2^m)` (for positive)
 
-<a id="toc-zero-fill-right-shift"></a>
 ### Zero-Fill Right Shift (`>>>`)
 
 ```javascript
@@ -10457,7 +8117,6 @@ if (str.includes("hello")) { }
 
 ---
 
-<a id="toc-bitwise-assignment-operators"></a>
 ### Bitwise Assignment Operators
 
 ```javascript
@@ -10472,7 +8131,6 @@ x >>>= 2; // x = x >>> 2
 
 ---
 
-<a id="toc-bitwise-operators-with-non-integers"></a>
 ### Bitwise Operators with Non-Integers
 
 **Convert to 32-bit signed integer first:**
@@ -10486,10 +8144,8 @@ true & 1;     // 1 (true → 1)
 
 ---
 
-<a id="toc-159-other-operators"></a>
 ### 1.5.9 Other Operators
 
-<a id="toc-comma-operator"></a>
 ### Comma Operator (`,`)
 
 Evaluates each operand left-to-right, returns last:
@@ -10523,7 +8179,6 @@ const fn = () => (sideEffect(), returnValue);
 
 ---
 
-<a id="toc-typeof-operator"></a>
 ### `typeof` Operator
 
 See Chapter 1.4 for details:
@@ -10543,7 +8198,6 @@ typeof 123n;         // "bigint"
 
 ---
 
-<a id="toc-instanceof-operator"></a>
 ### `instanceof` Operator
 
 See Chapter 1.4 for details:
@@ -10557,7 +8211,6 @@ new Date() instanceof Date; // true
 
 ---
 
-<a id="toc-in-operator"></a>
 ### `in` Operator
 
 Check if property exists in object (including prototype chain):
@@ -10588,7 +8241,6 @@ obj.hasOwnProperty("toString");  // false (inherited)
 
 ---
 
-<a id="toc-delete-operator"></a>
 ### `delete` Operator
 
 Delete property from object:
@@ -10636,7 +8288,6 @@ delete x;  // SyntaxError
 
 ---
 
-<a id="toc-void-operator"></a>
 ### `void` Operator
 
 Evaluates expression and returns `undefined`:
@@ -10673,7 +8324,6 @@ void function() {
 
 ---
 
-<a id="toc-spread-operator"></a>
 ### Spread Operator (`...`)
 
 **Arrays:**
@@ -10723,7 +8373,6 @@ let arr = [...map];  // [["a", 1], ["b", 2]]
 
 ---
 
-<a id="toc-destructuring"></a>
 ### Destructuring
 
 **Arrays:**
@@ -10782,7 +8431,6 @@ function greet({ name = "Guest", age = 0 } = {}) {
 
 ---
 
-<a id="toc-1510-operator-precedence"></a>
 ### 1.5.10 Operator Precedence
 
 Precedence determines evaluation order (higher = evaluated first):
@@ -10827,7 +8475,6 @@ a || b && c;       // a || (b && c)
 
 ---
 
-<a id="toc-associativity"></a>
 ### Associativity
 
 **Left-to-right:**
@@ -10846,10 +8493,8 @@ a ** b ** c;       // a ** (b ** c)
 
 ---
 
-<a id="toc-1511-summary"></a>
 ### 1.5.11 Summary
 
-<a id="toc-operator-categories"></a>
 ### Operator Categories
 
 **Arithmetic:**
@@ -10892,7 +8537,6 @@ a ** b ** c;       // a ** (b ** c)
 
 ---
 
-<a id="toc-key-takeaways-1"></a>
 ### Key Takeaways
 
 1. **`+` is overloaded**: Addition for numbers, concatenation for strings
@@ -10908,13 +8552,10 @@ a ** b ** c;       // a ** (b ** c)
 
 ---
 
-<a id="toc-16-expressions-and-statements"></a>
 ## 1.6 Expressions and Statements
 
-<a id="toc-161-expressions-vs-statements"></a>
 ### 1.6.1 Expressions vs Statements
 
-<a id="toc-definitions"></a>
 ### Definitions
 
 **Expression:**
@@ -10931,7 +8572,6 @@ a ** b ** c;       // a ** (b ** c)
 
 ---
 
-<a id="toc-key-differences"></a>
 ### Key Differences
 
 ```javascript
@@ -10973,7 +8613,6 @@ let x = 5;               // Declaration
 
 ---
 
-<a id="toc-expression-statements"></a>
 ### Expression Statements
 
 Any expression can be used as a statement (though often pointless):
@@ -10994,12 +8633,10 @@ arr.push(5);        // Method call
 
 ---
 
-<a id="toc-162-primary-expressions"></a>
 ### 1.6.2 Primary Expressions
 
 Primary expressions are the simplest expressions—literals and identifiers.
 
-<a id="toc-literals"></a>
 ### Literals
 
 **Primitive literals:**
@@ -11094,7 +8731,6 @@ tag`template`
 
 ---
 
-<a id="toc-identifiers"></a>
 ### Identifiers
 
 Variable, function, and property names:
@@ -11109,7 +8745,6 @@ Symbol.iterator
 
 ---
 
-<a id="toc-reserved-words-as-property-names"></a>
 ### Reserved Words as Property Names
 
 **Allowed in object literals and member access:**
@@ -11131,12 +8766,10 @@ let if = 5;  // SyntaxError
 
 ---
 
-<a id="toc-163-left-hand-side-expressions"></a>
 ### 1.6.3 Left-Hand-Side Expressions
 
 Expressions that can appear on the left side of an assignment.
 
-<a id="toc-property-access"></a>
 ### Property Access
 
 **Dot notation:**
@@ -11167,7 +8800,6 @@ obj[func()]
 
 ---
 
-<a id="toc-function-calls"></a>
 ### Function Calls
 
 **Regular calls:**
@@ -11198,7 +8830,6 @@ obj?.method()         // Access method if obj is not nullish
 
 ---
 
-<a id="toc-new-expression"></a>
 ### `new` Expression
 
 **With arguments:**
@@ -11227,7 +8858,6 @@ new Constructor.staticMethod(); // new (Constructor.staticMethod)()
 
 ---
 
-<a id="toc-super-expression"></a>
 ### `super` Expression
 
 **In class methods:**
@@ -11256,7 +8886,6 @@ let obj = {
 
 ---
 
-<a id="toc-this-expression"></a>
 ### `this` Expression
 
 ```javascript
@@ -11287,7 +8916,6 @@ const arrow = () => console.log(this);
 
 ---
 
-<a id="toc-import-and-importmeta"></a>
 ### Import and Import.meta
 
 **Import (static):**
@@ -11317,10 +8945,8 @@ import.meta.url;  // Current module URL
 
 ---
 
-<a id="toc-164-expression-composition"></a>
 ### 1.6.4 Expression Composition
 
-<a id="toc-binary-expressions"></a>
 ### Binary Expressions
 
 Operators with two operands:
@@ -11364,7 +8990,6 @@ a instanceof Constructor
 
 ---
 
-<a id="toc-unary-expressions"></a>
 ### Unary Expressions
 
 Operators with one operand:
@@ -11386,7 +9011,6 @@ await x   // Await promise (async context)
 
 ---
 
-<a id="toc-ternary-expression"></a>
 ### Ternary Expression
 
 Conditional operator (only ternary operator):
@@ -11403,7 +9027,6 @@ x < 0 ? "negative" : "zero"
 
 ---
 
-<a id="toc-comma-expression"></a>
 ### Comma Expression
 
 Evaluates multiple expressions, returns last:
@@ -11418,7 +9041,6 @@ for (i = 0, j = 10; i < j; i++, j--) { }
 
 ---
 
-<a id="toc-grouping-expression"></a>
 ### Grouping Expression
 
 Parentheses control evaluation order:
@@ -11433,10 +9055,8 @@ Parentheses control evaluation order:
 
 ---
 
-<a id="toc-165-declaration-statements"></a>
 ### 1.6.5 Declaration Statements
 
-<a id="toc-variable-declarations"></a>
 ### Variable Declarations
 
 **`var` declarations:**
@@ -11479,7 +9099,6 @@ y = 10;  // TypeError
 
 ---
 
-<a id="toc-function-declarations"></a>
 ### Function Declarations
 
 **Named function:**
@@ -11526,7 +9145,6 @@ async function* asyncGen() {
 
 ---
 
-<a id="toc-class-declarations"></a>
 ### Class Declarations
 
 **Basic class:**
@@ -11560,7 +9178,6 @@ class Child extends Parent {
 
 ---
 
-<a id="toc-importexport-declarations"></a>
 ### Import/Export Declarations
 
 **Export:**
@@ -11590,10 +9207,8 @@ import defaultExport, { name } from "./module.js";
 
 ---
 
-<a id="toc-166-control-flow-statements"></a>
 ### 1.6.6 Control Flow Statements
 
-<a id="toc-if-statement"></a>
 ### `if` Statement
 
 **Basic:**
@@ -11673,7 +9288,6 @@ if (x > 0) {
 
 ---
 
-<a id="toc-switch-statement"></a>
 ### `switch` Statement
 
 **Basic:**
@@ -11786,10 +9400,8 @@ switch (true) {
 
 ---
 
-<a id="toc-167-loop-statements"></a>
 ### 1.6.7 Loop Statements
 
-<a id="toc-while-loop"></a>
 ### `while` Loop
 
 **Syntax:**
@@ -11821,7 +9433,6 @@ while (true) {
 
 ---
 
-<a id="toc-do-while-loop"></a>
 ### `do-while` Loop
 
 **Syntax:**
@@ -11851,7 +9462,6 @@ do {
 
 ---
 
-<a id="toc-for-loop"></a>
 ### `for` Loop
 
 **Syntax:**
@@ -11917,7 +9527,6 @@ for (var i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-for-in-loop"></a>
 ### `for-in` Loop
 
 Iterate over enumerable properties:
@@ -11980,7 +9589,6 @@ for (let key in child) {
 
 ---
 
-<a id="toc-for-of-loop"></a>
 ### `for-of` Loop
 
 Iterate over iterable objects:
@@ -12096,7 +9704,6 @@ for (let [a, b] of arr) {
 
 ---
 
-<a id="toc-for-awaitof-loop"></a>
 ### `for await...of` Loop
 
 Iterate over async iterables:
@@ -12126,10 +9733,8 @@ async function* asyncGen() {
 
 ---
 
-<a id="toc-168-jump-statements"></a>
 ### 1.6.8 Jump Statements
 
-<a id="toc-break-statement"></a>
 ### `break` Statement
 
 **Exit loop:**
@@ -12183,7 +9788,6 @@ function f() {
 
 ---
 
-<a id="toc-continue-statement"></a>
 ### `continue` Statement
 
 **Skip to next iteration:**
@@ -12233,7 +9837,6 @@ switch (value) {
 
 ---
 
-<a id="toc-return-statement"></a>
 ### `return` Statement
 
 **Return value from function:**
@@ -12293,7 +9896,6 @@ const makeObj = () => ({ x: 1, y: 2 });
 
 ---
 
-<a id="toc-throw-statement"></a>
 ### `throw` Statement
 
 **Throw exception:**
@@ -12339,7 +9941,6 @@ throw new ValidationError("Invalid input");
 
 ---
 
-<a id="toc-try-catch-finally-statement"></a>
 ### `try-catch-finally` Statement
 
 **Basic try-catch:**
@@ -12429,10 +10030,8 @@ try {
 
 ---
 
-<a id="toc-169-other-statements"></a>
 ### 1.6.9 Other Statements
 
-<a id="toc-empty-statement"></a>
 ### Empty Statement
 
 **Syntax:**
@@ -12453,7 +10052,6 @@ for (let i = 0; i < arr.length && arr[i] !== target; i++);
 
 ---
 
-<a id="toc-block-statement"></a>
 ### Block Statement
 
 **Syntax:**
@@ -12486,7 +10084,6 @@ if (condition) {
 
 ---
 
-<a id="toc-labeled-statement"></a>
 ### Labeled Statement
 
 **Syntax:**
@@ -12518,7 +10115,6 @@ myLabel: {
 
 ---
 
-<a id="toc-with-statement-deprecated"></a>
 ### `with` Statement (Deprecated)
 
 **Syntax:**
@@ -12564,7 +10160,6 @@ console.log(x, y);
 
 ---
 
-<a id="toc-debugger-statement"></a>
 ### `debugger` Statement
 
 **Syntax:**
@@ -12589,10 +10184,8 @@ function buggyFunction() {
 
 ---
 
-<a id="toc-1610-expression-vs-statement-contexts"></a>
 ### 1.6.10 Expression vs Statement Contexts
 
-<a id="toc-where-statements-expected"></a>
 ### Where Statements Expected
 
 **Top-level (module/script):**
@@ -12641,7 +10234,6 @@ while (condition) {
 
 ---
 
-<a id="toc-where-expressions-expected"></a>
 ### Where Expressions Expected
 
 **Assignment right-hand side:**
@@ -12682,7 +10274,6 @@ expression ? a : b;
 
 ---
 
-<a id="toc-ambiguous-constructs"></a>
 ### Ambiguous Constructs
 
 **Object literal vs block:**
@@ -12719,10 +10310,8 @@ class MyClass { }
 
 ---
 
-<a id="toc-1611-summary"></a>
 ### 1.6.11 Summary
 
-<a id="toc-expression-types"></a>
 ### Expression Types
 
 **Primary:**
@@ -12746,7 +10335,6 @@ class MyClass { }
 
 ---
 
-<a id="toc-statement-types"></a>
 ### Statement Types
 
 **Declarations:**
@@ -12780,7 +10368,6 @@ class MyClass { }
 
 ---
 
-<a id="toc-key-takeaways-2"></a>
 ### Key Takeaways
 
 1. **Expressions produce values**, statements perform actions
@@ -12795,10 +10382,8 @@ class MyClass { }
 10. **Context determines** if `{ }` is block or object literal
 
 ---
-<a id="toc-17-language-fundamentals-summary"></a>
 ## 1.7 Language Fundamentals Summary
 
-<a id="toc-core-concepts"></a>
 ### Core Concepts
 
 | Section | Key Topics |
@@ -12810,7 +10395,6 @@ class MyClass { }
 | **1.5 Operators** | Arithmetic, assignment, comparison, logical, bitwise, `?.`, `??`, `&&=`/`||=`/`??=`, precedence |
 | **1.6 Expressions & Statements** | Primary/LHS expressions, control flow, loops, jump statements, try-catch-finally |
 
-<a id="toc-essential-rules"></a>
 ### Essential Rules
 
 1. **Use `const` by default**, `let` when reassignment needed, never `var`
@@ -12824,12 +10408,10 @@ class MyClass { }
 
 ---
 
-<a id="toc-mastery-check"></a>
 ## Mastery Check
 
 Test your understanding with these challenges. Try to answer without running the code.
 
-<a id="toc-quiz-questions"></a>
 ### Quiz Questions
 
 **Q1:** What does this output?
@@ -12922,7 +10504,6 @@ const url = config.api.url ?? 'default';
 ```
 </details>
 
-<a id="toc-coding-challenges"></a>
 ### Coding Challenges
 
 **Challenge 1:** Write a function that checks if two floating-point numbers are "close enough" to be considered equal.
@@ -13002,10 +10583,8 @@ console.log(obj2.x);   // 10 (obj1 and obj2 point to same object)
 With these fundamentals internalized, you're ready to tackle functions, objects, and the advanced features built upon this foundation.
 
 
-<a id="toc-02-control-flowmd"></a>
 # 02-Control-Flow.md
 
-<a id="toc-2-control-flow"></a>
 # 2 Control Flow
 
 Control flow determines the order in which statements execute. JavaScript provides conditionals (`if`, `switch`), loops (`for`, `while`, `for...of`), jump statements (`break`, `continue`, `return`), and exception handling (`try...catch...finally`).
@@ -13014,13 +10593,10 @@ This chapter builds on the statement fundamentals from Chapter 1.6, diving deepe
 
 ---
 
-<a id="toc-21-conditional-statements"></a>
 ## 2.1 Conditional Statements
 
-<a id="toc-211-if-statement"></a>
 ### 2.1.1 `if` Statement
 
-<a id="toc-basic-syntax"></a>
 ### Basic Syntax
 
 ```javascript
@@ -13041,7 +10617,6 @@ if (age >= 18) {
 
 ---
 
-<a id="toc-truthiness-in-conditions"></a>
 ### Truthiness in Conditions
 
 The condition is **coerced to boolean**:
@@ -13090,7 +10665,6 @@ if (str !== "0") { }
 
 ---
 
-<a id="toc-block-statements"></a>
 ### Block Statements
 
 **With braces (recommended):**
@@ -13129,7 +10703,6 @@ if (x > 0) {
 
 ---
 
-<a id="toc-ifelse"></a>
 ### `if...else`
 
 ```javascript
@@ -13154,7 +10727,6 @@ if (age >= 18) {
 
 ---
 
-<a id="toc-else-if-chains"></a>
 ### `else if` Chains
 
 ```javascript
@@ -13209,7 +10781,6 @@ if (x > 25) {
 
 ---
 
-<a id="toc-dangling-else-problem"></a>
 ### Dangling `else` Problem
 
 **Ambiguous `else` binding:**
@@ -13247,7 +10818,6 @@ if (x > 0) {
 
 ---
 
-<a id="toc-nested-conditionals"></a>
 ### Nested Conditionals
 
 **Flatten when possible:**
@@ -13282,7 +10852,6 @@ if (user?.isActive && user?.hasPermission) {
 
 ---
 
-<a id="toc-assignment-in-conditions-common-bug"></a>
 ### Assignment in Conditions (Common Bug)
 
 ```javascript
@@ -13326,10 +10895,8 @@ if (x = 10) {  // Warning: Expected a conditional expression
 
 ---
 
-<a id="toc-212-ternary-operator"></a>
 ### 2.1.2 Ternary Operator
 
-<a id="toc-basic-syntax-1"></a>
 ### Basic Syntax
 
 ```javascript
@@ -13346,7 +10913,6 @@ console.log(status);  // "adult"
 
 ---
 
-<a id="toc-when-to-use"></a>
 ### When to Use
 
 **Good use cases:**
@@ -13385,7 +10951,6 @@ x > 0 ? (a++, b++, c++) : (x++, y++, z++);  // Confusing
 
 ---
 
-<a id="toc-nested-ternary"></a>
 ### Nested Ternary
 
 **Single level (acceptable):**
@@ -13417,7 +10982,6 @@ if (a) {
 
 ---
 
-<a id="toc-ternary-vs-logical-operators"></a>
 ### Ternary vs Logical Operators
 
 ```javascript
@@ -13437,7 +11001,6 @@ let count = userCount !== null && userCount !== undefined ? userCount : 0;
 
 ---
 
-<a id="toc-operator-precedence"></a>
 ### Operator Precedence
 
 ```javascript
@@ -13454,10 +11017,8 @@ let result = x > 0 ? (a + b) : (c + d);
 
 ---
 
-<a id="toc-213-switch-statement"></a>
 ### 2.1.3 `switch` Statement
 
-<a id="toc-basic-syntax-2"></a>
 ### Basic Syntax
 
 ```javascript
@@ -13496,7 +11057,6 @@ switch (day) {
 
 ---
 
-<a id="toc-strict-equality-comparison"></a>
 ### Strict Equality Comparison
 
 `switch` uses **strict equality (`===`)**:
@@ -13517,7 +11077,6 @@ switch (x) {
 
 ---
 
-<a id="toc-fall-through-behavior"></a>
 ### Fall-Through Behavior
 
 **Without `break`, execution continues to next case:**
@@ -13581,7 +11140,6 @@ switch (value) {
 
 ---
 
-<a id="toc-default-case"></a>
 ### `default` Case
 
 **Optional but recommended:**
@@ -13630,7 +11188,6 @@ switch (value) {
 
 ---
 
-<a id="toc-block-scope-in-cases"></a>
 ### Block Scope in Cases
 
 **Single block scope for entire switch:**
@@ -13665,7 +11222,6 @@ switch (value) {
 
 ---
 
-<a id="toc-expressions-in-cases"></a>
 ### Expressions in Cases
 
 **Cases can be expressions:**
@@ -13703,7 +11259,6 @@ switch (value) {
 
 ---
 
-<a id="toc-return-in-switch"></a>
 ### Return in Switch
 
 **Can return directly (no break needed):**
@@ -13725,7 +11280,6 @@ function getDayName(day) {
 
 ---
 
-<a id="toc-switch-vs-ifelse"></a>
 ### `switch` vs `if...else`
 
 **Use `switch` when:**
@@ -13769,7 +11323,6 @@ if (age < 18) {
 
 ---
 
-<a id="toc-object-lookup-alternative"></a>
 ### Object Lookup Alternative
 
 **Instead of switch:**
@@ -13815,10 +11368,8 @@ return operations.get(action)?.(a, b);
 
 ---
 
-<a id="toc-214-common-patterns-and-best-practices"></a>
 ### 2.1.4 Common Patterns and Best Practices
 
-<a id="toc-guard-clauses"></a>
 ### Guard Clauses
 
 **Early returns to reduce nesting:**
@@ -13855,7 +11406,6 @@ function processUser(user) {
 
 ---
 
-<a id="toc-nullundefined-checks"></a>
 ### Null/Undefined Checks
 
 **Explicit null check:**
@@ -13891,7 +11441,6 @@ const name = user?.profile?.name ?? "Anonymous";
 
 ---
 
-<a id="toc-boolean-conditions"></a>
 ### Boolean Conditions
 
 **Don't compare to true/false:**
@@ -13918,7 +11467,6 @@ if (value === true) { }  // false (not boolean true)
 
 ---
 
-<a id="toc-type-checking-1"></a>
 ### Type Checking
 
 **Check type before operations:**
@@ -13945,7 +11493,6 @@ function processString(str = "") {
 
 ---
 
-<a id="toc-logical-operators-in-conditions"></a>
 ### Logical Operators in Conditions
 
 **Short-circuit evaluation:**
@@ -13976,7 +11523,6 @@ if ((isAdmin || isModerator) && hasPermission) { }
 
 ---
 
-<a id="toc-switch-statement-best-practices"></a>
 ### Switch Statement Best Practices
 
 1. **Always include `default`** (even if just error handling)
@@ -13987,7 +11533,6 @@ if ((isAdmin || isModerator) && hasPermission) { }
 
 ---
 
-<a id="toc-readability-guidelines"></a>
 ### Readability Guidelines
 
 **Positive conditions first:**
@@ -14037,10 +11582,8 @@ if (canUserDrive(user)) {
 
 ---
 
-<a id="toc-215-performance-considerations"></a>
 ### 2.1.5 Performance Considerations
 
-<a id="toc-short-circuit-evaluation-1"></a>
 ### Short-Circuit Evaluation
 
 **Logical operators stop at first determinant:**
@@ -14058,7 +11601,6 @@ if (cheapCheck() && expensiveCheck()) { }
 
 ---
 
-<a id="toc-switch-vs-if-else-performance"></a>
 ### Switch vs If-Else Performance
 
 **For many cases, switch can be faster:**
@@ -14083,10 +11625,8 @@ switch (x) {
 
 ---
 
-<a id="toc-216-summary"></a>
 ### 2.1.6 Summary
 
-<a id="toc-conditional-statement-comparison"></a>
 ### Conditional Statement Comparison
 
 |Feature|`if...else`|Ternary|`switch`|
@@ -14099,7 +11639,6 @@ switch (x) {
 
 ---
 
-<a id="toc-best-practices-1"></a>
 ### Best Practices
 
 1. **Always use braces** for `if` blocks (even single statement)
@@ -14115,7 +11654,6 @@ switch (x) {
 
 ---
 
-<a id="toc-key-takeaways-3"></a>
 ### Key Takeaways
 
 - **8 falsy values**: `false`, `0`, `-0`, `0n`, `""`, `null`, `undefined`, `NaN`
@@ -14131,13 +11669,10 @@ switch (x) {
 
 Next: Loops (for, while, for-in, for-of, for await...of).
 
-<a id="toc-22-loops"></a>
 ## 2.2 Loops
 
-<a id="toc-221-for-loop"></a>
 ### 2.2.1 `for` Loop
 
-<a id="toc-basic-syntax-3"></a>
 ### Basic Syntax
 
 ```javascript
@@ -14157,7 +11692,6 @@ for (let i = 0; i < 5; i++) {
 
 ---
 
-<a id="toc-execution-order"></a>
 ### Execution Order
 
 ```javascript
@@ -14181,7 +11715,6 @@ for (let i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-parts-are-optional"></a>
 ### Parts Are Optional
 
 **All parts optional:**
@@ -14226,7 +11759,6 @@ for (let i = 0, j = 10; i < j; i++, j--) {
 
 ---
 
-<a id="toc-let-vs-var-in-loops"></a>
 ### `let` vs `var` in Loops
 
 **`let` creates per-iteration binding:**
@@ -14269,7 +11801,6 @@ for (var i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-common-patterns-1"></a>
 ### Common Patterns
 
 **Iterate array:**
@@ -14312,10 +11843,8 @@ for (let i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-222-while-loop"></a>
 ### 2.2.2 `while` Loop
 
-<a id="toc-basic-syntax-4"></a>
 ### Basic Syntax
 
 ```javascript
@@ -14337,7 +11866,6 @@ while (i < 5) {
 
 ---
 
-<a id="toc-execution-order-1"></a>
 ### Execution Order
 
 ```javascript
@@ -14360,7 +11888,6 @@ while (i < 3) {
 
 ---
 
-<a id="toc-when-to-use-1"></a>
 ### When to Use
 
 **Use when:**
@@ -14389,7 +11916,6 @@ while (queue.length > 0) {
 
 ---
 
-<a id="toc-infinite-loop"></a>
 ### Infinite Loop
 
 ```javascript
@@ -14401,10 +11927,8 @@ while (true) {
 
 ---
 
-<a id="toc-223-dowhile-loop"></a>
 ### 2.2.3 `do...while` Loop
 
-<a id="toc-basic-syntax-5"></a>
 ### Basic Syntax
 
 ```javascript
@@ -14426,7 +11950,6 @@ do {
 
 ---
 
-<a id="toc-executes-at-least-once"></a>
 ### Executes At Least Once
 
 ```javascript
@@ -14445,7 +11968,6 @@ do {
 
 ---
 
-<a id="toc-when-to-use-2"></a>
 ### When to Use
 
 **Menu-driven programs:**
@@ -14469,10 +11991,8 @@ do {
 
 ---
 
-<a id="toc-224-forin-loop"></a>
 ### 2.2.4 `for...in` Loop
 
-<a id="toc-basic-syntax-6"></a>
 ### Basic Syntax
 
 ```javascript
@@ -14496,7 +12016,6 @@ for (let key in obj) {
 
 ---
 
-<a id="toc-enumerates-properties"></a>
 ### Enumerates Properties
 
 **Includes inherited properties:**
@@ -14530,7 +12049,6 @@ for (let key of Object.keys(child)) {
 
 ---
 
-<a id="toc-arrays-dont-use"></a>
 ### Arrays (Don't Use)
 
 **Iterates indices as strings:**
@@ -14577,7 +12095,6 @@ for (let value of arr) {
 
 ---
 
-<a id="toc-order-of-iteration"></a>
 ### Order of Iteration
 
 **Generally:**
@@ -14590,10 +12107,8 @@ for (let value of arr) {
 
 ---
 
-<a id="toc-225-forof-loop"></a>
 ### 2.2.5 `for...of` Loop
 
-<a id="toc-basic-syntax-7"></a>
 ### Basic Syntax
 
 ```javascript
@@ -14615,7 +12130,6 @@ for (let value of arr) {
 
 ---
 
-<a id="toc-works-with-iterables"></a>
 ### Works with Iterables
 
 **Arrays:**
@@ -14684,7 +12198,6 @@ for (let value of arr) {
 
 ---
 
-<a id="toc-not-for-plain-objects"></a>
 ### Not for Plain Objects
 
 **Objects are not iterable:**
@@ -14718,7 +12231,6 @@ for (let [key, value] of Object.entries(obj)) {
 
 ---
 
-<a id="toc-destructuring-in-forof"></a>
 ### Destructuring in `for...of`
 
 ```javascript
@@ -14745,7 +12257,6 @@ for (let { name, age } of users) {
 
 ---
 
-<a id="toc-custom-iterables"></a>
 ### Custom Iterables
 
 **Implement `Symbol.iterator`:**
@@ -14799,10 +12310,8 @@ for (let num of range) {
 
 ---
 
-<a id="toc-226-for-awaitof-loop"></a>
 ### 2.2.6 `for await...of` Loop
 
-<a id="toc-basic-syntax-8"></a>
 ### Basic Syntax
 
 ```javascript
@@ -14823,7 +12332,6 @@ async function process() {
 
 ---
 
-<a id="toc-async-iterables"></a>
 ### Async Iterables
 
 **Async generators:**
@@ -14879,7 +12387,6 @@ let asyncRange = {
 
 ---
 
-<a id="toc-streams-and-async-iteration"></a>
 ### Streams and Async Iteration
 
 **ReadableStream:**
@@ -14903,7 +12410,6 @@ for await (const chunk of stream) {
 
 ---
 
-<a id="toc-error-handling"></a>
 ### Error Handling
 
 ```javascript
@@ -14926,10 +12432,8 @@ async function* asyncGen() {
 
 ---
 
-<a id="toc-227-loop-control-best-practices"></a>
 ### 2.2.7 Loop Control Best Practices
 
-<a id="toc-avoid-modifying-loop-variable"></a>
 ### Avoid Modifying Loop Variable
 
 **Bad:**
@@ -14954,7 +12458,6 @@ for (let i = 0; i < 10; i++) {
 
 ---
 
-<a id="toc-cache-length-in-performance-critical-loops"></a>
 ### Cache Length in Performance-Critical Loops
 
 **If length doesn't change:**
@@ -14971,7 +12474,6 @@ for (let i = 0, len = arr.length; i < len; i++) { }
 
 ---
 
-<a id="toc-prefer-forof-for-arrays"></a>
 ### Prefer `for...of` for Arrays
 
 **More readable:**
@@ -15004,7 +12506,6 @@ arr.forEach((item, index) => {
 
 ---
 
-<a id="toc-loop-choice-flowchart"></a>
 ### Loop Choice Flowchart
 
 1. **Iterating array/iterable?** → `for...of`
@@ -15015,13 +12516,10 @@ arr.forEach((item, index) => {
 6. **Async iteration?** → `for await...of`
 
 ---
-<a id="toc-23-jump-statements"></a>
 ## 2.3 Jump Statements
 
-<a id="toc-231-break-statement"></a>
 ### 2.3.1 `break` Statement
 
-<a id="toc-exit-loop"></a>
 ### Exit Loop
 
 ```javascript
@@ -15034,7 +12532,6 @@ for (let i = 0; i < 10; i++) {
 
 ---
 
-<a id="toc-exit-switch"></a>
 ### Exit Switch
 
 ```javascript
@@ -15050,7 +12547,6 @@ switch (value) {
 
 ---
 
-<a id="toc-labeled-break"></a>
 ### Labeled `break`
 
 **Break outer loop:**
@@ -15078,7 +12574,6 @@ console.log("outside");
 
 ---
 
-<a id="toc-common-patterns-2"></a>
 ### Common Patterns
 
 **Search with early exit:**
@@ -15109,10 +12604,8 @@ while (true) {
 
 ---
 
-<a id="toc-232-continue-statement"></a>
 ### 2.3.2 `continue` Statement
 
-<a id="toc-skip-to-next-iteration"></a>
 ### Skip to Next Iteration
 
 ```javascript
@@ -15125,7 +12618,6 @@ for (let i = 0; i < 5; i++) {
 
 ---
 
-<a id="toc-in-different-loops"></a>
 ### In Different Loops
 
 **`for` loop:**
@@ -15161,7 +12653,6 @@ for (let item of arr) {
 
 ---
 
-<a id="toc-labeled-continue"></a>
 ### Labeled `continue`
 
 ```javascript
@@ -15176,7 +12667,6 @@ outer: for (let i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-common-patterns-3"></a>
 ### Common Patterns
 
 **Skip invalid items:**
@@ -15202,10 +12692,8 @@ let result = values.filter(v => v >= min && v <= max);
 
 ---
 
-<a id="toc-233-return-statement"></a>
 ### 2.3.3 `return` Statement
 
-<a id="toc-exit-function"></a>
 ### Exit Function
 
 ```javascript
@@ -15218,7 +12706,6 @@ let result = add(5, 3);  // 8
 
 ---
 
-<a id="toc-early-return-guard-clauses"></a>
 ### Early Return (Guard Clauses)
 
 ```javascript
@@ -15234,7 +12721,6 @@ function processUser(user) {
 
 ---
 
-<a id="toc-multiple-return-points"></a>
 ### Multiple Return Points
 
 **Readable for guard clauses:**
@@ -15297,7 +12783,6 @@ function complex(x) {
 
 ---
 
-<a id="toc-arrow-function-returns"></a>
 ### Arrow Function Returns
 
 **Implicit return (single expression):**
@@ -15329,10 +12814,8 @@ const makeObj = (x) => ({ x: x });
 
 ---
 
-<a id="toc-234-labels"></a>
 ### 2.3.4 Labels
 
-<a id="toc-syntax"></a>
 ### Syntax
 
 ```javascript
@@ -15341,7 +12824,6 @@ labelName: statement
 
 ---
 
-<a id="toc-label-loops"></a>
 ### Label Loops
 
 ```javascript
@@ -15354,7 +12836,6 @@ outer: for (let i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-label-blocks"></a>
 ### Label Blocks
 
 ```javascript
@@ -15370,7 +12851,6 @@ console.log("after");
 
 ---
 
-<a id="toc-common-use-cases"></a>
 ### Common Use Cases
 
 **Break nested loops:**
@@ -15406,7 +12886,6 @@ validation: {
 
 ---
 
-<a id="toc-best-practices-2"></a>
 ### Best Practices
 
 1. **Use labels sparingly** (often there's a better way)
@@ -15415,13 +12894,10 @@ validation: {
 4. **Document why you're using a label**
 
 ------
-<a id="toc-24-exception-handling"></a>
 ## 2.4 Exception Handling
 
-<a id="toc-241-trycatchfinally"></a>
 ### 2.4.1 `try...catch...finally`
 
-<a id="toc-basic-trycatch"></a>
 ### Basic `try...catch`
 
 ```javascript
@@ -15436,7 +12912,6 @@ try {
 
 ---
 
-<a id="toc-finally-block"></a>
 ### `finally` Block
 
 **Always executes:**
@@ -15484,7 +12959,6 @@ test();  // Returns "finally"
 
 ---
 
-<a id="toc-catch-without-binding-es2019"></a>
 ### Catch Without Binding (ES2019)
 
 ```javascript
@@ -15498,7 +12972,6 @@ try {
 
 ---
 
-<a id="toc-nested-trycatch"></a>
 ### Nested `try...catch`
 
 ```javascript
@@ -15517,10 +12990,8 @@ try {
 
 ---
 
-<a id="toc-242-throw-statement"></a>
 ### 2.4.2 `throw` Statement
 
-<a id="toc-throw-errors"></a>
 ### Throw Errors
 
 ```javascript
@@ -15533,7 +13004,6 @@ throw new RangeError("Out of range");
 
 ---
 
-<a id="toc-throw-any-value"></a>
 ### Throw Any Value
 
 ```javascript
@@ -15558,7 +13028,6 @@ throw new Error("Error");
 
 ---
 
-<a id="toc-custom-error-messages"></a>
 ### Custom Error Messages
 
 ```javascript
@@ -15578,10 +13047,8 @@ try {
 
 ---
 
-<a id="toc-243-built-in-error-types"></a>
 ### 2.4.3 Built-In Error Types
 
-<a id="toc-error-base-type"></a>
 ### `Error` (Base Type)
 
 ```javascript
@@ -15595,7 +13062,6 @@ error.stack;    // Stack trace
 
 ---
 
-<a id="toc-typeerror"></a>
 ### `TypeError`
 
 **Wrong type:**
@@ -15614,7 +13080,6 @@ function process(value) {
 
 ---
 
-<a id="toc-referenceerror"></a>
 ### `ReferenceError`
 
 **Undefined variable:**
@@ -15631,7 +13096,6 @@ let x = 10;
 
 ---
 
-<a id="toc-syntaxerror"></a>
 ### `SyntaxError`
 
 **Invalid syntax:**
@@ -15646,7 +13110,6 @@ JSON.parse("invalid json");
 
 ---
 
-<a id="toc-rangeerror"></a>
 ### `RangeError`
 
 **Out of range:**
@@ -15661,7 +13124,6 @@ new Array(-1);
 
 ---
 
-<a id="toc-urierror"></a>
 ### `URIError`
 
 **Invalid URI:**
@@ -15673,14 +13135,12 @@ decodeURIComponent("%");
 
 ---
 
-<a id="toc-evalerror"></a>
 ### `EvalError`
 
 **Deprecated** (not used in modern JavaScript).
 
 ---
 
-<a id="toc-aggregateerror"></a>
 ### `AggregateError`
 
 **Multiple errors:**
@@ -15697,10 +13157,8 @@ Promise.any([
 
 ---
 
-<a id="toc-244-custom-errors"></a>
 ### 2.4.4 Custom Errors
 
-<a id="toc-extend-error"></a>
 ### Extend `Error`
 
 ```javascript
@@ -15716,7 +13174,6 @@ throw new ValidationError("Invalid input");
 
 ---
 
-<a id="toc-with-additional-properties"></a>
 ### With Additional Properties
 
 ```javascript
@@ -15733,7 +13190,6 @@ throw new HttpError(404, "Not found");
 
 ---
 
-<a id="toc-catch-specific-errors"></a>
 ### Catch Specific Errors
 
 ```javascript
@@ -15752,10 +13208,8 @@ try {
 
 ---
 
-<a id="toc-245-error-stack-traces"></a>
 ### 2.4.5 Error Stack Traces
 
-<a id="toc-stack-property"></a>
 ### `stack` Property
 
 ```javascript
@@ -15779,7 +13233,6 @@ try {
 
 ---
 
-<a id="toc-errorcapturestacktrace-v8"></a>
 ### `Error.captureStackTrace()` (V8)
 
 ```javascript
@@ -15794,10 +13247,8 @@ class MyError extends Error {
 
 ---
 
-<a id="toc-246-error-handling-patterns"></a>
 ### 2.4.6 Error Handling Patterns
 
-<a id="toc-fail-fast"></a>
 ### Fail Fast
 
 ```javascript
@@ -15816,7 +13267,6 @@ function processUser(user) {
 
 ---
 
-<a id="toc-try-catch-at-boundaries"></a>
 ### Try-Catch at Boundaries
 
 **Catch at appropriate level:**
@@ -15841,7 +13291,6 @@ function loadConfig() {
 
 ---
 
-<a id="toc-rethrowing"></a>
 ### Rethrowing
 
 ```javascript
@@ -15855,7 +13304,6 @@ try {
 
 ---
 
-<a id="toc-wrapping-errors"></a>
 ### Wrapping Errors
 
 ```javascript
@@ -15868,7 +13316,6 @@ try {
 
 ---
 
-<a id="toc-error-boundaries-react-pattern"></a>
 ### Error Boundaries (React Pattern)
 
 ```javascript
@@ -15903,7 +13350,6 @@ class ErrorBoundary extends React.Component {
 
 ---
 
-<a id="toc-global-error-handlers"></a>
 ### Global Error Handlers
 
 **Browser:**
@@ -15933,7 +13379,6 @@ process.on("unhandledRejection", (reason, promise) => {
 
 ---
 
-<a id="toc-247-best-practices"></a>
 ### 2.4.7 Best Practices
 
 1. **Always throw `Error` objects** (not strings/numbers)
@@ -15949,10 +13394,8 @@ process.on("unhandledRejection", (reason, promise) => {
 
 ---
 
-<a id="toc-common-pitfalls"></a>
 ## Common Pitfalls
 
-<a id="toc-pitfall-1-for-in-on-arrays"></a>
 ### Pitfall 1: for-in on Arrays
 
 ```javascript
@@ -15970,7 +13413,6 @@ for (const value of arr) {
 }
 ```
 
-<a id="toc-pitfall-2-switch-fallthrough"></a>
 ### Pitfall 2: Switch Fallthrough
 
 ```javascript
@@ -15994,7 +13436,6 @@ switch (day) {
 }
 ```
 
-<a id="toc-pitfall-3-loop-variable-closure-with-var"></a>
 ### Pitfall 3: Loop Variable Closure with var
 
 ```javascript
@@ -16009,7 +13450,6 @@ for (let i = 0; i < 3; i++) {
 }
 ```
 
-<a id="toc-pitfall-4-catching-too-broadly"></a>
 ### Pitfall 4: Catching Too Broadly
 
 ```javascript
@@ -16034,7 +13474,6 @@ try {
 }
 ```
 
-<a id="toc-pitfall-5-finally-with-return"></a>
 ### Pitfall 5: finally with return
 
 ```javascript
@@ -16061,10 +13500,8 @@ function correct() {
 
 ---
 
-<a id="toc-summary"></a>
 ## Summary
 
-<a id="toc-loop-comparison"></a>
 ### Loop Comparison
 
 |Loop|Use Case|
@@ -16076,7 +13513,6 @@ function correct() {
 |`for-of`|Array/iterable values|
 |`for await-of`|Async iterables|
 
-<a id="toc-jump-statements"></a>
 ### Jump Statements
 
 - **`break`**: Exit loop/switch/block
@@ -16084,7 +13520,6 @@ function correct() {
 - **`return`**: Exit function with value
 - **Labels**: Target for break/continue
 
-<a id="toc-exception-handling"></a>
 ### Exception Handling
 
 - **`try-catch`**: Handle errors
@@ -16096,7 +13531,6 @@ function correct() {
 
 ---
 
-<a id="toc-25-control-flow-summary"></a>
 ## 2.5 Control Flow Summary
 
 | Construct | Purpose | Key Points |
@@ -16116,7 +13550,6 @@ function correct() {
 | `try...catch` | Handle exceptions | `catch` receives error |
 | `finally` | Cleanup | Always executes |
 
-<a id="toc-best-practices-3"></a>
 ### Best Practices
 
 1. **Use `for...of` for arrays**, not `for...in`
@@ -16133,24 +13566,19 @@ function correct() {
 With conditionals, loops, and exception handling mastered, you're ready for functions and closures.
 
 
-<a id="toc-03-functionsmd"></a>
 # 03-Functions.md
 
-<a id="toc-3-functions"></a>
 # 3 Functions
 
 Functions are first-class citizens in JavaScript—they can be assigned to variables, passed as arguments, returned from other functions, and have properties. This chapter covers function fundamentals through advanced patterns, from basic declarations to generators and async functions.
 
 ---
 
-<a id="toc-31-function-basics"></a>
 ## 3.1 Function Basics
 
 
-<a id="toc-311-function-declarations"></a>
 ### 3.1.1 Function Declarations
 
-<a id="toc-basic-syntax-9"></a>
 ### Basic Syntax
 
 ```javascript
@@ -16172,7 +13600,6 @@ console.log(greet("Alice"));  // "Hello, Alice!"
 
 ---
 
-<a id="toc-characteristics"></a>
 ### Characteristics
 
 **1. Hoisted to top of scope:**
@@ -16209,7 +13636,6 @@ if (true) {
 
 ---
 
-<a id="toc-function-hoisting-1"></a>
 ### Function Hoisting
 
 **Entire function is hoisted:**
@@ -16254,7 +13680,6 @@ console.log(typeof foo);  // "string" (reassigned)
 
 ---
 
-<a id="toc-block-scoped-function-declarations-strict-mode"></a>
 ### Block-Scoped Function Declarations (Strict Mode)
 
 **In strict mode, function declarations are block-scoped:**
@@ -16285,10 +13710,8 @@ console.log(typeof f);  // "function" (hoisted to enclosing function/global)
 
 ---
 
-<a id="toc-312-function-expressions"></a>
 ### 3.1.2 Function Expressions
 
-<a id="toc-basic-syntax-10"></a>
 ### Basic Syntax
 
 ```javascript
@@ -16310,7 +13733,6 @@ console.log(greet("Alice"));  // "Hello, Alice!"
 
 ---
 
-<a id="toc-characteristics-1"></a>
 ### Characteristics
 
 **1. Not hoisted (variable is hoisted, not the function):**
@@ -16378,10 +13800,8 @@ console.log(greet.name);  // "greet" (inferred from variable name)
 
 ---
 
-<a id="toc-313-anonymous-functions"></a>
 ### 3.1.3 Anonymous Functions
 
-<a id="toc-definition-1"></a>
 ### Definition
 
 Functions without a name:
@@ -16394,7 +13814,6 @@ function(x) {
 
 ---
 
-<a id="toc-common-uses"></a>
 ### Common Uses
 
 **Callbacks:**
@@ -16432,7 +13851,6 @@ button.addEventListener("click", function(event) {
 
 ---
 
-<a id="toc-name-inference"></a>
 ### Name Inference
 
 **Modern engines infer names from context:**
@@ -16462,7 +13880,6 @@ arr.map(function(x) { return x * 2; })[0].name;  // "" (empty)
 
 ---
 
-<a id="toc-drawbacks-of-anonymous-functions"></a>
 ### Drawbacks of Anonymous Functions
 
 **1. Stack traces are less helpful:**
@@ -16508,10 +13925,8 @@ original(3);  // TypeError: countdown is not a function
 
 ---
 
-<a id="toc-314-named-function-expressions"></a>
 ### 3.1.4 Named Function Expressions
 
-<a id="toc-syntax-1"></a>
 ### Syntax
 
 ```javascript
@@ -16533,7 +13948,6 @@ console.log(factorial(5));  // 120
 
 ---
 
-<a id="toc-name-scope"></a>
 ### Name Scope
 
 **Function name only visible inside function:**
@@ -16550,7 +13964,6 @@ console.log(sayHello);      // ReferenceError: sayHello is not defined
 
 ---
 
-<a id="toc-self-reference"></a>
 ### Self-Reference
 
 **Reliable recursion:**
@@ -16585,7 +13998,6 @@ original(3);  // TypeError: countdown is not a function
 
 ---
 
-<a id="toc-best-practice"></a>
 ### Best Practice
 
 **Use named function expressions for:**
@@ -16608,10 +14020,8 @@ const users = data.map(function transformUser(raw) {
 
 ---
 
-<a id="toc-315-function-properties-and-methods"></a>
 ### 3.1.5 Function Properties and Methods
 
-<a id="toc-name-property"></a>
 ### `name` Property
 
 ```javascript
@@ -16630,7 +14040,6 @@ console.log(arrow.name);  // "arrow" (inferred)
 
 ---
 
-<a id="toc-length-property"></a>
 ### `length` Property
 
 **Number of parameters (excluding rest and defaults):**
@@ -16648,7 +14057,6 @@ console.log(h.length);  // 2 (rest not counted)
 
 ---
 
-<a id="toc-prototype-property"></a>
 ### `prototype` Property
 
 **Only on regular functions (not arrows):**
@@ -16663,7 +14071,6 @@ console.log(arrow.prototype);  // undefined
 
 ---
 
-<a id="toc-call-apply-bind"></a>
 ### `call()`, `apply()`, `bind()`
 
 **Explicit `this` binding:**
@@ -16688,10 +14095,8 @@ boundGreet();  // "Hey, Alice!"
 
 ---
 
-<a id="toc-316-iifes-immediately-invoked-function-expressions"></a>
 ### 3.1.6 IIFEs (Immediately Invoked Function Expressions)
 
-<a id="toc-syntax-2"></a>
 ### Syntax
 
 ```javascript
@@ -16707,7 +14112,6 @@ boundGreet();  // "Hey, Alice!"
 
 ---
 
-<a id="toc-use-cases"></a>
 ### Use Cases
 
 **1. Create private scope:**
@@ -16769,7 +14173,6 @@ for (var i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-modern-alternative-blocks"></a>
 ### Modern Alternative: Blocks
 
 **ES6 block scoping:**
@@ -16798,10 +14201,8 @@ export function publicMethod() {
 
 ---
 
-<a id="toc-317-function-declaration-vs-expression"></a>
 ### 3.1.7 Function Declaration vs Expression
 
-<a id="toc-comparison"></a>
 ### Comparison
 
 |Feature|Declaration|Expression|
@@ -16814,7 +14215,6 @@ export function publicMethod() {
 
 ---
 
-<a id="toc-when-to-use-each"></a>
 ### When to Use Each
 
 **Function Declaration:**
@@ -16853,14 +14253,11 @@ const obj = {
 ---
 
 
-<a id="toc-32-arrow-functions"></a>
 ## 3.2 Arrow Functions
 
 
-<a id="toc-321-syntax-variations"></a>
 ### 3.2.1 Syntax Variations
 
-<a id="toc-basic-syntax-11"></a>
 ### Basic Syntax
 
 ```javascript
@@ -16869,7 +14266,6 @@ const obj = {
 
 ---
 
-<a id="toc-no-parameters"></a>
 ### No Parameters
 
 ```javascript
@@ -16881,7 +14277,6 @@ const obj = {
 
 ---
 
-<a id="toc-single-parameter-no-parentheses"></a>
 ### Single Parameter (No Parentheses)
 
 ```javascript
@@ -16893,7 +14288,6 @@ x => x * 2
 
 ---
 
-<a id="toc-multiple-parameters"></a>
 ### Multiple Parameters
 
 ```javascript
@@ -16905,7 +14299,6 @@ x => x * 2
 
 ---
 
-<a id="toc-default-parameters"></a>
 ### Default Parameters
 
 ```javascript
@@ -16914,7 +14307,6 @@ x => x * 2
 
 ---
 
-<a id="toc-rest-parameters"></a>
 ### Rest Parameters
 
 ```javascript
@@ -16923,7 +14315,6 @@ x => x * 2
 
 ---
 
-<a id="toc-destructuring-parameters"></a>
 ### Destructuring Parameters
 
 ```javascript
@@ -16934,10 +14325,8 @@ x => x * 2
 
 ---
 
-<a id="toc-322-implicit-return"></a>
 ### 3.2.2 Implicit Return
 
-<a id="toc-single-expression-no-braces"></a>
 ### Single Expression (No Braces)
 
 ```javascript
@@ -16950,7 +14339,6 @@ const greet = name => `Hello, ${name}!`;
 
 ---
 
-<a id="toc-returning-object-literal"></a>
 ### Returning Object Literal
 
 **Must wrap in parentheses:**
@@ -16967,7 +14355,6 @@ const user = name => ({ name, age: 0 });
 
 ---
 
-<a id="toc-multi-line-implicit-return"></a>
 ### Multi-Line Implicit Return
 
 ```javascript
@@ -16980,7 +14367,6 @@ const transform = data =>
 
 ---
 
-<a id="toc-block-body-explicit-return"></a>
 ### Block Body (Explicit Return)
 
 ```javascript
@@ -16993,10 +14379,8 @@ const processUser = user => {
 
 ---
 
-<a id="toc-323-lexical-this-binding"></a>
 ### 3.2.3 Lexical `this` Binding
 
-<a id="toc-no-own-this"></a>
 ### No Own `this`
 
 Arrow functions **don't have their own `this`**—they inherit from enclosing scope:
@@ -17020,7 +14404,6 @@ obj.arrowFunc();    // undefined
 
 ---
 
-<a id="toc-lexical-scope-example"></a>
 ### Lexical Scope Example
 
 ```javascript
@@ -17045,7 +14428,6 @@ obj.method();
 
 ---
 
-<a id="toc-old-workaround-pre-es6"></a>
 ### Old Workaround (Pre-ES6)
 
 ```javascript
@@ -17066,7 +14448,6 @@ const obj = {
 
 ---
 
-<a id="toc-cannot-bind-this"></a>
 ### Cannot Bind `this`
 
 **`call`, `apply`, `bind` don't change `this`:**
@@ -17083,7 +14464,6 @@ arrow.bind(obj)(); // undefined (bind ignored)
 
 ---
 
-<a id="toc-class-methods"></a>
 ### Class Methods
 
 **Use arrow functions for event handlers:**
@@ -17135,10 +14515,8 @@ increment();  // Works! (this = counter)
 
 ---
 
-<a id="toc-324-no-arguments-object"></a>
 ### 3.2.4 No `arguments` Object
 
-<a id="toc-arrow-functions-dont-have-arguments"></a>
 ### Arrow Functions Don't Have `arguments`
 
 ```javascript
@@ -17156,7 +14534,6 @@ arrowFunc(1, 2, 3);    // Error
 
 ---
 
-<a id="toc-use-rest-parameters-instead"></a>
 ### Use Rest Parameters Instead
 
 ```javascript
@@ -17169,7 +14546,6 @@ sum(1, 2, 3);  // 6
 
 ---
 
-<a id="toc-accessing-outer-arguments"></a>
 ### Accessing Outer `arguments`
 
 **Arrow functions can access enclosing function's `arguments`:**
@@ -17188,10 +14564,8 @@ outer(1, 2, 3);  // [1, 2, 3]
 
 ---
 
-<a id="toc-325-cannot-be-constructors"></a>
 ### 3.2.5 Cannot Be Constructors
 
-<a id="toc-no-new"></a>
 ### No `new`
 
 **Arrow functions cannot be used with `new`:**
@@ -17206,7 +14580,6 @@ const alice = new Person("Alice");  // TypeError: Person is not a constructor
 
 ---
 
-<a id="toc-no-prototype-property"></a>
 ### No `prototype` Property
 
 ```javascript
@@ -17219,7 +14592,6 @@ console.log(regular.prototype);  // { constructor: regular }
 
 ---
 
-<a id="toc-use-regular-functions-for-constructors"></a>
 ### Use Regular Functions for Constructors
 
 ```javascript
@@ -17245,10 +14617,8 @@ const alice = new Person("Alice");
 
 ---
 
-<a id="toc-326-other-differences"></a>
 ### 3.2.6 Other Differences
 
-<a id="toc-no-super"></a>
 ### No `super`
 
 **Arrow functions cannot access `super`:**
@@ -17265,7 +14635,6 @@ class Child extends Parent {
 
 ---
 
-<a id="toc-no-newtarget"></a>
 ### No `new.target`
 
 ```javascript
@@ -17280,7 +14649,6 @@ const arrow = () => {
 
 ---
 
-<a id="toc-no-yield"></a>
 ### No `yield`
 
 **Cannot be generators:**
@@ -17293,10 +14661,8 @@ const gen = *() => {  // SyntaxError
 
 ---
 
-<a id="toc-327-when-to-use-arrow-functions"></a>
 ### 3.2.7 When to Use Arrow Functions
 
-<a id="toc-good-use-cases"></a>
 ### Good Use Cases
 
 **1. Short callbacks:**
@@ -17338,7 +14704,6 @@ fetch(url)
 
 ---
 
-<a id="toc-when-not-to-use"></a>
 ### When NOT to Use
 
 **1. Object methods:**
@@ -17404,14 +14769,11 @@ const sum = (...args) => {
 ---
 
 
-<a id="toc-33-parameters-and-arguments"></a>
 ## 3.3 Parameters and Arguments
 
 
-<a id="toc-331-default-parameters"></a>
 ### 3.3.1 Default Parameters
 
-<a id="toc-basic-syntax-12"></a>
 ### Basic Syntax
 
 ```javascript
@@ -17425,7 +14787,6 @@ greet("Alice"); // "Hello, Alice!"
 
 ---
 
-<a id="toc-default-values-can-be-expressions"></a>
 ### Default Values Can Be Expressions
 
 ```javascript
@@ -17440,7 +14801,6 @@ function greet(name, greeting = `Hello, ${name}`) {
 
 ---
 
-<a id="toc-defaults-evaluated-at-call-time"></a>
 ### Defaults Evaluated at Call Time
 
 ```javascript
@@ -17457,7 +14817,6 @@ increment(10);  // 10 (default not used, count unchanged)
 
 ---
 
-<a id="toc-previous-parameters-in-defaults"></a>
 ### Previous Parameters in Defaults
 
 ```javascript
@@ -17478,7 +14837,6 @@ function f(a = b, b = 2) {  // ReferenceError: b in TDZ
 
 ---
 
-<a id="toc-undefined-triggers-default"></a>
 ### `undefined` Triggers Default
 
 ```javascript
@@ -17493,7 +14851,6 @@ greet("");         // "Hello, !" (empty string doesn't trigger default)
 
 ---
 
-<a id="toc-defaults-and-length-property"></a>
 ### Defaults and `length` Property
 
 **Parameters with defaults not counted:**
@@ -17508,10 +14865,8 @@ console.log(g.length);  // 2
 
 ---
 
-<a id="toc-332-rest-parameters"></a>
 ### 3.3.2 Rest Parameters
 
-<a id="toc-basic-syntax-13"></a>
 ### Basic Syntax
 
 ```javascript
@@ -17525,7 +14880,6 @@ sum(1, 2, 3, 4, 5); // 15
 
 ---
 
-<a id="toc-rest-is-an-array"></a>
 ### Rest is an Array
 
 ```javascript
@@ -17539,7 +14893,6 @@ log(1, 2, 3);  // true, 3
 
 ---
 
-<a id="toc-combined-with-regular-parameters"></a>
 ### Combined with Regular Parameters
 
 **Rest must be last:**
@@ -17557,7 +14910,6 @@ function invalid(...args, last) { }  // SyntaxError
 
 ---
 
-<a id="toc-rest-vs-arguments"></a>
 ### Rest vs `arguments`
 
 |Feature|Rest (`...args`)|`arguments`|
@@ -17584,7 +14936,6 @@ withArguments(1, 2, 3, 4, 5);
 
 ---
 
-<a id="toc-rest-and-length"></a>
 ### Rest and `length`
 
 **Rest parameter not counted:**
@@ -17596,10 +14947,8 @@ console.log(f.length);  // 2
 
 ---
 
-<a id="toc-333-arguments-object"></a>
 ### 3.3.3 `arguments` Object
 
-<a id="toc-basic-usage"></a>
 ### Basic Usage
 
 **Array-like object containing all arguments:**
@@ -17618,7 +14967,6 @@ sum(1, 2, 3);  // 6
 
 ---
 
-<a id="toc-not-a-real-array"></a>
 ### Not a Real Array
 
 ```javascript
@@ -17646,7 +14994,6 @@ function f() {
 
 ---
 
-<a id="toc-properties"></a>
 ### Properties
 
 **`length` (number of arguments):**
@@ -17677,7 +15024,6 @@ function f() {
 
 ---
 
-<a id="toc-aliasing-sloppy-mode"></a>
 ### Aliasing (Sloppy Mode)
 
 **In sloppy mode, `arguments` tracks parameter changes:**
@@ -17705,7 +15051,6 @@ f(5);
 
 ---
 
-<a id="toc-not-available-in-arrow-functions"></a>
 ### Not Available in Arrow Functions
 
 ```javascript
@@ -17721,7 +15066,6 @@ const withRest = (...args) => {
 
 ---
 
-<a id="toc-modern-alternative-rest-parameters"></a>
 ### Modern Alternative: Rest Parameters
 
 **Prefer rest parameters:**
@@ -17740,10 +15084,8 @@ function sum(...numbers) {
 
 ---
 
-<a id="toc-334-parameter-destructuring"></a>
 ### 3.3.4 Parameter Destructuring
 
-<a id="toc-array-destructuring"></a>
 ### Array Destructuring
 
 ```javascript
@@ -17764,7 +15106,6 @@ first([1, 2, 3]);
 
 ---
 
-<a id="toc-object-destructuring"></a>
 ### Object Destructuring
 
 ```javascript
@@ -17785,7 +15126,6 @@ greet({ name: "Bob" });  // "Bob is 0 years old"
 
 ---
 
-<a id="toc-nested-destructuring"></a>
 ### Nested Destructuring
 
 ```javascript
@@ -17802,7 +15142,6 @@ processUser({
 
 ---
 
-<a id="toc-renaming"></a>
 ### Renaming
 
 ```javascript
@@ -17815,7 +15154,6 @@ greet({ name: "Alice" });  // "Hello, Alice!"
 
 ---
 
-<a id="toc-with-rest"></a>
 ### With Rest
 
 ```javascript
@@ -17829,10 +15167,8 @@ process({ id: 1, name: "Alice", age: 30 });
 
 ---
 
-<a id="toc-335-spread-in-function-calls"></a>
 ### 3.3.5 Spread in Function Calls
 
-<a id="toc-basic-usage-1"></a>
 ### Basic Usage
 
 ```javascript
@@ -17846,7 +15182,6 @@ sum(...numbers);  // 6 (same as sum(1, 2, 3))
 
 ---
 
-<a id="toc-combining-with-regular-arguments"></a>
 ### Combining with Regular Arguments
 
 ```javascript
@@ -17860,7 +15195,6 @@ greet("Hello", ...people);  // "Hello, Alice and Bob!"
 
 ---
 
-<a id="toc-multiple-spreads"></a>
 ### Multiple Spreads
 
 ```javascript
@@ -17876,7 +15210,6 @@ sum(...arr1, ...arr2);  // 21
 
 ---
 
-<a id="toc-with-other-values"></a>
 ### With Other Values
 
 ```javascript
@@ -17889,7 +15222,6 @@ log(1, ...[2, 3], 4, 5);  // 1, 2, 3, 4, 5
 
 ---
 
-<a id="toc-spread-any-iterable"></a>
 ### Spread Any Iterable
 
 ```javascript
@@ -17903,14 +15235,11 @@ Math.max(...set);  // 3
 ---
 
 
-<a id="toc-34-return-values"></a>
 ## 3.4 Return Values
 
 
-<a id="toc-341-explicit-return"></a>
 ### 3.4.1 Explicit Return
 
-<a id="toc-basic-syntax-14"></a>
 ### Basic Syntax
 
 ```javascript
@@ -17923,7 +15252,6 @@ const result = add(5, 3);  // 8
 
 ---
 
-<a id="toc-early-return"></a>
 ### Early Return
 
 ```javascript
@@ -17936,7 +15264,6 @@ function validate(input) {
 
 ---
 
-<a id="toc-returning-different-types"></a>
 ### Returning Different Types
 
 ```javascript
@@ -17950,7 +15277,6 @@ function process(x) {
 
 ---
 
-<a id="toc-no-return-value-returns-undefined"></a>
 ### No Return Value (Returns `undefined`)
 
 ```javascript
@@ -17965,7 +15291,6 @@ console.log(result);  // undefined
 
 ---
 
-<a id="toc-explicit-undefined-return"></a>
 ### Explicit `undefined` Return
 
 ```javascript
@@ -17981,10 +15306,8 @@ function maybeReturn(condition) {
 
 ---
 
-<a id="toc-342-implicit-return-arrow-functions"></a>
 ### 3.4.2 Implicit Return (Arrow Functions)
 
-<a id="toc-single-expression"></a>
 ### Single Expression
 
 ```javascript
@@ -17997,7 +15320,6 @@ const greet = name => `Hello, ${name}!`;
 
 ---
 
-<a id="toc-object-literal-must-wrap"></a>
 ### Object Literal (Must Wrap)
 
 ```javascript
@@ -18009,7 +15331,6 @@ const broken = (name, age) => { name, age };  // undefined
 
 ---
 
-<a id="toc-multi-line-expression"></a>
 ### Multi-Line Expression
 
 ```javascript
@@ -18022,7 +15343,6 @@ const transform = data =>
 
 ---
 
-<a id="toc-conditional-return"></a>
 ### Conditional Return
 
 ```javascript
@@ -18035,10 +15355,8 @@ const sign = x =>
 
 ---
 
-<a id="toc-343-returning-multiple-values"></a>
 ### 3.4.3 Returning Multiple Values
 
-<a id="toc-using-arrays"></a>
 ### Using Arrays
 
 ```javascript
@@ -18052,7 +15370,6 @@ console.log(x, y);  // 10, 20
 
 ---
 
-<a id="toc-using-objects"></a>
 ### Using Objects
 
 ```javascript
@@ -18070,7 +15387,6 @@ console.log(name, age);  // "Alice", 30
 
 ---
 
-<a id="toc-choosing-between-array-and-object"></a>
 ### Choosing Between Array and Object
 
 **Use array when:**
@@ -18103,7 +15419,6 @@ const { min, max } = getStats();  // Can skip avg, median
 
 ---
 
-<a id="toc-nested-destructuring-1"></a>
 ### Nested Destructuring
 
 ```javascript
@@ -18125,10 +15440,8 @@ const {
 
 ---
 
-<a id="toc-344-return-value-best-practices"></a>
 ### 3.4.4 Return Value Best Practices
 
-<a id="toc-be-consistent"></a>
 ### Be Consistent
 
 **Bad:**
@@ -18156,7 +15469,6 @@ function getUser(id) {
 
 ---
 
-<a id="toc-document-return-types-jsdoc"></a>
 ### Document Return Types (JSDoc)
 
 ```javascript
@@ -18172,7 +15484,6 @@ function getUser(id) {
 
 ---
 
-<a id="toc-avoid-too-many-return-points"></a>
 ### Avoid Too Many Return Points
 
 **Hard to follow:**
@@ -18214,10 +15525,8 @@ const ranges = [
 
 ---
 
-<a id="toc-summary-1"></a>
 ## Summary
 
-<a id="toc-function-types"></a>
 ### Function Types
 
 |Feature|Declaration|Expression|Arrow|
@@ -18231,7 +15540,6 @@ const ranges = [
 
 ---
 
-<a id="toc-parameter-features"></a>
 ### Parameter Features
 
 - **Default parameters**: `function f(x = 0) { }`
@@ -18242,7 +15550,6 @@ const ranges = [
 
 ---
 
-<a id="toc-best-practices-4"></a>
 ### Best Practices
 
 1. **Prefer `const`** for function expressions
@@ -18258,14 +15565,11 @@ const ranges = [
 
 ---
 
-<a id="toc-35-scope-and-closures"></a>
 ## 3.5 Scope and Closures
 
 
-<a id="toc-351-lexical-scope"></a>
 ### 3.5.1 Lexical Scope
 
-<a id="toc-definition-2"></a>
 ### Definition
 
 **Lexical scope** (static scope) means a variable's scope is determined by its position in the source code at write-time, not at run-time.
@@ -18286,7 +15590,6 @@ outer();  // 10
 
 ---
 
-<a id="toc-scope-chain"></a>
 ### Scope Chain
 
 When a variable is referenced, JavaScript searches:
@@ -18320,7 +15623,6 @@ outer();
 
 ---
 
-<a id="toc-shadowing"></a>
 ### Shadowing
 
 **Inner variables shadow outer variables:**
@@ -18346,7 +15648,6 @@ console.log(x);  // "global"
 
 ---
 
-<a id="toc-lexical-vs-dynamic-scope"></a>
 ### Lexical vs Dynamic Scope
 
 **JavaScript uses lexical scope:**
@@ -18370,10 +15671,8 @@ bar();  // "global" (not "local")
 
 ---
 
-<a id="toc-352-function-scope"></a>
 ### 3.5.2 Function Scope
 
-<a id="toc-var-is-function-scoped"></a>
 ### `var` is Function-Scoped
 
 ```javascript
@@ -18389,7 +15688,6 @@ example();
 
 ---
 
-<a id="toc-functions-create-scope"></a>
 ### Functions Create Scope
 
 **Each function creates its own scope:**
@@ -18414,7 +15712,6 @@ function outer() {
 
 ---
 
-<a id="toc-nested-functions"></a>
 ### Nested Functions
 
 ```javascript
@@ -18440,10 +15737,8 @@ level1();
 
 ---
 
-<a id="toc-353-block-scope"></a>
 ### 3.5.3 Block Scope
 
-<a id="toc-let-and-const-are-block-scoped"></a>
 ### `let` and `const` are Block-Scoped
 
 ```javascript
@@ -18459,7 +15754,6 @@ console.log(y);  // ReferenceError
 
 ---
 
-<a id="toc-blocks-create-scope"></a>
 ### Blocks Create Scope
 
 **All blocks create scope for `let`/`const`:**
@@ -18498,7 +15792,6 @@ switch (value) {
 
 ---
 
-<a id="toc-loop-iterations-create-separate-scopes"></a>
 ### Loop Iterations Create Separate Scopes
 
 **`let` in `for` loop creates per-iteration binding:**
@@ -18538,7 +15831,6 @@ for (var i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-temporal-dead-zone-tdz"></a>
 ### Temporal Dead Zone (TDZ)
 
 **Variables exist but cannot be accessed before declaration:**
@@ -18555,10 +15847,8 @@ for (var i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-354-closure-mechanism"></a>
 ### 3.5.4 Closure Mechanism
 
-<a id="toc-why-closures-matter"></a>
 ### Why Closures Matter
 
 Closures are one of JavaScript's most powerful features. They enable:
@@ -18571,7 +15861,6 @@ Closures are one of JavaScript's most powerful features. They enable:
 
 Without closures, JavaScript would lack fundamental patterns like private variables, memoization, and partial application.
 
-<a id="toc-definition-3"></a>
 ### Definition
 
 A **closure** is a function that retains access to its lexical scope even when the function is executed outside that scope. In simpler terms: **a function "remembers" the variables from where it was created, not where it's called.**
@@ -18593,7 +15882,6 @@ fn();  // 10 (but x is still accessible!)
 
 ---
 
-<a id="toc-how-closures-work"></a>
 ### How Closures Work
 
 **When a function is created, it stores a reference to its lexical environment:**
@@ -18623,7 +15911,6 @@ console.log(counter2());  // 2
 
 ---
 
-<a id="toc-closure-scope-chain"></a>
 ### Closure Scope Chain
 
 **Closures retain entire scope chain:**
@@ -18655,7 +15942,6 @@ fn();  // All variables accessible
 
 ---
 
-<a id="toc-closures-capture-variables-not-values"></a>
 ### Closures Capture Variables, Not Values
 
 ```javascript
@@ -18714,10 +16000,8 @@ for (var i = 0; i < 3; i++) {
 
 ---
 
-<a id="toc-355-closure-use-cases"></a>
 ### 3.5.5 Closure Use Cases
 
-<a id="toc-private-variables"></a>
 ### Private Variables
 
 **Encapsulate data:**
@@ -18748,7 +16032,6 @@ console.log(person._name);      // undefined (private)
 
 ---
 
-<a id="toc-function-factories"></a>
 ### Function Factories
 
 **Create specialized functions:**
@@ -18769,7 +16052,6 @@ console.log(triple(5));  // 15
 
 ---
 
-<a id="toc-event-handlers"></a>
 ### Event Handlers
 
 **Capture context:**
@@ -18789,7 +16071,6 @@ setupButton("btn2", "Button 2 clicked");
 
 ---
 
-<a id="toc-memoization"></a>
 ### Memoization
 
 **Cache results:**
@@ -18824,7 +16105,6 @@ factorial(6);  // Only computes 6 (reuses cached 5!)
 
 ---
 
-<a id="toc-iterators-and-generators"></a>
 ### Iterators and Generators
 
 ```javascript
@@ -18850,7 +16130,6 @@ console.log(iter.next());  // { done: true }
 
 ---
 
-<a id="toc-partial-application"></a>
 ### Partial Application
 
 ```javascript
@@ -18871,10 +16150,8 @@ console.log(sayHello("Bob"));    // "Hello, Bob!"
 
 ---
 
-<a id="toc-356-module-pattern-with-closures"></a>
 ### 3.5.6 Module Pattern with Closures
 
-<a id="toc-revealing-module-pattern"></a>
 ### Revealing Module Pattern
 
 ```javascript
@@ -18922,7 +16199,6 @@ console.log(calculator.validate);     // undefined (private)
 
 ---
 
-<a id="toc-singleton-pattern"></a>
 ### Singleton Pattern
 
 ```javascript
@@ -18964,7 +16240,6 @@ console.log(db1 === db2);  // true
 
 ---
 
-<a id="toc-namespace-pattern"></a>
 ### Namespace Pattern
 
 ```javascript
@@ -19004,10 +16279,8 @@ MyApp.api.get("users");
 
 ---
 
-<a id="toc-357-memory-considerations"></a>
 ### 3.5.7 Memory Considerations
 
-<a id="toc-closures-and-memory"></a>
 ### Closures and Memory
 
 **Closures retain references to outer scope:**
@@ -19027,7 +16300,6 @@ const fn = heavy();
 
 ---
 
-<a id="toc-memory-leaks"></a>
 ### Memory Leaks
 
 **Unintentional retention:**
@@ -19072,7 +16344,6 @@ cleanup();
 
 ---
 
-<a id="toc-only-capture-whats-needed"></a>
 ### Only Capture What's Needed
 
 **Bad: Captures entire scope:**
@@ -19106,7 +16377,6 @@ function outer() {
 
 ---
 
-<a id="toc-weakmap-for-private-data"></a>
 ### WeakMap for Private Data
 
 **Modern alternative to closures for private data:**
@@ -19135,7 +16405,6 @@ console.log(person.getName());  // "Alice"
 
 ---
 
-<a id="toc-358-best-practices"></a>
 ### 3.5.8 Best Practices
 
 1. **Use closures for data privacy**
@@ -19150,14 +16419,11 @@ console.log(person.getName());  // "Alice"
 ---
 
 
-<a id="toc-36-advanced-function-concepts"></a>
 ## 3.6 Advanced Function Concepts
 
 
-<a id="toc-361-higher-order-functions"></a>
 ### 3.6.1 Higher-Order Functions
 
-<a id="toc-definition-4"></a>
 ### Definition
 
 A **higher-order function** either:
@@ -19167,7 +16433,6 @@ A **higher-order function** either:
 
 ---
 
-<a id="toc-functions-as-arguments"></a>
 ### Functions as Arguments
 
 ```javascript
@@ -19188,7 +16453,6 @@ console.log(doubled);  // [2, 4, 6, 8, 10]
 
 ---
 
-<a id="toc-functions-as-return-values"></a>
 ### Functions as Return Values
 
 ```javascript
@@ -19207,7 +16471,6 @@ console.log(sayHi("Bob"));       // "Hi, Bob!"
 
 ---
 
-<a id="toc-built-in-higher-order-functions"></a>
 ### Built-In Higher-Order Functions
 
 ```javascript
@@ -19229,7 +16492,6 @@ Promise.resolve(42).then(x => x * 2);
 
 ---
 
-<a id="toc-creating-utilities"></a>
 ### Creating Utilities
 
 ```javascript
@@ -19247,17 +16509,14 @@ repeat(3, i => console.log(`Iteration ${i}`));
 
 ---
 
-<a id="toc-362-callbacks"></a>
 ### 3.6.2 Callbacks
 
-<a id="toc-definition-5"></a>
 ### Definition
 
 A **callback** is a function passed as an argument to be executed later.
 
 ---
 
-<a id="toc-synchronous-callbacks"></a>
 ### Synchronous Callbacks
 
 ```javascript
@@ -19276,7 +16535,6 @@ console.log(squared);  // [1, 4, 9]
 
 ---
 
-<a id="toc-asynchronous-callbacks"></a>
 ### Asynchronous Callbacks
 
 ```javascript
@@ -19294,7 +16552,6 @@ fetchData("https://api.example.com/user/1", (data) => {
 
 ---
 
-<a id="toc-error-first-callbacks-nodejs-convention"></a>
 ### Error-First Callbacks (Node.js Convention)
 
 ```javascript
@@ -19319,7 +16576,6 @@ readFile("data.txt", (err, data) => {
 
 ---
 
-<a id="toc-callback-hell-pyramid-of-doom"></a>
 ### Callback Hell (Pyramid of Doom)
 
 ```javascript
@@ -19361,17 +16617,14 @@ try {
 
 ---
 
-<a id="toc-363-function-composition"></a>
 ### 3.6.3 Function Composition
 
-<a id="toc-definition-6"></a>
 ### Definition
 
 **Function composition** is combining two or more functions to create a new function.
 
 ---
 
-<a id="toc-basic-composition"></a>
 ### Basic Composition
 
 ```javascript
@@ -19385,7 +16638,6 @@ console.log(addThenMultiply(5));  // 12 ((5 + 1) * 2)
 
 ---
 
-<a id="toc-compose-function"></a>
 ### Compose Function
 
 **Right-to-left composition:**
@@ -19408,7 +16660,6 @@ console.log(composed(5));  // 144
 
 ---
 
-<a id="toc-pipe-function"></a>
 ### Pipe Function
 
 **Left-to-right composition:**
@@ -19431,7 +16682,6 @@ console.log(piped(5));  // 144
 
 ---
 
-<a id="toc-practical-example"></a>
 ### Practical Example
 
 ```javascript
@@ -19463,17 +16713,14 @@ console.log(processUsers(users));
 
 ---
 
-<a id="toc-364-currying"></a>
 ### 3.6.4 Currying
 
-<a id="toc-definition-7"></a>
 ### Definition
 
 **Currying** transforms a function with multiple arguments into a sequence of functions, each taking a single argument.
 
 ---
 
-<a id="toc-manual-currying"></a>
 ### Manual Currying
 
 ```javascript
@@ -19502,7 +16749,6 @@ addCurried(1)(2)(3);  // 6
 
 ---
 
-<a id="toc-curry-utility"></a>
 ### Curry Utility
 
 ```javascript
@@ -19533,7 +16779,6 @@ console.log(curriedAdd(1, 2, 3));     // 6
 
 ---
 
-<a id="toc-practical-use-cases"></a>
 ### Practical Use Cases
 
 **Creating specialized functions:**
@@ -19566,17 +16811,14 @@ console.log(filterGreaterThan3(numbers)); // [4, 5]
 
 ---
 
-<a id="toc-365-partial-application"></a>
 ### 3.6.5 Partial Application
 
-<a id="toc-definition-8"></a>
 ### Definition
 
 **Partial application** fixes some arguments of a function, producing a new function with fewer arguments.
 
 ---
 
-<a id="toc-manual-partial-application"></a>
 ### Manual Partial Application
 
 ```javascript
@@ -19599,7 +16841,6 @@ console.log(sayHi("Bob"));       // "Hi, Bob!"
 
 ---
 
-<a id="toc-partial-vs-currying"></a>
 ### Partial vs Currying
 
 **Partial application:**
@@ -19637,7 +16878,6 @@ curriedAdd(5)(10)(15);  // 30
 
 ---
 
-<a id="toc-using-bind-for-partial-application"></a>
 ### Using `bind` for Partial Application
 
 ```javascript
@@ -19651,10 +16891,8 @@ console.log(sayHello("Alice"));  // "Hello, Alice!"
 
 ---
 
-<a id="toc-366-function-binding"></a>
 ### 3.6.6 Function Binding
 
-<a id="toc-bind-method"></a>
 ### `bind()` Method
 
 **Creates new function with bound `this`:**
@@ -19678,7 +16916,6 @@ boundGreet();  // "Hello, Alice" (this bound to user)
 
 ---
 
-<a id="toc-binding-with-arguments"></a>
 ### Binding with Arguments
 
 ```javascript
@@ -19695,7 +16932,6 @@ console.log(triple(5));  // 15 (3 * 5)
 
 ---
 
-<a id="toc-call-method"></a>
 ### `call()` Method
 
 **Invoke function with specified `this` and arguments:**
@@ -19712,7 +16948,6 @@ console.log(greet.call(user, "Hello"));  // "Hello, Alice!"
 
 ---
 
-<a id="toc-apply-method"></a>
 ### `apply()` Method
 
 **Like `call`, but arguments as array:**
@@ -19729,7 +16964,6 @@ console.log(greet.apply(user, ["Hello", "!"]));  // "Hello, Alice!"
 
 ---
 
-<a id="toc-comparison-1"></a>
 ### Comparison
 
 ```javascript
@@ -19752,10 +16986,8 @@ greet.apply(user, ["Hello", "!"]);  // "Hello, Alice!"
 
 ---
 
-<a id="toc-367-iife-revisited"></a>
 ### 3.6.7 IIFE Revisited
 
-<a id="toc-pattern"></a>
 ### Pattern
 
 ```javascript
@@ -19771,7 +17003,6 @@ greet.apply(user, ["Hello", "!"]);  // "Hello, Alice!"
 
 ---
 
-<a id="toc-use-cases-1"></a>
 ### Use Cases
 
 **1. Private scope:**
@@ -19834,17 +17065,14 @@ console.log(myModule.privateVar);      // undefined
 
 ---
 
-<a id="toc-368-recursion"></a>
 ### 3.6.8 Recursion
 
-<a id="toc-definition-9"></a>
 ### Definition
 
 A **recursive function** calls itself.
 
 ---
 
-<a id="toc-basic-recursion"></a>
 ### Basic Recursion
 
 ```javascript
@@ -19863,7 +17091,6 @@ console.log(factorial(5));  // 120
 
 ---
 
-<a id="toc-recursive-patterns"></a>
 ### Recursive Patterns
 
 **Counting:**
@@ -19926,7 +17153,6 @@ console.log(flatten(nested));  // [1, 2, 3, 4, 5]
 
 ---
 
-<a id="toc-tail-call-optimization-tco"></a>
 ### Tail Call Optimization (TCO)
 
 **Tail call:** Recursive call is the last operation in the function.
@@ -19953,7 +17179,6 @@ function factorial(n, accumulator = 1) {
 
 ---
 
-<a id="toc-mutual-recursion"></a>
 ### Mutual Recursion
 
 **Functions call each other:**
@@ -19975,7 +17200,6 @@ console.log(isOdd(7));   // true
 
 ---
 
-<a id="toc-stack-overflow"></a>
 ### Stack Overflow
 
 **Recursion can exhaust call stack:**
@@ -20012,17 +17236,14 @@ console.log(trampoline(() => factorial(10000)));  // Works!
 
 ---
 
-<a id="toc-369-memoization"></a>
 ### 3.6.9 Memoization
 
-<a id="toc-definition-10"></a>
 ### Definition
 
 **Memoization** caches function results to avoid redundant computation.
 
 ---
 
-<a id="toc-basic-memoization"></a>
 ### Basic Memoization
 
 ```javascript
@@ -20056,7 +17277,6 @@ slowSquare(5);  // "Returning cached result" (instant)
 
 ---
 
-<a id="toc-memoizing-recursive-functions"></a>
 ### Memoizing Recursive Functions
 
 ```javascript
@@ -20082,7 +17302,6 @@ Each value computed only once, then cached
 
 ---
 
-<a id="toc-limitations"></a>
 ### Limitations
 
 **1. Only works with pure functions** (same input → same output)
@@ -20109,7 +17328,6 @@ fn({b: 2, a: 1});  // Same object, different JSON strings!
 
 ---
 
-<a id="toc-advanced-memoization"></a>
 ### Advanced Memoization
 
 **LRU Cache (Least Recently Used):**
@@ -20145,10 +17363,8 @@ function memoizeLRU(fn, maxSize = 100) {
 
 ---
 
-<a id="toc-3610-pure-functions-and-side-effects"></a>
 ### 3.6.10 Pure Functions and Side Effects
 
-<a id="toc-pure-functions"></a>
 ### Pure Functions
 
 A **pure function**:
@@ -20173,7 +17389,6 @@ function multiply(arr, factor) {
 
 ---
 
-<a id="toc-impure-functions"></a>
 ### Impure Functions
 
 **Depend on external state:**
@@ -20210,7 +17425,6 @@ function fetchData(url) {
 
 ---
 
-<a id="toc-benefits-of-pure-functions"></a>
 ### Benefits of Pure Functions
 
 1. **Predictable** (same input → same output)
@@ -20231,7 +17445,6 @@ const transform = compose(square, double, increment);
 
 ---
 
-<a id="toc-managing-side-effects"></a>
 ### Managing Side Effects
 
 **Isolate side effects:**
@@ -20254,7 +17467,6 @@ displayTotal(total);  // Impure, but isolated
 
 ---
 
-<a id="toc-immutability"></a>
 ### Immutability
 
 **Don't mutate, create new values:**
@@ -20274,10 +17486,8 @@ function addItem(cart, item) {
 
 ---
 
-<a id="toc-summary-2"></a>
 ## Summary
 
-<a id="toc-scope-and-closures"></a>
 ### Scope and Closures
 
 - **Lexical scope**: Variable scope determined at write-time
@@ -20287,7 +17497,6 @@ function addItem(cart, item) {
 - **Use cases**: Private data, factories, memoization, modules
 - **Memory**: Closures retain references, can cause leaks
 
-<a id="toc-advanced-concepts"></a>
 ### Advanced Concepts
 
 - **Higher-order functions**: Take/return functions
@@ -20301,14 +17510,11 @@ function addItem(cart, item) {
 
 ---
 
-<a id="toc-37-generator-functions"></a>
 ## 3.7 Generator Functions
 
 
-<a id="toc-371-function-syntax"></a>
 ### 3.7.1 `function*` Syntax
 
-<a id="toc-basic-syntax-15"></a>
 ### Basic Syntax
 
 ```javascript
@@ -20332,7 +17538,6 @@ function*gen() { }    // Valid (no space)
 
 ---
 
-<a id="toc-generator-as-method"></a>
 ### Generator as Method
 
 ```javascript
@@ -20348,7 +17553,6 @@ const gen = obj.generator();
 
 ---
 
-<a id="toc-generator-as-class-method"></a>
 ### Generator as Class Method
 
 ```javascript
@@ -20371,7 +17575,6 @@ const gen2 = MyClass.staticGenerator();
 
 ---
 
-<a id="toc-generator-vs-regular-function"></a>
 ### Generator vs Regular Function
 
 ```javascript
@@ -20403,10 +17606,8 @@ gen.next();  // Logs "end", returns { value: "done", done: true }
 
 ---
 
-<a id="toc-372-yield-keyword"></a>
 ### 3.7.2 `yield` Keyword
 
-<a id="toc-basic-usage-2"></a>
 ### Basic Usage
 
 **`yield` produces a value and pauses execution:**
@@ -20428,7 +17629,6 @@ console.log(gen.next());  // { value: undefined, done: true }
 
 ---
 
-<a id="toc-yield-is-an-expression"></a>
 ### `yield` is an Expression
 
 **`yield` can receive values:**
@@ -20459,7 +17659,6 @@ console.log(gen.next("B"));   // Logs "Received: B", { value: "done", done: true
 
 ---
 
-<a id="toc-yield-in-loops"></a>
 ### `yield` in Loops
 
 ```javascript
@@ -20479,7 +17678,6 @@ for (let value of gen) {
 
 ---
 
-<a id="toc-multiple-yield-statements"></a>
 ### Multiple `yield` Statements
 
 ```javascript
@@ -20504,10 +17702,8 @@ console.log(fib.next().value);  // 5
 
 ---
 
-<a id="toc-373-yield-delegation"></a>
 ### 3.7.3 `yield*` Delegation
 
-<a id="toc-delegating-to-another-generator"></a>
 ### Delegating to Another Generator
 
 **`yield*` delegates to another iterable:**
@@ -20531,7 +17727,6 @@ console.log([...gen]);  // ["a", 1, 2, "b"]
 
 ---
 
-<a id="toc-delegating-to-arrays"></a>
 ### Delegating to Arrays
 
 ```javascript
@@ -20546,7 +17741,6 @@ console.log([...gen()]);  // [1, 2, 3, 4, 5]
 
 ---
 
-<a id="toc-delegating-to-strings"></a>
 ### Delegating to Strings
 
 ```javascript
@@ -20559,7 +17753,6 @@ console.log([...gen()]);  // ["h", "e", "l", "l", "o"]
 
 ---
 
-<a id="toc-nested-delegation"></a>
 ### Nested Delegation
 
 ```javascript
@@ -20586,7 +17779,6 @@ console.log([...outer()]);
 
 ---
 
-<a id="toc-return-value-from-delegation"></a>
 ### Return Value from Delegation
 
 **`yield*` returns the delegated generator's return value:**
@@ -20614,10 +17806,8 @@ console.log(gen.next());  // { value: undefined, done: true }
 
 ---
 
-<a id="toc-374-generator-methods"></a>
 ### 3.7.4 Generator Methods
 
-<a id="toc-nextvalue-method"></a>
 ### `next(value)` Method
 
 **Advance generator and optionally pass value:**
@@ -20654,7 +17844,6 @@ g.next("ignored");  // Value ignored (no yield to receive it yet)
 
 ---
 
-<a id="toc-returnvalue-method"></a>
 ### `return(value)` Method
 
 **Terminate generator and return value:**
@@ -20693,7 +17882,6 @@ console.log(g.return(0)); // Logs "Cleanup", { value: 0, done: true }
 
 ---
 
-<a id="toc-throwerror-method"></a>
 ### `throw(error)` Method
 
 **Throw error inside generator:**
@@ -20735,10 +17923,8 @@ g.throw(new Error("oops"));  // Error propagates to caller
 
 ---
 
-<a id="toc-375-iterating-generators"></a>
 ### 3.7.5 Iterating Generators
 
-<a id="toc-manual-iteration"></a>
 ### Manual Iteration
 
 ```javascript
@@ -20760,7 +17946,6 @@ while (!result.done) {
 
 ---
 
-<a id="toc-forof-loop"></a>
 ### `for...of` Loop
 
 **Automatically iterates until `done: true`:**
@@ -20781,7 +17966,6 @@ for (let value of gen()) {
 
 ---
 
-<a id="toc-spread-operator-1"></a>
 ### Spread Operator
 
 ```javascript
@@ -20797,7 +17981,6 @@ console.log(arr);  // [1, 2, 3]
 
 ---
 
-<a id="toc-destructuring-1"></a>
 ### Destructuring
 
 ```javascript
@@ -20813,7 +17996,6 @@ console.log(a, b, c);  // 1, 2, 3
 
 ---
 
-<a id="toc-arrayfrom"></a>
 ### `Array.from()`
 
 ```javascript
@@ -20829,10 +18011,8 @@ console.log(arr);  // [1, 2, 3]
 
 ---
 
-<a id="toc-376-use-cases"></a>
 ### 3.7.6 Use Cases
 
-<a id="toc-lazy-evaluation"></a>
 ### Lazy Evaluation
 
 **Generate values on-demand:**
@@ -20861,7 +18041,6 @@ console.log(first10);
 
 ---
 
-<a id="toc-infinite-sequences"></a>
 ### Infinite Sequences
 
 ```javascript
@@ -20904,7 +18083,6 @@ console.log(take(10, naturalNumbers()));
 
 ---
 
-<a id="toc-custom-iterables-1"></a>
 ### Custom Iterables
 
 ```javascript
@@ -20934,7 +18112,6 @@ console.log([...range]);  // [0, 2, 4, 6, 8]
 
 ---
 
-<a id="toc-tree-traversal"></a>
 ### Tree Traversal
 
 ```javascript
@@ -20969,7 +18146,6 @@ console.log([...tree.traverse()]);
 
 ---
 
-<a id="toc-state-machines"></a>
 ### State Machines
 
 ```javascript
@@ -20991,7 +18167,6 @@ console.log(light.next().value);  // "green"
 
 ---
 
-<a id="toc-pulling-data-pull-based"></a>
 ### Pulling Data (Pull-Based)
 
 ```javascript
@@ -21014,7 +18189,6 @@ const response2 = fetcher.next().value;  // Fetch page 2
 
 ---
 
-<a id="toc-cooperative-multitasking"></a>
 ### Cooperative Multitasking
 
 ```javascript
@@ -21058,7 +18232,6 @@ runTasks(task1, task2);
 
 ---
 
-<a id="toc-377-generator-best-practices"></a>
 ### 3.7.7 Generator Best Practices
 
 1. **Use for lazy evaluation** (don't compute everything upfront)
@@ -21072,14 +18245,11 @@ runTasks(task1, task2);
 ---
 
 
-<a id="toc-38-async-functions"></a>
 ## 3.8 Async Functions
 
 
-<a id="toc-381-async-keyword"></a>
 ### 3.8.1 `async` Keyword
 
-<a id="toc-basic-syntax-16"></a>
 ### Basic Syntax
 
 ```javascript
@@ -21108,7 +18278,6 @@ getValue().then(value => console.log(value));  // 42
 
 ---
 
-<a id="toc-async-function-expressions"></a>
 ### Async Function Expressions
 
 ```javascript
@@ -21123,7 +18292,6 @@ const getData = async () => {
 
 ---
 
-<a id="toc-async-methods"></a>
 ### Async Methods
 
 ```javascript
@@ -21146,7 +18314,6 @@ class MyClass {
 
 ---
 
-<a id="toc-throwing-errors"></a>
 ### Throwing Errors
 
 **Throwing in async function creates rejected promise:**
@@ -21168,10 +18335,8 @@ function failingFunction() {
 
 ---
 
-<a id="toc-382-await-keyword"></a>
 ### 3.8.2 `await` Keyword
 
-<a id="toc-basic-usage-3"></a>
 ### Basic Usage
 
 **`await` pauses execution until promise settles:**
@@ -21198,7 +18363,6 @@ function fetchUser() {
 
 ---
 
-<a id="toc-await-unwraps-promises"></a>
 ### `await` Unwraps Promises
 
 ```javascript
@@ -21213,7 +18377,6 @@ example();
 
 ---
 
-<a id="toc-multiple-await-statements"></a>
 ### Multiple `await` Statements
 
 **Sequential (one after another):**
@@ -21248,7 +18411,6 @@ async function fetchUsers() {
 
 ---
 
-<a id="toc-await-only-in-async-functions"></a>
 ### `await` Only in Async Functions
 
 ```javascript
@@ -21267,7 +18429,6 @@ async function asyncFunc() {
 
 ---
 
-<a id="toc-await-with-non-promises"></a>
 ### `await` with Non-Promises
 
 **Works with any value (wraps in resolved promise):**
@@ -21284,10 +18445,8 @@ async function example() {
 
 ---
 
-<a id="toc-383-error-handling"></a>
 ### 3.8.3 Error Handling
 
-<a id="toc-trycatch"></a>
 ### `try...catch`
 
 **Handle rejected promises:**
@@ -21314,7 +18473,6 @@ fetchUser(1);
 
 ---
 
-<a id="toc-multiple-try-catch-blocks"></a>
 ### Multiple Try-Catch Blocks
 
 ```javascript
@@ -21341,7 +18499,6 @@ async function complexOperation() {
 
 ---
 
-<a id="toc-catch-on-promises"></a>
 ### `.catch()` on Promises
 
 **Mix await with promise methods:**
@@ -21361,7 +18518,6 @@ async function fetchUser(id) {
 
 ---
 
-<a id="toc-uncaught-errors"></a>
 ### Uncaught Errors
 
 **Errors propagate to returned promise:**
@@ -21388,7 +18544,6 @@ async function caller() {
 
 ---
 
-<a id="toc-finally-block-1"></a>
 ### `finally` Block
 
 ```javascript
@@ -21412,10 +18567,8 @@ async function fetchWithCleanup() {
 
 ---
 
-<a id="toc-384-top-level-await"></a>
 ### 3.8.4 Top-Level `await`
 
-<a id="toc-es2022-feature"></a>
 ### ES2022 Feature
 
 **Use `await` at module top level:**
@@ -21434,7 +18587,6 @@ console.log(config);  // Available immediately
 
 ---
 
-<a id="toc-dynamic-imports"></a>
 ### Dynamic Imports
 
 ```javascript
@@ -21449,7 +18601,6 @@ if (condition) {
 
 ---
 
-<a id="toc-module-initialization"></a>
 ### Module Initialization
 
 ```javascript
@@ -21466,7 +18617,6 @@ import db from "./database.js";
 
 ---
 
-<a id="toc-limitations-1"></a>
 ### Limitations
 
 **Only in ES modules:**
@@ -21498,7 +18648,6 @@ const data = await fetch("/api/data");  // SyntaxError
 
 ---
 
-<a id="toc-load-order-dependencies"></a>
 ### Load Order Dependencies
 
 **Modules with top-level await block importing modules:**
@@ -21521,10 +18670,8 @@ console.log(slowData, fastData);
 
 ---
 
-<a id="toc-385-async-generators"></a>
 ### 3.8.5 Async Generators
 
-<a id="toc-async-function-syntax"></a>
 ### `async function*` Syntax
 
 **Combine async and generator:**
@@ -21549,7 +18696,6 @@ async function* asyncGenerator() {
 
 ---
 
-<a id="toc-async-iteration"></a>
 ### Async Iteration
 
 ```javascript
@@ -21573,7 +18719,6 @@ async function* fetchPages() {
 
 ---
 
-<a id="toc-real-world-example-streaming"></a>
 ### Real-World Example: Streaming
 
 ```javascript
@@ -21614,7 +18759,6 @@ async function* readLines(url) {
 
 ---
 
-<a id="toc-async-generator-methods"></a>
 ### Async Generator Methods
 
 **Similar to regular generators:**
@@ -21653,7 +18797,6 @@ await eg.throw(new Error("oops"));
 
 ---
 
-<a id="toc-delegating-with-yield"></a>
 ### Delegating with `yield*`
 
 ```javascript
@@ -21678,10 +18821,8 @@ async function* outer() {
 
 ---
 
-<a id="toc-386-async-patterns"></a>
 ### 3.8.6 Async Patterns
 
-<a id="toc-sequential-execution"></a>
 ### Sequential Execution
 
 ```javascript
@@ -21695,7 +18836,6 @@ async function sequential() {
 
 ---
 
-<a id="toc-parallel-execution"></a>
 ### Parallel Execution
 
 ```javascript
@@ -21712,7 +18852,6 @@ async function parallel() {
 
 ---
 
-<a id="toc-race-conditions"></a>
 ### Race Conditions
 
 ```javascript
@@ -21729,7 +18868,6 @@ async function fastest() {
 
 ---
 
-<a id="toc-retry-logic"></a>
 ### Retry Logic
 
 ```javascript
@@ -21752,7 +18890,6 @@ const data = await retry(() => fetch("/api/data").then(r => r.json()));
 
 ---
 
-<a id="toc-timeout"></a>
 ### Timeout
 
 ```javascript
@@ -21777,7 +18914,6 @@ async function fetchWithTimeout() {
 
 ---
 
-<a id="toc-cancellation"></a>
 ### Cancellation
 
 ```javascript
@@ -21804,7 +18940,6 @@ try {
 
 ---
 
-<a id="toc-387-best-practices"></a>
 ### 3.8.7 Best Practices
 
 1. **Use `async`/`await` over promise chains** (more readable)
@@ -21818,10 +18953,8 @@ try {
 
 ---
 
-<a id="toc-388-common-pitfalls"></a>
 ### 3.8.8 Common Pitfalls
 
-<a id="toc-forgetting-await"></a>
 ### Forgetting `await`
 
 ```javascript
@@ -21841,7 +18974,6 @@ async function fetchUser() {
 
 ---
 
-<a id="toc-sequential-instead-of-parallel"></a>
 ### Sequential Instead of Parallel
 
 ```javascript
@@ -21866,7 +18998,6 @@ async function fast() {
 
 ---
 
-<a id="toc-not-handling-rejections"></a>
 ### Not Handling Rejections
 
 ```javascript
@@ -21893,10 +19024,8 @@ async function good() {
 
 ---
 
-<a id="toc-summary-3"></a>
 ## Summary
 
-<a id="toc-generators"></a>
 ### Generators
 
 - **`function*` syntax** creates generator functions
@@ -21906,7 +19035,6 @@ async function good() {
 - **Use cases**: lazy evaluation, infinite sequences, custom iterables
 - **Iteration**: `for...of`, spread, destructuring
 
-<a id="toc-async-functions"></a>
 ### Async Functions
 
 - **`async`** makes function return Promise
@@ -21920,7 +19048,6 @@ async function good() {
 ---
 
 
-<a id="toc-39-functions-summary"></a>
 ## 3.9 Functions Summary
 
 | Concept | Key Points |
@@ -21934,7 +19061,6 @@ async function good() {
 | **Generators** | Pause/resume with `yield`; return iterators |
 | **Async Functions** | `async`/`await` for promise-based code |
 
-<a id="toc-best-practices-5"></a>
 ### Best Practices
 
 1. **Use arrow functions** for callbacks and short functions
@@ -21948,10 +19074,8 @@ async function good() {
 
 ---
 
-<a id="toc-mastery-check-1"></a>
 ## Mastery Check
 
-<a id="toc-quiz-questions-1"></a>
 ### Quiz Questions
 
 **Q1:** What does this output?
@@ -22027,7 +19151,6 @@ fetchData().then(console.log).catch(console.error);
 Logs `"Error!"` via `catch`. The `await` on a rejected promise throws, which rejects the async function's returned promise. Without try-catch inside, the error propagates.
 </details>
 
-<a id="toc-coding-challenges-1"></a>
 ### Coding Challenges
 
 **Challenge 1:** Implement `memoize(fn)` that caches function results based on arguments.
@@ -22119,27 +19242,21 @@ const result = await retry(fetchData, 3);
 Functions are JavaScript's primary abstraction mechanism. With closures, higher-order patterns, generators, and async/await mastered, you're ready to tackle objects and prototypes.
 
 
-<a id="toc-04-objectsmd"></a>
 # 04-Objects.md
 
-<a id="toc-4-objects"></a>
 # 4 Objects
 
 Objects are JavaScript's fundamental data structure—collections of key-value pairs that can store data and behavior. This chapter covers object creation, property manipulation, built-in methods, destructuring, spread/rest operations, and the critical `this` keyword.
 
 ---
 
-<a id="toc-4-objects-and-object-oriented-programming"></a>
 # 4. Objects and Object-Oriented Programming
 
-<a id="toc-41-object-fundamentals"></a>
 ## 4.1 Object Fundamentals
 
 
-<a id="toc-411-object-literals"></a>
 ### 4.1.1 Object Literals
 
-<a id="toc-basic-syntax-17"></a>
 ### Basic Syntax
 
 **Most common way to create objects:**
@@ -22153,7 +19270,6 @@ const obj = {
 
 ---
 
-<a id="toc-property-types"></a>
 ### Property Types
 
 **Various value types:**
@@ -22192,7 +19308,6 @@ const person = {
 
 ---
 
-<a id="toc-property-keys"></a>
 ### Property Keys
 
 **Strings and symbols:**
@@ -22220,7 +19335,6 @@ console.log(obj["123"]);         // "numeric" (same)
 
 ---
 
-<a id="toc-trailing-commas"></a>
 ### Trailing Commas
 
 **Allowed (and recommended):**
@@ -22235,7 +19349,6 @@ const obj = {
 
 ---
 
-<a id="toc-empty-objects"></a>
 ### Empty Objects
 
 ```javascript
@@ -22247,10 +19360,8 @@ console.log(Object.keys(empty).length);  // 0
 
 ---
 
-<a id="toc-412-object-creation-methods"></a>
 ### 4.1.2 Object Creation Methods
 
-<a id="toc-new-object"></a>
 ### `new Object()`
 
 **Constructor syntax:**
@@ -22276,7 +19387,6 @@ const obj2 = { name: "Alice" };
 
 ---
 
-<a id="toc-objectcreate"></a>
 ### `Object.create()`
 
 **Create object with specific prototype:**
@@ -22306,7 +19416,6 @@ console.log(obj.__proto__); // undefined
 
 ---
 
-<a id="toc-objectcreate-with-property-descriptors"></a>
 ### `Object.create()` with Property Descriptors
 
 ```javascript
@@ -22335,7 +19444,6 @@ console.log(obj.age);   // 30 (not writable, silent failure)
 
 ---
 
-<a id="toc-constructor-functions-pre-es6"></a>
 ### Constructor Functions (Pre-ES6)
 
 ```javascript
@@ -22356,10 +19464,8 @@ console.log(alice.greet());  // "Hello, I'm Alice"
 
 ---
 
-<a id="toc-413-property-access"></a>
 ### 4.1.3 Property Access
 
-<a id="toc-dot-notation"></a>
 ### Dot Notation
 
 **Standard access for valid identifiers:**
@@ -22396,7 +19502,6 @@ const obj = {
 
 ---
 
-<a id="toc-bracket-notation"></a>
 ### Bracket Notation
 
 **Access any property (even with special characters):**
@@ -22442,7 +19547,6 @@ console.log(obj["user123"]);// "Alice"
 
 ---
 
-<a id="toc-optional-chaining"></a>
 ### Optional Chaining (`?.`)
 
 **Safe property access:**
@@ -22497,7 +19601,6 @@ console.log(count);  // 0 (count++ not evaluated)
 
 ---
 
-<a id="toc-nested-property-access"></a>
 ### Nested Property Access
 
 ```javascript
@@ -22522,10 +19625,8 @@ console.log(user.profile["personal"].name);  // "Alice"
 
 ---
 
-<a id="toc-414-computed-property-names"></a>
 ### 4.1.4 Computed Property Names
 
-<a id="toc-basic-syntax-18"></a>
 ### Basic Syntax
 
 **Compute property names in object literals:**
@@ -22543,7 +19644,6 @@ console.log(obj[key]);  // "Alice"
 
 ---
 
-<a id="toc-expressions"></a>
 ### Expressions
 
 **Any expression:**
@@ -22565,7 +19665,6 @@ console.log(obj[3]);       // "three"
 
 ---
 
-<a id="toc-function-calls-1"></a>
 ### Function Calls
 
 ```javascript
@@ -22582,7 +19681,6 @@ console.log(obj.dynamicKey);  // "value"
 
 ---
 
-<a id="toc-symbol-keys"></a>
 ### Symbol Keys
 
 ```javascript
@@ -22605,7 +19703,6 @@ console.log(Object.getOwnPropertySymbols(user));  // [Symbol(id)]
 
 ---
 
-<a id="toc-template-literals"></a>
 ### Template Literals
 
 ```javascript
@@ -22623,7 +19720,6 @@ handlers.user_create();  // "Creating user"
 
 ---
 
-<a id="toc-method-names"></a>
 ### Method Names
 
 ```javascript
@@ -22642,10 +19738,8 @@ console.log(person.greet());  // "Hello, I'm Alice"
 
 ---
 
-<a id="toc-415-property-shorthand"></a>
 ### 4.1.5 Property Shorthand
 
-<a id="toc-basic-shorthand"></a>
 ### Basic Shorthand
 
 **When variable name matches property name:**
@@ -22671,7 +19765,6 @@ console.log(person2);  // { name: "Alice", age: 30 }
 
 ---
 
-<a id="toc-mixed-syntax"></a>
 ### Mixed Syntax
 
 ```javascript
@@ -22686,7 +19779,6 @@ const person = {
 
 ---
 
-<a id="toc-function-returns"></a>
 ### Function Returns
 
 ```javascript
@@ -22705,7 +19797,6 @@ console.log(user);
 
 ---
 
-<a id="toc-destructuring-with-shorthand"></a>
 ### Destructuring with Shorthand
 
 ```javascript
@@ -22719,10 +19810,8 @@ const person = {
 
 ---
 
-<a id="toc-416-method-shorthand"></a>
 ### 4.1.6 Method Shorthand
 
-<a id="toc-basic-syntax-19"></a>
 ### Basic Syntax
 
 **Concise method definition:**
@@ -22745,7 +19834,6 @@ const obj2 = {
 
 ---
 
-<a id="toc-this-binding"></a>
 ### `this` Binding
 
 **Method shorthand has normal `this` (not arrow):**
@@ -22767,7 +19855,6 @@ console.log(greet());  // "Hello, I'm undefined" (lost this)
 
 ---
 
-<a id="toc-generator-methods"></a>
 ### Generator Methods
 
 ```javascript
@@ -22785,7 +19872,6 @@ console.log([...gen]);  // [1, 2, 3]
 
 ---
 
-<a id="toc-async-methods-1"></a>
 ### Async Methods
 
 ```javascript
@@ -22801,7 +19887,6 @@ obj.fetchData().then(data => console.log(data));
 
 ---
 
-<a id="toc-async-generator-methods-1"></a>
 ### Async Generator Methods
 
 ```javascript
@@ -22821,7 +19906,6 @@ const obj = {
 
 ---
 
-<a id="toc-computed-method-names"></a>
 ### Computed Method Names
 
 ```javascript
@@ -22846,14 +19930,11 @@ console.log(person.greetFormal());  // "Good day, I am Alice"
 ---
 
 
-<a id="toc-42-properties"></a>
 ## 4.2 Properties
 
 
-<a id="toc-421-data-properties"></a>
 ### 4.2.1 Data Properties
 
-<a id="toc-definition-11"></a>
 ### Definition
 
 **Properties that hold values:**
@@ -22867,7 +19948,6 @@ const person = {
 
 ---
 
-<a id="toc-default-attributes"></a>
 ### Default Attributes
 
 **When created via assignment or literal:**
@@ -22884,7 +19964,6 @@ const obj = { key: "value" };
 
 ---
 
-<a id="toc-reading-and-writing"></a>
 ### Reading and Writing
 
 ```javascript
@@ -22906,7 +19985,6 @@ console.log(person.age);  // 30
 
 ---
 
-<a id="toc-deleting"></a>
 ### Deleting
 
 ```javascript
@@ -22922,10 +20000,8 @@ console.log("age" in person);  // false
 
 ---
 
-<a id="toc-422-accessor-properties"></a>
 ### 4.2.2 Accessor Properties
 
-<a id="toc-getters-and-setters"></a>
 ### Getters and Setters
 
 **Computed properties:**
@@ -22958,7 +20034,6 @@ console.log(person.fullName);   // "Bob Jones"
 
 ---
 
-<a id="toc-read-only-properties-getter-only"></a>
 ### Read-Only Properties (Getter Only)
 
 ```javascript
@@ -22978,7 +20053,6 @@ console.log(obj.value);  // Still 42
 
 ---
 
-<a id="toc-write-only-properties-setter-only"></a>
 ### Write-Only Properties (Setter Only)
 
 ```javascript
@@ -22999,7 +20073,6 @@ console.log(logger._logs);      // ["Error occurred"]
 
 ---
 
-<a id="toc-validation-in-setters"></a>
 ### Validation in Setters
 
 ```javascript
@@ -23030,7 +20103,6 @@ person.age = "30";   // TypeError
 
 ---
 
-<a id="toc-computed-getterssetters"></a>
 ### Computed Getters/Setters
 
 ```javascript
@@ -23060,10 +20132,8 @@ console.log(rectangle.area);    // 400
 
 ---
 
-<a id="toc-423-property-attributes"></a>
 ### 4.2.3 Property Attributes
 
-<a id="toc-four-attributes"></a>
 ### Four Attributes
 
 **Data properties:**
@@ -23082,7 +20152,6 @@ console.log(rectangle.area);    // 400
 
 ---
 
-<a id="toc-default-values"></a>
 ### Default Values
 
 **When created via assignment:**
@@ -23115,10 +20184,8 @@ Object.defineProperty(obj, "prop", {
 
 ---
 
-<a id="toc-424-property-descriptors"></a>
 ### 4.2.4 Property Descriptors
 
-<a id="toc-descriptor-objects"></a>
 ### Descriptor Objects
 
 **Describe property attributes:**
@@ -23143,7 +20210,6 @@ Object.defineProperty(obj, "prop", {
 
 ---
 
-<a id="toc-cannot-mix-data-and-accessor"></a>
 ### Cannot Mix Data and Accessor
 
 ```javascript
@@ -23157,10 +20223,8 @@ Object.defineProperty(obj, "prop", {
 
 ---
 
-<a id="toc-425-objectdefineproperty"></a>
 ### 4.2.5 `Object.defineProperty()`
 
-<a id="toc-basic-syntax-20"></a>
 ### Basic Syntax
 
 ```javascript
@@ -23169,7 +20233,6 @@ Object.defineProperty(obj, propName, descriptor)
 
 ---
 
-<a id="toc-defining-data-property"></a>
 ### Defining Data Property
 
 ```javascript
@@ -23187,7 +20250,6 @@ console.log(person.name);  // "Alice"
 
 ---
 
-<a id="toc-read-only-property"></a>
 ### Read-Only Property
 
 ```javascript
@@ -23211,7 +20273,6 @@ console.log(obj.constant);  // Still 42
 
 ---
 
-<a id="toc-non-enumerable-property"></a>
 ### Non-Enumerable Property
 
 ```javascript
@@ -23241,7 +20302,6 @@ console.log(Object.getOwnPropertyNames(obj));
 
 ---
 
-<a id="toc-non-configurable-property"></a>
 ### Non-Configurable Property
 
 ```javascript
@@ -23268,7 +20328,6 @@ obj.permanent = "new value";  // OK
 
 ---
 
-<a id="toc-defining-accessor-property"></a>
 ### Defining Accessor Property
 
 ```javascript
@@ -23295,7 +20354,6 @@ console.log(obj.value);  // Logs "Getting value", then 42
 
 ---
 
-<a id="toc-modifying-existing-property"></a>
 ### Modifying Existing Property
 
 ```javascript
@@ -23314,10 +20372,8 @@ console.log(obj.name);  // Still "Alice"
 
 ---
 
-<a id="toc-426-objectdefineproperties"></a>
 ### 4.2.6 `Object.defineProperties()`
 
-<a id="toc-define-multiple-properties"></a>
 ### Define Multiple Properties
 
 ```javascript
@@ -23359,7 +20415,6 @@ console.log(obj.email);  // "alice@example.com"
 
 ---
 
-<a id="toc-creating-immutable-objects"></a>
 ### Creating Immutable Objects
 
 ```javascript
@@ -23387,10 +20442,8 @@ console.log(constants.PI);  // Still 3.14159
 
 ---
 
-<a id="toc-427-objectgetownpropertydescriptor"></a>
 ### 4.2.7 `Object.getOwnPropertyDescriptor()`
 
-<a id="toc-get-single-property-descriptor"></a>
 ### Get Single Property Descriptor
 
 ```javascript
@@ -23412,7 +20465,6 @@ console.log(nameDesc);
 
 ---
 
-<a id="toc-inspecting-accessor-properties"></a>
 ### Inspecting Accessor Properties
 
 ```javascript
@@ -23441,7 +20493,6 @@ console.log(desc);
 
 ---
 
-<a id="toc-non-existent-property"></a>
 ### Non-Existent Property
 
 ```javascript
@@ -23454,7 +20505,6 @@ console.log(desc);  // undefined
 
 ---
 
-<a id="toc-inherited-properties"></a>
 ### Inherited Properties
 
 ```javascript
@@ -23472,10 +20522,8 @@ console.log(Object.getOwnPropertyDescriptor(obj, "inherited"));
 
 ---
 
-<a id="toc-428-objectgetownpropertydescriptors"></a>
 ### 4.2.8 `Object.getOwnPropertyDescriptors()`
 
-<a id="toc-get-all-property-descriptors"></a>
 ### Get All Property Descriptors
 
 ```javascript
@@ -23515,7 +20563,6 @@ console.log(descriptors);
 
 ---
 
-<a id="toc-cloning-objects-with-accessors"></a>
 ### Cloning Objects with Accessors
 
 **Problem with `Object.assign` (doesn't preserve getters/setters):**
@@ -23552,7 +20599,6 @@ console.log(Object.getOwnPropertyDescriptor(clone2, "value"));
 
 ---
 
-<a id="toc-shallow-clone-utility"></a>
 ### Shallow Clone Utility
 
 ```javascript
@@ -23580,10 +20626,8 @@ console.log(clone.greeting);  // "Hello, Bob"
 
 ---
 
-<a id="toc-429-property-attribute-interactions"></a>
 ### 4.2.9 Property Attribute Interactions
 
-<a id="toc-writable-and-configurable"></a>
 ### `writable` and `configurable`
 
 ```javascript
@@ -23616,7 +20660,6 @@ console.log(obj.prop1);  // 3
 
 ---
 
-<a id="toc-configurable-false-restrictions"></a>
 ### `configurable: false` Restrictions
 
 **Cannot change most attributes:**
@@ -23669,7 +20712,6 @@ Object.defineProperty(obj, "prop", {
 
 ---
 
-<a id="toc-enumerable-effects"></a>
 ### `enumerable` Effects
 
 ```javascript
@@ -23709,10 +20751,8 @@ console.log(Object.getOwnPropertyNames(obj));
 
 ---
 
-<a id="toc-4210-common-patterns"></a>
 ### 4.2.10 Common Patterns
 
-<a id="toc-private-properties-convention"></a>
 ### Private Properties (Convention)
 
 ```javascript
@@ -23736,7 +20776,6 @@ console.log(person._name);  // "Alice" (not truly private)
 
 ---
 
-<a id="toc-truly-private-with-symbols"></a>
 ### Truly Private with Symbols
 
 ```javascript
@@ -23766,7 +20805,6 @@ console.log(Object.getOwnPropertySymbols(person));  // [Symbol(name)]
 
 ---
 
-<a id="toc-truly-private-with-weakmap"></a>
 ### Truly Private with WeakMap
 
 ```javascript
@@ -23794,7 +20832,6 @@ console.log(person.name);  // "Alice"
 
 ---
 
-<a id="toc-immutable-properties"></a>
 ### Immutable Properties
 
 ```javascript
@@ -23824,7 +20861,6 @@ console.log(config.apiUrl);  // Still "https://api.example.com"
 
 ---
 
-<a id="toc-lazy-properties"></a>
 ### Lazy Properties
 
 ```javascript
@@ -23855,7 +20891,6 @@ console.log(obj.expensive);  // Returns cached value (no log)
 
 ---
 
-<a id="toc-self-defining-properties"></a>
 ### Self-Defining Properties
 
 ```javascript
@@ -23885,10 +20920,8 @@ console.log(obj.expensive);  // Just returns value
 
 ---
 
-<a id="toc-summary-4"></a>
 ## Summary
 
-<a id="toc-object-creation"></a>
 ### Object Creation
 
 - **Object literals**: `{ key: value }`
@@ -23896,7 +20929,6 @@ console.log(obj.expensive);  // Just returns value
 - **`Object.create(proto)`**: With specific prototype
 - **Constructor functions**: Pre-ES6 pattern
 
-<a id="toc-property-access-1"></a>
 ### Property Access
 
 - **Dot notation**: `obj.prop`
@@ -23906,19 +20938,16 @@ console.log(obj.expensive);  // Just returns value
 - **Shorthand**: `{ name, age }`
 - **Method shorthand**: `{ method() { } }`
 
-<a id="toc-property-types-1"></a>
 ### Property Types
 
 - **Data properties**: Hold values
 - **Accessor properties**: Getters/setters
 
-<a id="toc-property-attributes"></a>
 ### Property Attributes
 
 - **Data**: `value`, `writable`, `enumerable`, `configurable`
 - **Accessor**: `get`, `set`, `enumerable`, `configurable`
 
-<a id="toc-descriptor-methods"></a>
 ### Descriptor Methods
 
 - **`Object.defineProperty()`**: Define single property
@@ -23926,7 +20955,6 @@ console.log(obj.expensive);  // Just returns value
 - **`Object.getOwnPropertyDescriptor()`**: Get single descriptor
 - **`Object.getOwnPropertyDescriptors()`**: Get all descriptors
 
-<a id="toc-key-patterns"></a>
 ### Key Patterns
 
 - **Private properties**: Symbols, WeakMap, or `#` (classes)
@@ -23937,14 +20965,11 @@ console.log(obj.expensive);  // Just returns value
 
 ---
 
-<a id="toc-43-object-methods"></a>
 ## 4.3 Object Methods
 
 
-<a id="toc-431-enumeration-methods"></a>
 ### 4.3.1 Enumeration Methods
 
-<a id="toc-objectkeys"></a>
 ### `Object.keys()`
 
 **Returns array of own enumerable property names:**
@@ -24042,7 +21067,6 @@ console.log(Object.keys(obj).length);  // 3
 
 ---
 
-<a id="toc-objectvalues"></a>
 ### `Object.values()`
 
 **Returns array of own enumerable property values:**
@@ -24104,7 +21128,6 @@ if (Object.values(user).includes("admin")) {
 
 ---
 
-<a id="toc-objectentries"></a>
 ### `Object.entries()`
 
 **Returns array of [key, value] pairs:**
@@ -24168,7 +21191,6 @@ console.log(passing);  // { alice: 95, charlie: 92 }
 
 ---
 
-<a id="toc-objectfromentries"></a>
 ### `Object.fromEntries()`
 
 **Create object from [key, value] pairs:**
@@ -24232,10 +21254,8 @@ console.log(swapped);  // { x: "a", y: "b", z: "c" }
 
 ---
 
-<a id="toc-432-object-copying"></a>
 ### 4.3.2 Object Copying
 
-<a id="toc-objectassign"></a>
 ### `Object.assign()`
 
 **Copy properties from source(s) to target:**
@@ -24373,10 +21393,8 @@ console.log(newState.count);  // 1
 
 ---
 
-<a id="toc-433-immutability-controls"></a>
 ### 4.3.3 Immutability Controls
 
-<a id="toc-objectfreeze"></a>
 ### `Object.freeze()`
 
 **Make object immutable (cannot add, delete, or modify properties):**
@@ -24488,7 +21506,6 @@ Object.defineProperty(obj, "b", {
 
 ---
 
-<a id="toc-objectseal"></a>
 ### `Object.seal()`
 
 **Prevent adding or deleting properties (but can modify existing):**
@@ -24543,7 +21560,6 @@ delete obj.a;  // Fails
 
 ---
 
-<a id="toc-objectpreventextensions"></a>
 ### `Object.preventExtensions()`
 
 **Prevent adding new properties (but can modify and delete existing):**
@@ -24571,7 +21587,6 @@ console.log(obj.email);  // undefined
 
 ---
 
-<a id="toc-comparison-table"></a>
 ### Comparison Table
 
 |Operation|Normal|preventExtensions|seal|freeze|
@@ -24585,7 +21600,6 @@ console.log(obj.email);  // undefined
 
 ---
 
-<a id="toc-objectisfrozen"></a>
 ### `Object.isFrozen()`
 
 **Check if object is frozen:**
@@ -24616,7 +21630,6 @@ console.log(Object.isFrozen(obj));  // true (empty + non-extensible = frozen)
 
 ---
 
-<a id="toc-objectissealed"></a>
 ### `Object.isSealed()`
 
 **Check if object is sealed:**
@@ -24648,7 +21661,6 @@ console.log(Object.isFrozen(obj));  // true
 
 ---
 
-<a id="toc-objectisextensible"></a>
 ### `Object.isExtensible()`
 
 **Check if properties can be added:**
@@ -24679,10 +21691,8 @@ console.log(Object.isFrozen(obj));      // true
 
 ---
 
-<a id="toc-434-prototype-methods"></a>
 ### 4.3.4 Prototype Methods
 
-<a id="toc-objectgetprototypeof"></a>
 ### `Object.getPrototypeOf()`
 
 **Get object's prototype:**
@@ -24731,7 +21741,6 @@ const proto = Object.getPrototypeOf(obj);
 
 ---
 
-<a id="toc-objectsetprototypeof"></a>
 ### `Object.setPrototypeOf()`
 
 **Set object's prototype:**
@@ -24796,10 +21805,8 @@ console.log(obj.toString);  // undefined (no inherited methods)
 
 ---
 
-<a id="toc-435-comparison"></a>
 ### 4.3.5 Comparison
 
-<a id="toc-objectis-1"></a>
 ### `Object.is()`
 
 **Same-value equality:**
@@ -24893,10 +21900,8 @@ if (!Object.is) {
 
 ---
 
-<a id="toc-436-property-existence"></a>
 ### 4.3.6 Property Existence
 
-<a id="toc-objecthasown-es2022"></a>
 ### `Object.hasOwn()` (ES2022)
 
 **Check if object has own property:**
@@ -24988,10 +21993,8 @@ if (!Object.hasOwn) {
 
 ---
 
-<a id="toc-437-additional-methods"></a>
 ### 4.3.7 Additional Methods
 
-<a id="toc-objectgetownpropertynames"></a>
 ### `Object.getOwnPropertyNames()`
 
 **Get all own property names (including non-enumerable):**
@@ -25012,7 +22015,6 @@ console.log(Object.getOwnPropertyNames(obj));
 
 ---
 
-<a id="toc-objectgetownpropertysymbols"></a>
 ### `Object.getOwnPropertySymbols()`
 
 **Get all own symbol properties:**
@@ -25033,7 +22035,6 @@ console.log(Object.getOwnPropertySymbols(obj));
 
 ---
 
-<a id="toc-all-own-properties"></a>
 ### All Own Properties
 
 **Combine strings and symbols:**
@@ -25066,10 +22067,8 @@ console.log(Reflect.ownKeys(obj));
 
 ---
 
-<a id="toc-438-practical-patterns"></a>
 ### 4.3.8 Practical Patterns
 
-<a id="toc-cloning-objects"></a>
 ### Cloning Objects
 
 **Shallow clone:**
@@ -25124,7 +22123,6 @@ function deepClone(obj) {
 
 ---
 
-<a id="toc-merging-objects"></a>
 ### Merging Objects
 
 **Shallow merge:**
@@ -25169,7 +22167,6 @@ console.log(merged);
 
 ---
 
-<a id="toc-object-comparison"></a>
 ### Object Comparison
 
 ```javascript
@@ -25196,7 +22193,6 @@ console.log(shallowEqual({ a: 1, b: 2 }, { a: 1, b: 3 }));  // false
 
 ---
 
-<a id="toc-pick-properties"></a>
 ### Pick Properties
 
 ```javascript
@@ -25217,7 +22213,6 @@ console.log(subset);  // { name: "Alice", email: "alice@example.com" }
 
 ---
 
-<a id="toc-omit-properties"></a>
 ### Omit Properties
 
 ```javascript
@@ -25235,7 +22230,6 @@ console.log(safe);  // { name: "Alice", age: 30 }
 
 ---
 
-<a id="toc-map-object-values"></a>
 ### Map Object Values
 
 ```javascript
@@ -25254,10 +22248,8 @@ console.log(doubled);
 
 ---
 
-<a id="toc-summary-5"></a>
 ## Summary
 
-<a id="toc-enumeration"></a>
 ### Enumeration
 
 - **`Object.keys()`**: Array of own enumerable property names
@@ -25265,14 +22257,12 @@ console.log(doubled);
 - **`Object.entries()`**: Array of [key, value] pairs
 - **`Object.fromEntries()`**: Create object from entries
 
-<a id="toc-copying"></a>
 ### Copying
 
 - **`Object.assign()`**: Copy properties (shallow, converts getters)
 - Spread syntax: `{ ...obj }` (shallow)
 - `structuredClone()`: Deep clone (modern browsers)
 
-<a id="toc-immutability-1"></a>
 ### Immutability
 
 - **`Object.freeze()`**: Cannot add, delete, or modify (shallow)
@@ -25282,27 +22272,23 @@ console.log(doubled);
 - **`Object.isSealed()`**: Check if sealed
 - **`Object.isExtensible()`**: Check if extensible
 
-<a id="toc-prototypes"></a>
 ### Prototypes
 
 - **`Object.getPrototypeOf()`**: Get prototype
 - **`Object.setPrototypeOf()`**: Set prototype (slow!)
 - **`Object.create()`**: Create with specific prototype
 
-<a id="toc-comparison-2"></a>
 ### Comparison
 
 - **`Object.is()`**: Same-value equality (handles NaN and ±0)
 - **`Object.hasOwn()`**: Check own property (ES2022, safe)
 
-<a id="toc-property-inspection"></a>
 ### Property Inspection
 
 - **`Object.getOwnPropertyNames()`**: All own properties (including non-enumerable)
 - **`Object.getOwnPropertySymbols()`**: All own symbol properties
 - **`Reflect.ownKeys()`**: All own properties (strings + symbols)
 
-<a id="toc-key-patterns-1"></a>
 ### Key Patterns
 
 - Clone: shallow (assign/spread), deep (structuredClone/recursive)
@@ -25313,10 +22299,8 @@ console.log(doubled);
 
 ---
 
-<a id="toc-44-destructuring"></a>
 ## 4.4 Destructuring
 
-<a id="toc-why-destructuring-changes-how-you-write-javascript"></a>
 ### Why Destructuring Changes How You Write JavaScript
 
 Destructuring is a JavaScript expression that allows you to extract values from arrays or properties from objects into distinct variables. It's not just syntactic sugar—it fundamentally improves code clarity:
@@ -25342,7 +22326,6 @@ function processUser({ name, email, role }) {
 - **React/Vue** — Props and state management
 - **Import statements** — `import { useState } from 'react'`
 
-<a id="toc-object-destructuring-1"></a>
 ### Object Destructuring
 
 Object destructuring extracts properties from objects and assigns them to variables.
@@ -25386,7 +22369,6 @@ console.log(email);    // 'john@example.com'
 // password and role are not extracted
 ```
 
-<a id="toc-nested-destructuring-2"></a>
 ### Nested Destructuring
 
 Destructuring can be used with nested objects to extract deeply nested values.
@@ -25479,7 +22461,6 @@ console.log(email);     // 'john.smith@email.com'
 console.log(theme);     // 'dark'
 ```
 
-<a id="toc-default-values-1"></a>
 ### Default Values
 
 Default values can be assigned to variables in case the property doesn't exist in the object.
@@ -25540,7 +22521,6 @@ console.log(d); // '' (empty string doesn't trigger default)
 console.log(e); // 'default-e' (missing property triggers default)
 ```
 
-<a id="toc-rest-in-destructuring"></a>
 ### Rest in Destructuring
 
 The rest operator (`...`) collects remaining properties into a new object.
@@ -25633,7 +22613,6 @@ console.log(sanitizeUser(rawUser));
 // { name: 'John', email: 'john@example.com', age: 30 }
 ```
 
-<a id="toc-renaming-during-destructuring"></a>
 ### Renaming During Destructuring
 
 You can assign properties to variables with different names using the colon (`:`) syntax.
@@ -25756,12 +22735,10 @@ console.log(newUser);
 
 ---
 
-<a id="toc-45-spread-and-rest"></a>
 ## 4.5 Spread and Rest
 
 The spread (`...`) and rest (`...`) operators use the same syntax but serve opposite purposes. Spread expands elements, while rest collects them.
 
-<a id="toc-spread-operator-with-objects"></a>
 ### Spread Operator with Objects
 
 The spread operator unpacks object properties into a new object or combines multiple objects.
@@ -25921,7 +22898,6 @@ console.log(user.address.city);       // 'New York' (unchanged)
 console.log(properCopy.address.city); // 'Seattle'
 ```
 
-<a id="toc-rest-properties"></a>
 ### Rest Properties
 
 The rest operator collects remaining properties into a new object. It's the opposite of spread.
@@ -26024,7 +23000,6 @@ console.log(transformProduct(original));
 // }
 ```
 
-<a id="toc-shallow-vs-deep-copying"></a>
 ### Shallow vs Deep Copying
 
 Understanding the difference between shallow and deep copying is crucial when working with objects.
@@ -26218,10 +23193,8 @@ console.log(deepCopy.array); // [1, 2, 3, 4]
 
 ---
 
-<a id="toc-46-this-keyword"></a>
 ## 4.6 `this` Keyword
 
-<a id="toc-why-this-is-confusing-and-why-it-matters"></a>
 ### Why `this` Is Confusing (And Why It Matters)
 
 The `this` keyword is one of JavaScript's most misunderstood features. Unlike most languages where `this` always refers to the current object instance, **JavaScript's `this` is determined at call time, not definition time.**
@@ -26235,7 +23208,6 @@ This matters because:
 
 Understanding `this` prevents bugs like "Cannot read property of undefined" when `this` isn't what you expect.
 
-<a id="toc-the-core-rule"></a>
 ### The Core Rule
 
 The `this` keyword in JavaScript refers to the object that is currently executing the code. **Its value depends on how a function is called, not where it's defined.**
@@ -26248,7 +23220,6 @@ The `this` keyword in JavaScript refers to the object that is currently executin
 | `func.call(obj)` | `obj` |
 | `() => {}` | Inherited from enclosing scope |
 
-<a id="toc-global-context"></a>
 ### Global Context
 
 In the global execution context, `this` refers to the global object.
@@ -26284,7 +23255,6 @@ function showThis() {
 showThis(); // Window object (browser) or global object (Node.js)
 ```
 
-<a id="toc-function-context"></a>
 ### Function Context
 
 In regular functions, `this` depends on how the function is called, not where it's defined.
@@ -26314,7 +23284,6 @@ const greetFunc = greet;
 greetFunc('Hi'); // Same behavior as direct call
 ```
 
-<a id="toc-method-context"></a>
 ### Method Context
 
 When a function is called as a method of an object, `this` refers to that object.
@@ -26395,7 +23364,6 @@ company.department.manager.introduce(); // "I'm Alice"
 // this refers to the immediate parent (manager object)
 ```
 
-<a id="toc-constructor-context"></a>
 ### Constructor Context
 
 When a function is used as a constructor with the `new` keyword, `this` refers to the newly created object.
@@ -26478,7 +23446,6 @@ const obj2 = new AnotherObject(10);
 console.log(obj2); // AnotherObject { value: 10 } (primitive return ignored)
 ```
 
-<a id="toc-arrow-functions-and-this"></a>
 ### Arrow Functions and `this`
 
 Arrow functions don't have their own `this` binding. They inherit `this` from the enclosing lexical context.
@@ -26603,7 +23570,6 @@ obj.method();
 // Arrow 2 this: Outer
 ```
 
-<a id="toc-explicit-binding-call-apply-bind"></a>
 ### Explicit Binding (`call`, `apply`, `bind`)
 
 JavaScript provides methods to explicitly set the value of `this` in a function call.
@@ -26759,7 +23725,6 @@ myArrow(); // 'Container' (inherited from getArrow's this)
 myArrow.call({ value: 'Other' }); // Still 'Container' (cannot be changed)
 ```
 
-<a id="toc-this-in-event-handlers"></a>
 ### `this` in Event Handlers
 
 In event handlers, `this` typically refers to the element that triggered the event.
@@ -26875,7 +23840,6 @@ element.addEventListener('click', handler.onClick.bind(handler));
 element.addEventListener('mouseenter', handler.onHover.bind(handler));
 ```
 
-<a id="toc-this-in-strict-mode"></a>
 ### `this` in Strict Mode
 
 Strict mode changes how `this` behaves in certain contexts.
@@ -26960,7 +23924,6 @@ function outer() {
 outer();
 ```
 
-<a id="toc-common-pitfalls-and-solutions"></a>
 ### Common Pitfalls and Solutions
 
 Understanding common `this` pitfalls helps avoid bugs and write better code.
@@ -27275,7 +24238,6 @@ greet.call({ name: 'Alice' });
 ---
 
 
-<a id="toc-47-objects-summary"></a>
 ## 4.7 Objects Summary
 
 | Concept | Key Points |
@@ -27288,7 +24250,6 @@ greet.call({ name: 'Alice' });
 | **Spread/Rest** | `...` for copying/merging objects |
 | **`this` Keyword** | Context-dependent; binding rules matter |
 
-<a id="toc-best-practices-6"></a>
 ### Best Practices
 
 1. **Use shorthand syntax** for concise object literals
@@ -27300,10 +24261,8 @@ greet.call({ name: 'Alice' });
 
 ---
 
-<a id="toc-mastery-check-2"></a>
 ## Mastery Check
 
-<a id="toc-quiz-questions-2"></a>
 ### Quiz Questions
 
 **Q1:** What's the output?
@@ -27372,7 +24331,6 @@ console.log(obj.arrow());    // undefined (arrow captures outer this, not obj)
 ```
 </details>
 
-<a id="toc-coding-challenges-2"></a>
 ### Coding Challenges
 
 **Challenge 1:** Implement `deepClone(obj)` that creates a true deep copy (no shared references).
@@ -27467,20 +24425,16 @@ defaults(config, { port: 3000, host: 'localhost' });
 With object fundamentals mastered, you're ready to explore prototypes and inheritance.
 
 
-<a id="toc-05-prototypemd"></a>
 # 05-Prototype.md
 
-<a id="toc-5-prototypes"></a>
 # 5 Prototypes
 
 JavaScript uses prototypal inheritance—objects inherit directly from other objects. Every object has an internal `[[Prototype]]` link forming a chain used for property lookup. Understanding prototypes is essential for mastering JavaScript's object model.
 
 ---
 
-<a id="toc-51-prototype-chain"></a>
 ## 5.1 Prototype Chain
 
-<a id="toc-why-prototypes-matter"></a>
 ### Why Prototypes Matter
 
 JavaScript doesn't have classical inheritance like Java or C++. Instead, it uses **prototypal inheritance** — objects inherit directly from other objects. This matters because:
@@ -27492,12 +24446,10 @@ JavaScript doesn't have classical inheritance like Java or C++. Instead, it uses
 
 Understanding prototypes is essential because even if you use `class` syntax, you're still using prototypes under the hood.
 
-<a id="toc-the-chain-explained"></a>
 ### The Chain Explained
 
 The prototype chain is JavaScript's fundamental mechanism for inheritance. Every object in JavaScript has an internal link to another object called its prototype. This creates a chain of objects that JavaScript traverses when looking for properties.
 
-<a id="toc-__proto__-vs-prototype"></a>
 ### `__proto__` vs `prototype`
 
 Understanding the difference between `__proto__` and `prototype` is crucial for mastering JavaScript's inheritance model.
@@ -27619,7 +24571,6 @@ const child = Object.create(parent);
 console.log(Object.getPrototypeOf(child) === parent); // true
 ```
 
-<a id="toc-prototype-lookup"></a>
 ### Prototype Lookup
 
 When you access a property on an object, JavaScript follows a specific lookup process through the prototype chain.
@@ -27748,7 +24699,6 @@ c1.increment(); // Even faster
 // Modern JS engines create "shapes" or "hidden classes" to optimize this
 ```
 
-<a id="toc-objectprototype"></a>
 ### `Object.prototype`
 
 `Object.prototype` is the root of the prototype chain. All objects (except those created with `Object.create(null)`) eventually inherit from `Object.prototype`.
@@ -27847,7 +24797,6 @@ console.log(Object.prototype.isPrototypeOf(dog)); // true
 console.log(dog instanceof Object); // true
 ```
 
-<a id="toc-constructor-functions"></a>
 ### Constructor Functions
 
 Constructor functions are regular functions used with the `new` keyword to create objects with shared behavior.
@@ -28007,7 +24956,6 @@ console.log(MathUtils.add(5, 3)); // 8
 // Static methods belong to the constructor, not instances
 ```
 
-<a id="toc-new-operator-mechanism"></a>
 ### `new` Operator Mechanism
 
 Understanding what happens when you use the `new` keyword is essential for mastering JavaScript's object creation.
@@ -28193,7 +25141,6 @@ console.log(alice instanceof SafePerson); // true
 console.log(bob instanceof SafePerson); // true
 ```
 
-<a id="toc-understanding-the-prototype-chain-visually"></a>
 ### Understanding the Prototype Chain Visually
 
 Visualizing the prototype chain helps understand JavaScript's inheritance model.
@@ -28402,12 +25349,10 @@ Lookup path:
 ---
 
 
-<a id="toc-52-prototypal-inheritance"></a>
 ## 5.2 Prototypal Inheritance
 
 Prototypal inheritance is JavaScript's mechanism for creating object hierarchies where objects inherit properties and methods from other objects through the prototype chain.
 
-<a id="toc-setting-up-inheritance"></a>
 ### Setting Up Inheritance
 
 There are multiple patterns for establishing inheritance relationships between constructor functions.
@@ -28587,7 +25532,6 @@ console.log(myCar instanceof Vehicle); // true
 console.log(myCar instanceof Object); // true
 ```
 
-<a id="toc-objectcreate-for-inheritance"></a>
 ### `Object.create()` for Inheritance
 
 `Object.create()` is the modern, preferred way to set up prototypal inheritance. It creates a new object with a specified prototype.
@@ -28784,7 +25728,6 @@ console.log('toString' in normalObj); // true
 console.log('hasOwnProperty' in normalObj); // true
 ```
 
-<a id="toc-constructor-stealing"></a>
 ### Constructor Stealing
 
 Constructor stealing (also called constructor borrowing) is a technique where a child constructor calls the parent constructor to inherit properties.
@@ -28888,7 +25831,6 @@ console.log(emp.department); // 'Engineering'
 console.log(emp.salary); // 80000
 ```
 
-<a id="toc-combination-inheritance"></a>
 ### Combination Inheritance
 
 Combination inheritance (also called pseudoclassical inheritance) combines constructor stealing with prototype chaining to get the benefits of both.
@@ -28944,7 +25886,6 @@ dog1.eat(); // "Buddy is eating"
 dog2.bark(); // "Max says: Woof!"
 ```
 
-<a id="toc-parasitic-inheritance"></a>
 ### Parasitic Inheritance
 
 Parasitic inheritance is a pattern where you create an object, augment it with new properties/methods, and return it.
@@ -29032,7 +25973,6 @@ console.log(alice instanceof Student); // true
 console.log(alice instanceof Person); // true
 ```
 
-<a id="toc-performance-implications"></a>
 ### Performance Implications
 
 Understanding the performance characteristics of different inheritance patterns helps make informed decisions.
@@ -29123,12 +26063,10 @@ const deep = new Level4();
 
 ---
 
-<a id="toc-53-property-inheritance"></a>
 ## 5.3 Property Inheritance
 
 Property inheritance determines how properties are accessed and distinguished between an object's own properties and those inherited through the prototype chain.
 
-<a id="toc-own-properties-vs-inherited-properties"></a>
 ### Own Properties vs Inherited Properties
 
 JavaScript distinguishes between properties defined directly on an object (own properties) and properties inherited from the prototype chain.
@@ -29164,7 +26102,6 @@ console.log(alice.hasOwnProperty('species')); // false (inherited)
 console.log(alice.hasOwnProperty('greet'));   // false (inherited)
 ```
 
-<a id="toc-hasownproperty"></a>
 ### `hasOwnProperty()`
 
 The `hasOwnProperty()` method determines whether an object has a property as its own (not inherited).
@@ -29183,7 +26120,6 @@ console.log(obj.hasOwnProperty('toString'));     // false (inherited from Object
 console.log(obj.hasOwnProperty('nonExistent'));  // false
 ```
 
-<a id="toc-objecthasown"></a>
 ### `Object.hasOwn()`
 
 `Object.hasOwn()` is a modern alternative to `hasOwnProperty()` introduced in ES2022, providing a more reliable way to check for own properties.
@@ -29205,7 +26141,6 @@ console.log(Object.hasOwn(obj, 'toString')); // false
 console.log(obj.hasOwnProperty('name')); // true
 ```
 
-<a id="toc-property-enumeration-and-inheritance"></a>
 ### Property Enumeration and Inheritance
 
 Different methods enumerate properties differently, especially regarding inherited properties.
@@ -29252,7 +26187,6 @@ console.log(Object.getOwnPropertyNames(obj));
 // Output: ['x', 'y', 'z', 'hidden']
 ```
 
-<a id="toc-shadowing-properties"></a>
 ### Shadowing Properties
 
 Property shadowing occurs when an object has an own property with the same name as an inherited property, effectively hiding the inherited property.
@@ -29291,7 +26225,6 @@ console.log(alice.hasOwnProperty('name')); // false
 ---
 
 
-<a id="toc-54-prototypes-summary"></a>
 ## 5.4 Prototypes Summary
 
 | Concept | Key Points |
@@ -29303,7 +26236,6 @@ console.log(alice.hasOwnProperty('name')); // false
 | **Property Shadowing** | Own properties shadow inherited ones |
 | **`hasOwnProperty()`** | Check if property is own (not inherited) |
 
-<a id="toc-best-practices-7"></a>
 ### Best Practices
 
 1. **Prefer `class` syntax** for cleaner inheritance
@@ -29318,22 +26250,18 @@ console.log(alice.hasOwnProperty('name')); // false
 With prototypes understood, classes become a natural next step.
 
 
-<a id="toc-06-classesmd"></a>
 # 06-Classes.md
 
-<a id="toc-6-classes"></a>
 # 6 Classes
 
 ES6 classes provide syntactic sugar over prototypal inheritance. They offer cleaner syntax for constructor functions, inheritance, static methods, and private fields.
 
 ---
 
-<a id="toc-61-class-basics"></a>
 ## 6.1 Class Basics
 
 Classes in JavaScript, introduced in ES6 (ES2015), provide a cleaner, more intuitive syntax for creating objects and implementing inheritance. They are syntactic sugar over JavaScript's existing prototype-based inheritance.
 
-<a id="toc-class-declarations-1"></a>
 ### Class Declarations
 
 **Basic Class:**
@@ -29359,7 +26287,6 @@ const alice = new Person('Alice', 30);
 alice.greet(); // "Hello, I'm Alice and I'm 30 years old."
 ```
 
-<a id="toc-class-expressions"></a>
 ### Class Expressions
 
 ```javascript
@@ -29378,7 +26305,6 @@ const rect = new Rectangle(10, 5);
 console.log(rect.getArea()); // 50
 ```
 
-<a id="toc-constructor-method"></a>
 ### Constructor Method
 
 ```javascript
@@ -29405,7 +26331,6 @@ class BankAccount {
 }
 ```
 
-<a id="toc-instance-methods"></a>
 ### Instance Methods
 
 ```javascript
@@ -29432,7 +26357,6 @@ class Calculator {
 const result = new Calculator(10).add(5).multiply(2).getResult(); // 30
 ```
 
-<a id="toc-class-hoisting-not-hoisted"></a>
 ### Class Hoisting (Not Hoisted)
 
 ```javascript
@@ -29452,10 +26376,8 @@ const obj = new MyClass();
 ---
 
 
-<a id="toc-62-class-features"></a>
 ## 6.2 Class Features
 
-<a id="toc-static-methods"></a>
 ### Static Methods
 
 ```javascript
@@ -29502,7 +26424,6 @@ const admin = User.createAdmin('Alice', 'alice@example.com');
 const guest = User.createGuest();
 ```
 
-<a id="toc-static-properties"></a>
 ### Static Properties
 
 ```javascript
@@ -29538,7 +26459,6 @@ class DatabaseConnection {
 }
 ```
 
-<a id="toc-instance-properties"></a>
 ### Instance Properties
 
 ```javascript
@@ -29555,7 +26475,6 @@ class Rectangle {
 }
 ```
 
-<a id="toc-private-fields"></a>
 ### Private Fields
 
 ```javascript
@@ -29598,7 +26517,6 @@ console.log(account.getBalance('1234')); // 1000
 // console.log(account.#balance); // SyntaxError
 ```
 
-<a id="toc-private-methods"></a>
 ### Private Methods
 
 ```javascript
@@ -29641,7 +26559,6 @@ class PasswordManager {
 }
 ```
 
-<a id="toc-public-fields"></a>
 ### Public Fields
 
 ```javascript
@@ -29663,7 +26580,6 @@ class Car {
 }
 ```
 
-<a id="toc-static-blocks"></a>
 ### Static Blocks
 
 ```javascript
@@ -29690,12 +26606,10 @@ console.log(Config.apiUrl);
 ---
 
 
-<a id="toc-63-inheritance"></a>
 ## 6.3 Inheritance
 
 Class inheritance in JavaScript allows one class to extend another, inheriting its properties and methods while adding or overriding functionality.
 
-<a id="toc-extends-keyword"></a>
 ### `extends` Keyword
 
 The `extends` keyword is used to create a class that is a child of another class.
@@ -29867,7 +26781,6 @@ console.log(map.get('name')); // 'Alice'
 console.log(map.get('age')); // 'N/A' (default value)
 ```
 
-<a id="toc-super-keyword-constructor-and-methods"></a>
 ### `super` Keyword (Constructor and Methods)
 
 The `super` keyword is used to access and call functions on an object's parent class.
@@ -30053,7 +26966,6 @@ console.log(square.getArea()); // 25
 console.log(square.getGrandparentDescription()); // "A red shape"
 ```
 
-<a id="toc-method-overriding"></a>
 ### Method Overriding
 
 Method overriding allows a child class to provide a specific implementation of a method already defined in its parent class.
@@ -30261,7 +27173,6 @@ console.log(premium.getDetails());
 // "Laptop: $1000 (20% off - Final: $800.00) + 3-year warranty"
 ```
 
-<a id="toc-super-in-static-methods"></a>
 ### `super` in Static Methods
 
 The `super` keyword can be used in static methods to call static methods of the parent class.
@@ -30442,7 +27353,6 @@ const admins = Admin.createBatch([
 console.log(admins.length); // 2
 ```
 
-<a id="toc-inheritance-chains"></a>
 ### Inheritance Chains
 
 Complex inheritance hierarchies where classes extend other classes in a chain.
@@ -30711,12 +27621,10 @@ user.restore(); // Restores
 ---
 
 
-<a id="toc-64-class-patterns"></a>
 ## 6.4 Class Patterns
 
 Advanced patterns and techniques for working with classes in JavaScript.
 
-<a id="toc-mixins"></a>
 ### Mixins
 
 Mixins allow you to add functionality to classes without using inheritance. They're useful for sharing behavior between unrelated classes.
@@ -30967,7 +27875,6 @@ store.dispatch({ type: 'INCREMENT' });
 // Logs: "State changed: {...} -> {...}"
 ```
 
-<a id="toc-abstract-classes-pattern"></a>
 ### Abstract Classes (Pattern)
 
 JavaScript doesn't have built-in abstract classes, but we can implement the pattern.
@@ -31207,7 +28114,6 @@ rect.draw(); // "Drawing..."
 rect.resize(15, 25); // "Resized to 15x25"
 ```
 
-<a id="toc-getters-and-setters-in-classes"></a>
 ### Getters and Setters in Classes
 
 Getters and setters provide computed properties and property access control.
@@ -31438,7 +28344,6 @@ console.log(account.accountNumber); // ****7890
 console.log(account.formattedBalance); // $1000.00
 ```
 
-<a id="toc-factory-functions-vs-classes"></a>
 ### Factory Functions vs Classes
 
 Comparing different approaches to object creation.
@@ -31616,7 +28521,6 @@ console.log(counter.getValue()); // 11
 // count is not accessible from outside
 ```
 
-<a id="toc-composition-over-inheritance"></a>
 ### Composition Over Inheritance
 
 Favoring composition over deep inheritance hierarchies for more flexible code.
@@ -31923,10 +28827,8 @@ console.log(ebook.download()); // "Downloading JavaScript eBook..."
 
 ---
 
-<a id="toc-common-pitfalls-1"></a>
 ## Common Pitfalls
 
-<a id="toc-pitfall-1-forgetting-super-in-constructor"></a>
 ### Pitfall 1: Forgetting super() in Constructor
 
 ```javascript
@@ -31947,7 +28849,6 @@ class Child extends Parent {
 }
 ```
 
-<a id="toc-pitfall-2-arrow-methods-and-inheritance"></a>
 ### Pitfall 2: Arrow Methods and Inheritance
 
 ```javascript
@@ -31980,7 +28881,6 @@ class Child extends Parent {
 }
 ```
 
-<a id="toc-pitfall-3-private-fields-and-inheritance"></a>
 ### Pitfall 3: Private Fields and Inheritance
 
 ```javascript
@@ -32009,7 +28909,6 @@ class Parent {
 }
 ```
 
-<a id="toc-pitfall-4-this-in-callbacks"></a>
 ### Pitfall 4: this in Callbacks
 
 ```javascript
@@ -32042,7 +28941,6 @@ class Button {
 }
 ```
 
-<a id="toc-pitfall-5-class-vs-object-for-configuration"></a>
 ### Pitfall 5: Class vs Object for Configuration
 
 ```javascript
@@ -32067,7 +28965,6 @@ const config = {
 
 ---
 
-<a id="toc-summary-6"></a>
 ## Summary
 
 This document covered ES6 Classes comprehensively:
@@ -32089,7 +28986,6 @@ Classes provide a clean, familiar syntax for object-oriented programming in Java
 - Class performance optimization techniques
 - Functional programming vs OOP in JavaScript
 
-<a id="toc-65-classes-summary"></a>
 ## 6.5 Classes Summary
 
 | Feature | Syntax |
@@ -32108,20 +29004,16 @@ Classes provide a clean, familiar syntax for object-oriented programming in Java
 **End of Chapter 6: Classes**
 
 
-<a id="toc-07-arraysmd"></a>
 # 07-Arrays.md
 
-<a id="toc-7-arrays"></a>
 # 7 Arrays
 
 Arrays are ordered collections with powerful built-in methods. This chapter covers array creation, mutating and non-mutating methods, iteration, typed arrays, and destructuring patterns.
 
 ---
 
-<a id="toc-71-array-basics"></a>
 ## 7.1 Array Basics
 
-<a id="toc-711-array-literals"></a>
 ### 7.1.1 Array Literals
 
 An **array** is an ordered collection of values. Arrays are the primary data structure for storing sequences of elements in JavaScript.
@@ -32294,7 +29186,6 @@ let arr = [1, undefined, 3];
 
 ---
 
-<a id="toc-712-array-constructor"></a>
 ### 7.1.2 Array Constructor
 
 The **Array constructor** is a function that creates new arrays. However, it has unintuitive behavior and should be used sparingly.
@@ -32458,7 +29349,6 @@ new Array(3)            // NO! Confusing
 
 ---
 
-<a id="toc-713-array-length-property"></a>
 ### 7.1.3 Array length Property
 
 The **length property** represents the number of elements in an array. It has special behavior in JavaScript.
@@ -32700,7 +29590,6 @@ function myFunc(...args) {  // Already array
 
 ---
 
-<a id="toc-714-sparse-arrays"></a>
 ### 7.1.4 Sparse Arrays
 
 A **sparse array** is an array with "holes" - positions that don't contain values. This is a unique JavaScript feature that can lead to unexpected behavior.
@@ -32956,7 +29845,6 @@ let sparse = new Array(10).fill(null);
 
 ---
 
-<a id="toc-715-array-like-objects"></a>
 ### 7.1.5 Array-like Objects
 
 An **array-like object** is an object that has some array characteristics but is not actually an Array. It has numeric indices and a `length` property.
@@ -33246,7 +30134,6 @@ if (Array.isArray(value)) {
 
 ---
 
-<a id="toc-716-converting-array-like-to-arrays"></a>
 ### 7.1.6 Converting Array-like to Arrays
 
 We've covered the basics, so let's go deeper into practical conversion patterns and edge cases.
@@ -33593,14 +30480,12 @@ let arr = Array.from(sparse);  // Holes become undefined
 // - Iterables: [...iterable]
 // - Arguments: rest parameters
 ```
-<a id="toc-72-array-methods-mutating"></a>
 ## 7.2 Array Methods (Mutating)
 
 **Mutating methods** are array methods that modify the original array in place, changing its structure or elements. This section covers the most important mutation methods and their gotchas.
 
 ---
 
-<a id="toc-721-push-and-pop"></a>
 ### 7.2.1 push() and pop()
 
 **push()** adds one or more elements to the end of an array and returns the new length.
@@ -33774,7 +30659,6 @@ queue.shift();              // 1, queue = [2, 3]
 
 ---
 
-<a id="toc-722-shift-and-unshift"></a>
 ### 7.2.2 shift() and unshift()
 
 **shift()** removes and returns the first element of an array.
@@ -34011,7 +30895,6 @@ class CircularQueue {
 
 ---
 
-<a id="toc-723-splice"></a>
 ### 7.2.3 splice()
 
 **splice()** changes the contents of an array by removing or replacing existing elements and/or adding new elements.
@@ -34235,7 +31118,6 @@ for (let i = arr.length - 1; i >= 0; i--) {
 
 ---
 
-<a id="toc-724-sort"></a>
 ### 7.2.4 sort()
 
 **sort()** sorts the elements of an array in place using a comparator function.
@@ -34433,7 +31315,6 @@ arr.sort(() => Math.random() - 0.5);  // Don't use this!
 
 ---
 
-<a id="toc-725-reverse"></a>
 ### 7.2.5 reverse()
 
 **reverse()** reverses an array in place.
@@ -34565,7 +31446,6 @@ for (let i = arr.length - 1; i >= 0; i--) {
 
 ---
 
-<a id="toc-726-fill"></a>
 ### 7.2.6 fill()
 
 **fill()** fills all array elements from a start index to an end index with a static value.
@@ -34680,7 +31560,6 @@ arr                     // [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]
 
 ---
 
-<a id="toc-727-copywithin"></a>
 ### 7.2.7 copyWithin()
 
 **copyWithin()** copies part of an array to another location in the same array and returns it, without modifying its length.
@@ -34792,14 +31671,12 @@ arr.copyWithin(0, 3);       // Confusing, rarely seen
 let arr = [1, 2, 3, 4, 5];
 arr = [...arr.slice(3), ...arr];  // More readable
 ```
-<a id="toc-73-array-methods-non-mutating"></a>
 ## 7.3 Array Methods (Non-mutating)
 
 **Non-mutating methods** return a new array or value without modifying the original array. This is a fundamental principle of functional programming and makes code more predictable.
 
 ---
 
-<a id="toc-731-concat"></a>
 ### 7.3.1 concat()
 
 **concat()** returns a new array by merging multiple arrays or values with the original array.
@@ -34892,7 +31769,6 @@ let result = [arr1, arr2].reduce((a, b) => [...a, ...b]);
 
 ---
 
-<a id="toc-732-slice"></a>
 ### 7.3.2 slice()
 
 **slice()** returns a shallow copy of a portion of an array as a new array object.
@@ -34992,7 +31868,6 @@ snapshot                    // [1, 2, 3] - unchanged
 
 ---
 
-<a id="toc-733-join"></a>
 ### 7.3.3 join()
 
 **join()** joins all elements of an array into a single string.
@@ -35095,7 +31970,6 @@ customJoin([1, 2, 3], '-', x => x * 2);  // "2-4-6"
 
 ---
 
-<a id="toc-734-indexof-and-lastindexof"></a>
 ### 7.3.4 indexOf() and lastIndexOf()
 
 **indexOf()** returns the first index at which an element can be found, or -1 if not present.
@@ -35219,7 +32093,6 @@ function removeAll(arr, value) {
 
 ---
 
-<a id="toc-735-includes"></a>
 ### 7.3.5 includes()
 
 **includes()** determines whether an array includes a certain element, returning true or false.
@@ -35342,7 +32215,6 @@ arr.indexOf(value) !== -1;  // ✗ (verbose)
 
 ---
 
-<a id="toc-736-flat-and-flatmap"></a>
 ### 7.3.6 flat() and flatMap()
 
 **flat()** creates a new array with all sub-array elements concatenated into it recursively up to the specified depth.
@@ -35467,7 +32339,6 @@ arr.flat(Infinity);         // [1, 2, 3, 4]
 
 ---
 
-<a id="toc-737-toreversed-tosorted-tospliced-es2023"></a>
 ### 7.3.7 toReversed(), toSorted(), toSpliced() (ES2023)
 
 These are non-mutating versions of reverse(), sort(), and splice(). They were added in ES2023.
@@ -35545,7 +32416,6 @@ spliced                     // [0, empty, 1]
 
 ---
 
-<a id="toc-738-with-es2023"></a>
 ### 7.3.8 with() (ES2023)
 
 **with()** returns a new array with the element at the specified index replaced with the given value.
@@ -35647,14 +32517,12 @@ let sorted = items
   .toReversed()
   .map(item => item.name);
 ```
-<a id="toc-74-iteration-methods"></a>
 ## 7.4 Iteration Methods
 
 **Iteration methods** execute a function on each array element, enabling powerful functional programming patterns. They're crucial for modern JavaScript development.
 
 ---
 
-<a id="toc-741-foreach"></a>
 ### 7.4.1 forEach()
 
 **forEach()** executes a provided function once for each array element. It always returns `undefined`.
@@ -35835,7 +32703,6 @@ arr.forEach(x => {
 
 ---
 
-<a id="toc-742-map"></a>
 ### 7.4.2 map()
 
 **map()** transforms each element using a callback function and returns a new array with the results.
@@ -35963,7 +32830,6 @@ let result = numbers
 
 ---
 
-<a id="toc-743-filter"></a>
 ### 7.4.3 filter()
 
 **filter()** returns a new array with elements that pass a test function.
@@ -36105,7 +32971,6 @@ search(['Apple', 'Banana', 'Cherry'], 'app');  // ['Apple']
 
 ---
 
-<a id="toc-744-reduce-and-reduceright"></a>
 ### 7.4.4 reduce() and reduceRight()
 
 **reduce()** executes a reducer function on each element, resulting in a single value.
@@ -36277,7 +33142,6 @@ result                      // 24 (3*2 + 4*2 + 5*2 = 6 + 8 + 10)
 
 ---
 
-<a id="toc-745-find-and-findindex"></a>
 ### 7.4.5 find() and findIndex()
 
 **find()** returns the first element that passes a test function (or undefined if none found).
@@ -36397,7 +33261,6 @@ cached                      // { key: 'user', value: {...} }
 
 ---
 
-<a id="toc-746-findlast-and-findlastindex-es2023"></a>
 ### 7.4.6 findLast() and findLastIndex() (ES2023)
 
 **findLast()** returns the last element that passes a test (searches right to left).
@@ -36477,7 +33340,6 @@ insertIndex                 // 2 (insert at position 2)
 
 ---
 
-<a id="toc-747-some-and-every"></a>
 ### 7.4.7 some() and every()
 
 **some()** returns true if at least one element passes the test.
@@ -36610,7 +33472,6 @@ let allUnique = arr.every((x, i) => arr[i + 1] !== x);
 
 ---
 
-<a id="toc-748-keys-values-and-entries"></a>
 ### 7.4.8 keys(), values(), and entries()
 
 These methods return iterators for array keys, values, and [key, value] pairs.
@@ -36686,14 +33547,12 @@ arr.forEach((val, i) => {
   console.log(i, val);
 });
 ```
-<a id="toc-75-array-destructuring"></a>
 ## 7.5 Array Destructuring
 
 **Array destructuring** allows extracting values from arrays and assigning them to variables in a concise syntax. It's a powerful ES6 feature that makes code more readable and reduces boilerplate.
 
 ---
 
-<a id="toc-751-basic-destructuring"></a>
 ### 7.5.1 Basic Destructuring
 
 **Basic destructuring** extracts array elements by position and assigns them to variables.
@@ -36780,7 +33639,6 @@ second                      // 200
 
 ---
 
-<a id="toc-752-skipping-elements"></a>
 ### 7.5.2 Skipping Elements
 
 **Skipping elements** allows ignoring specific positions while destructuring.
@@ -36847,7 +33705,6 @@ rest                        // [3, 4, 5]
 
 ---
 
-<a id="toc-753-rest-in-destructuring"></a>
 ### 7.5.3 Rest in Destructuring
 
 **Rest in destructuring** (using `...`) collects remaining elements into a new array.
@@ -36939,7 +33796,6 @@ let [, ...clone2] = original;       // Using rest destructuring
 
 ---
 
-<a id="toc-754-default-values"></a>
 ### 7.5.4 Default Values
 
 **Default values** are assigned when destructured element is `undefined`.
@@ -37026,7 +33882,6 @@ c                           // 30
 
 ---
 
-<a id="toc-755-swapping-variables"></a>
 ### 7.5.5 Swapping Variables
 
 **Swapping variables** is one of the most elegant uses of destructuring.
@@ -37126,7 +33981,6 @@ y                           // 'hello'
 
 ---
 
-<a id="toc-756-advanced-destructuring-patterns"></a>
 ### 7.5.6 Advanced Destructuring Patterns
 
 **Advanced patterns** combine multiple features for powerful array manipulation.
@@ -37301,14 +34155,12 @@ let [
   email       // Email address
 ] = data;
 ```
-<a id="toc-76-typed-arrays"></a>
 ## 7.6 Typed Arrays
 
 **Typed Arrays** provide a mechanism to access raw binary data with fixed data types. They're essential for performance-critical code, binary protocol handling, and low-level data manipulation.
 
 ---
 
-<a id="toc-761-typed-array-types-and-creation"></a>
 ### 7.6.1 Typed Array Types and Creation
 
 **Typed Arrays** come in various types for different integer and floating-point sizes.
@@ -37407,7 +34259,6 @@ Uint32Array.BYTES_PER_ELEMENT;  // 4 (bytes per element)
 
 ---
 
-<a id="toc-762-typed-array-operations"></a>
 ### 7.6.2 Typed Array Operations
 
 **Operations** on typed arrays include indexing, modification, and copying.
@@ -37514,7 +34365,6 @@ arr.toLocaleString();       // '1,2,3'
 
 ---
 
-<a id="toc-763-converting-between-typed-arrays"></a>
 ### 7.6.3 Converting Between Typed Arrays
 
 **Conversion** allows switching between typed array types and regular arrays.
@@ -37592,7 +34442,6 @@ bytes;                      // Uint8Array [208, 15, 73, 64] (bytes representatio
 
 ---
 
-<a id="toc-764-uint8clampedarray"></a>
 ### 7.6.4 Uint8ClampedArray
 
 **Uint8ClampedArray** is special: values are clamped to 0-255 range instead of wrapping.
@@ -37633,7 +34482,6 @@ imgData.data[0] = 256;      // Clamped to 255
 
 ---
 
-<a id="toc-765-bigint64array-and-biguint64array-es2020"></a>
 ### 7.6.5 BigInt64Array and BigUint64Array (ES2020)
 
 **BigInt typed arrays** handle 64-bit integers beyond JavaScript's safe integer range.
@@ -37684,7 +34532,6 @@ let regular = [...big64];   // [10n, 20n, 30n]
 
 ---
 
-<a id="toc-766-arraybuffer-and-binary-data"></a>
 ### 7.6.6 ArrayBuffer and Binary Data
 
 **ArrayBuffer** represents generic fixed-length binary data. Views interpret the bytes.
@@ -37754,7 +34601,6 @@ header[0] = 0xDEADBEEF;  // Set packet identifier
 
 ---
 
-<a id="toc-767-dataview-for-mixed-type-data"></a>
 ### 7.6.7 DataView for Mixed-Type Data
 
 **DataView** allows reading/writing different types from same buffer with explicit endianness control.
@@ -37849,7 +34695,6 @@ view.byteOffset;            // 5
 
 ---
 
-<a id="toc-768-use-cases"></a>
 ### 7.6.8 Use Cases
 
 **Common use cases** for typed arrays and binary data.
@@ -38005,7 +34850,6 @@ for (let i = 0; i < float32.length; i++) {
 }
 ```
 
-<a id="toc-79-arrays-summary"></a>
 ## 7.9 Arrays Summary
 
 | Category | Methods |
@@ -38020,24 +34864,20 @@ for (let i = 0; i < float32.length; i++) {
 **End of Chapter 7: Arrays**
 
 
-<a id="toc-08-stringsmd"></a>
 # 08-Strings.md
 
-<a id="toc-8-strings"></a>
 # 8 Strings
 
 Strings are immutable sequences of UTF-16 code units. This chapter covers string creation, manipulation methods, template literals, and internationalization.
 
 ---
 
-<a id="toc-81-string-basics"></a>
 ## 8.1 String Basics
 
 **Strings** are immutable sequences of characters. JavaScript has three ways to create strings and various mechanisms for accessing and manipulating characters.
 
 ---
 
-<a id="toc-811-string-literals"></a>
 ### 8.1.1 String Literals
 
 **String literals** define strings using quotes or template literals. All three formats create the same String primitive type.
@@ -38144,7 +34984,6 @@ let incorrect = new String('string');
 
 ---
 
-<a id="toc-812-template-literals"></a>
 ### 8.1.2 Template Literals
 
 **Template literals** use backticks and support expression interpolation and multi-line strings.
@@ -38275,7 +35114,6 @@ let summary = `
 
 ---
 
-<a id="toc-813-string-length-property"></a>
 ### 8.1.3 String Length Property
 
 **Length property** returns the number of UTF-16 code units in the string.
@@ -38357,7 +35195,6 @@ str5.length;                // 25 (multiple surrogate pairs and ZWJ)
 
 ---
 
-<a id="toc-814-character-access"></a>
 ### 8.1.4 Character Access
 
 **Character access** retrieves individual characters by index using bracket notation or charAt().
@@ -38440,7 +35277,6 @@ str4.indexOf('a') !== -1;   // true
 
 ---
 
-<a id="toc-815-unicode-and-code-points"></a>
 ### 8.1.5 Unicode and Code Points
 
 **Unicode** represents characters using code points. JavaScript uses UTF-16 encoding, which requires surrogates for some characters.
@@ -38546,7 +35382,6 @@ getCharAt('A😀Z', 1);      // '😀' (correct, not broken)
 
 ---
 
-<a id="toc-816-converting-array-like-to-strings"></a>
 ### 8.1.6 Converting Array-like to Strings
 
 **Conversion methods** transform various types into strings for manipulation.
@@ -38677,14 +35512,12 @@ let str7 = items.join('');
 // ✓ Or array accumulation
 let str8 = items.reduce((acc, item) => acc + item, '');
 ```
-<a id="toc-82-string-methods"></a>
 ## 8.2 String Methods
 
 **String methods** allow searching, manipulation, and transformation of strings. All methods return new strings (strings are immutable).
 
 ---
 
-<a id="toc-821-character-code-methods"></a>
 ### 8.2.1 Character Code Methods
 
 **Character code methods** retrieve numeric representations of characters.
@@ -38784,7 +35617,6 @@ isUpperCase('5');           // false
 
 ---
 
-<a id="toc-822-searching-and-matching"></a>
 ### 8.2.2 Searching and Matching
 
 **Search methods** find substrings or patterns within strings.
@@ -38891,7 +35723,6 @@ getParam('https://example.com?id=123&name=test', 'name');
 
 ---
 
-<a id="toc-823-string-replacement"></a>
 ### 8.2.3 String Replacement
 
 **Replacement methods** modify string content.
@@ -38997,7 +35828,6 @@ str2.replaceAll('hello', 'hi');    // Works (ES2021)
 
 ---
 
-<a id="toc-824-string-extraction"></a>
 ### 8.2.4 String Extraction
 
 **Extraction methods** get portions of strings.
@@ -39112,7 +35942,6 @@ str2.toUpperCase();         // 'HELLO WORLD'
 
 ---
 
-<a id="toc-825-string-transformation"></a>
 ### 8.2.5 String Transformation
 
 **Transformation methods** change string format or structure.
@@ -39227,7 +36056,6 @@ toCamelCase('hello-world');  // 'helloWorld'
 
 ---
 
-<a id="toc-826-advanced-pattern-matching"></a>
 ### 8.2.6 Advanced Pattern Matching
 
 ```javascript
@@ -39295,14 +36123,12 @@ formatCreditCard('1234567890123456');  // '1234 5678 9012 3456'
 'hello'.startsWith('he');   // true (faster)
 /^he/.test('hello');        // true (slower)
 ```
-<a id="toc-83-template-literals-and-tagged-templates"></a>
 ## 8.3 Template Literals and Tagged Templates
 
 **Template literals** (backtick strings) revolutionized string handling in JavaScript with expression interpolation, multi-line support, and custom processing via tag functions.
 
 ---
 
-<a id="toc-831-basic-template-literals"></a>
 ### 8.3.1 Basic Template Literals
 
 **Template literals** are delimited by backticks (`) instead of quotes.
@@ -39459,7 +36285,6 @@ let largeTpl = `
 
 ---
 
-<a id="toc-832-multi-line-strings-and-formatting"></a>
 ### 8.3.2 Multi-line Strings and Formatting
 
 **Multi-line strings** are a major benefit of template literals.
@@ -39502,18 +36327,14 @@ let apiBody = `
 
 // Markdown content
 let markdown = `
-<a id="toc-title"></a>
 # ${title}
 
-<a id="toc-overview"></a>
 ## Overview
 ${description}
 
-<a id="toc-features"></a>
 ## Features
 - ${features.join('\n- ')}
 
-<a id="toc-usage"></a>
 ## Usage
 \`\`\`javascript
 ${codeExample}
@@ -39588,7 +36409,6 @@ let complexHtml = `
 
 ---
 
-<a id="toc-833-tagged-templates"></a>
 ### 8.3.3 Tagged Templates
 
 **Tagged templates** process templates through a function for custom behavior.
@@ -39807,7 +36627,6 @@ let both = dedent`
 
 ---
 
-<a id="toc-834-stringraw-and-raw-strings"></a>
 ### 8.3.4 String.raw and Raw Strings
 
 **String.raw** preserves escape sequences without processing them.
@@ -39881,7 +36700,6 @@ urlPattern                 // Clean regex pattern
 
 ---
 
-<a id="toc-835-practical-use-cases"></a>
 ### 8.3.5 Practical Use Cases
 
 **Real-world applications** of template literals.
@@ -40027,14 +36845,12 @@ console.timeEnd('template');
 // Use for clarity, not necessarily performance
 // They perform well in modern engines
 ```
-<a id="toc-84-string-internationalization-i18n"></a>
 ## 8.4 String Internationalization (i18n)
 
 **Internationalization** handles locale-specific string operations for languages, character sets, and cultural conventions. JavaScript provides the `Intl` API for proper i18n support.
 
 ---
 
-<a id="toc-841-intlcollator"></a>
 ### 8.4.1 Intl.Collator
 
 **Collator** performs locale-aware string comparison following linguistic rules.
@@ -40147,7 +36963,6 @@ sortUsersByName([
 
 ---
 
-<a id="toc-842-locale-aware-string-operations"></a>
 ### 8.4.2 Locale-Aware String Operations
 
 **Locale-aware methods** handle language-specific transformations.
@@ -40239,7 +37054,6 @@ fuzzyMatch('Café', 'cafe', 'en-US');  // true (ignoring case and accents)
 
 ---
 
-<a id="toc-843-formatting-with-locales"></a>
 ### 8.4.3 Formatting with Locales
 
 **Number, date, and currency formatting** depends on locale.
@@ -40407,7 +37221,6 @@ let userLoc = getUserLocale();  // Use for all Intl operations
 
 ---
 
-<a id="toc-844-best-practices-and-gotchas"></a>
 ### 8.4.4 Best Practices and Gotchas
 
 **Common mistakes** and **proper patterns** for i18n.
@@ -40556,7 +37369,6 @@ class UserSettings {
 
 ---
 
-<a id="toc-summary-string-internationalization"></a>
 ## Summary: String Internationalization
 
 **Key Takeaways:**
@@ -40593,7 +37405,6 @@ let collator = new Intl.Collator(userLocale, { sensitivity: 'base' });
 results.filter(item => collator.compare(item.name, query) === 0);
 ```
 
-<a id="toc-85-strings-summary"></a>
 ## 8.5 Strings Summary
 
 | Category | Methods |
@@ -40609,24 +37420,20 @@ results.filter(item => collator.compare(item.name, query) === 0);
 **End of Chapter 8: Strings**
 
 
-<a id="toc-09-regexpmd"></a>
 # 09-RegExp.md
 
-<a id="toc-9-regular-expressions"></a>
 # 9 Regular Expressions
 
 Regular expressions are patterns for matching text. JavaScript provides the `RegExp` object and regex literals for powerful string pattern matching.
 
 ---
 
-<a id="toc-91-regexp-basics"></a>
 ## 9.1 RegExp Basics
 
 **Regular Expressions** are patterns used to match, search, and manipulate strings. They provide powerful pattern matching capabilities essential for text processing.
 
 ---
 
-<a id="toc-911-literal-syntax"></a>
 ### 9.1.1 Literal Syntax
 
 **Literal syntax** uses forward slashes to define regex patterns directly in code.
@@ -40691,7 +37498,6 @@ let badRegex = /\${digit}/;      // Literal: matches "${digit}"
 
 ---
 
-<a id="toc-912-constructor-syntax"></a>
 ### 9.1.2 Constructor Syntax
 
 **Constructor syntax** uses `new RegExp()` to create patterns with dynamic values.
@@ -40796,7 +37602,6 @@ let caseInsensitiveCopy = new RegExp(original.source, original.flags + 'i');
 
 ---
 
-<a id="toc-913-flags"></a>
 ### 9.1.3 Flags
 
 **Flags** modify how the regex behaves when matching.
@@ -40931,7 +37736,6 @@ globalRegex2.exec('a1b2c3');
 
 ---
 
-<a id="toc-914-regexp-properties"></a>
 ### 9.1.4 RegExp Properties
 
 **Properties** provide information about regex objects.
@@ -41055,7 +37859,6 @@ removeCase.flags;                // ''
 
 ---
 
-<a id="toc-915-creating-regex-dynamically"></a>
 ### 9.1.5 Creating Regex Dynamically
 
 **Dynamic regex** construction enables pattern building at runtime.
@@ -41172,7 +37975,6 @@ getCachedPattern('\\d+', 'g');   // Returns cached version
 
 ---
 
-<a id="toc-summary-regexp-basics"></a>
 ## Summary: RegExp Basics
 
 **Key Takeaways:**
@@ -41207,14 +38009,12 @@ let result = EMAIL.test(input);
 // Use constructor for dynamic patterns
 let pattern = new RegExp(userInput, 'i');
 ```
-<a id="toc-92-pattern-syntax"></a>
 ## 9.2 Pattern Syntax
 
 **Pattern syntax** defines the rules and notation used to specify what to match. Understanding patterns is fundamental to effective regex use.
 
 ---
 
-<a id="toc-921-literal-characters-and-escaping"></a>
 ### 9.2.1 Literal Characters and Escaping
 
 **Literal characters** match exactly what they are unless they have special meaning.
@@ -41285,7 +38085,6 @@ let regex = new RegExp(escapeInString);  // Matches any digit
 
 ---
 
-<a id="toc-922-character-classes"></a>
 ### 9.2.2 Character Classes
 
 **Character classes** match any one character from a set.
@@ -41373,7 +38172,6 @@ let specialChar = /[!@#$%^&*()]/;
 
 ---
 
-<a id="toc-923-predefined-character-classes"></a>
 ### 9.2.3 Predefined Character Classes
 
 **Predefined classes** are shorthand for common character sets.
@@ -41456,7 +38254,6 @@ let whitespaceNorm = /\s+/g;     // Normalize multiple spaces
 
 ---
 
-<a id="toc-924-quantifiers"></a>
 ### 9.2.4 Quantifiers
 
 **Quantifiers** specify how many times to match.
@@ -41548,7 +38345,6 @@ url.test('http://example.com');   // true
 
 ---
 
-<a id="toc-925-anchors"></a>
 ### 9.2.5 Anchors
 
 **Anchors** match positions rather than characters.
@@ -41626,7 +38422,6 @@ lines.match(endLines);            // ['start', 'middle', 'end']
 
 ---
 
-<a id="toc-926-groups-and-capture"></a>
 ### 9.2.6 Groups and Capture
 
 **Groups** organize patterns and capture matched text.
@@ -41723,7 +38518,6 @@ urlMatch[3];                     // '/path/to/page'
 
 ---
 
-<a id="toc-927-alternation"></a>
 ### 9.2.7 Alternation
 
 **Alternation** matches one pattern or another.
@@ -41795,7 +38589,6 @@ time.test('15:30');              // true
 
 ---
 
-<a id="toc-928-lookahead-and-lookbehind"></a>
 ### 9.2.8 Lookahead and Lookbehind
 
 **Lookahead and lookbehind** assert what comes before/after without consuming characters.
@@ -41863,7 +38656,6 @@ strongPassword.test(password);   // true
 
 ---
 
-<a id="toc-summary-pattern-syntax"></a>
 ## Summary: Pattern Syntax
 
 **Key Takeaways:**
@@ -41889,14 +38681,12 @@ strongPassword.test(password);   // true
 - Use non-capturing `(?:)` when you don't need the match
 - Use lookahead `(?=...)` for assertions without consuming
 - Test patterns thoroughly with edge cases
-<a id="toc-93-regexp-methods"></a>
 ## 9.3 RegExp Methods
 
 **RegExp methods** and **String methods for regex** perform matching, searching, and replacing operations.
 
 ---
 
-<a id="toc-931-regexpprototypetest"></a>
 ### 9.3.1 RegExp.prototype.test()
 
 **test()** returns a boolean indicating whether a pattern matches.
@@ -41970,7 +38760,6 @@ validateEmail('invalid');           // false
 
 ---
 
-<a id="toc-932-regexpprototypeexec"></a>
 ### 9.3.2 RegExp.prototype.exec()
 
 **exec()** returns match details including captured groups or null.
@@ -42082,7 +38871,6 @@ findAllMatches('hello 123 world 456', '\\d+');
 
 ---
 
-<a id="toc-933-string-methods-with-regexp"></a>
 ### 9.3.3 String Methods with RegExp
 
 **String methods** perform regex operations on strings.
@@ -42217,7 +39005,6 @@ findAllPositions('hello world hello', /\w+/);
 
 ---
 
-<a id="toc-summary-regexp-methods"></a>
 ## Summary: RegExp Methods
 
 **Key Takeaways:**
@@ -42259,14 +39046,12 @@ const DIGITS = /\d+/g;
 const WORDS = /\w+/g;
 const SPACES = /\s+/;
 ```
-<a id="toc-94-advanced-regexp"></a>
 ## 9.4 Advanced RegExp
 
 **Advanced techniques** for mastering complex regex patterns and special features.
 
 ---
 
-<a id="toc-941-backreferences"></a>
 ### 9.4.1 Backreferences
 
 **Backreferences** allow referencing previously captured groups within a pattern.
@@ -42358,7 +39143,6 @@ nestPattern.test('[1[[1]1');     // false (complex)
 
 ---
 
-<a id="toc-942-named-capture-groups"></a>
 ### 9.4.2 Named Capture Groups
 
 **Named capture groups** make patterns more readable by naming groups.
@@ -42477,7 +39261,6 @@ parseCSV('name,age,city', 'Alice,30,NYC');
 
 ---
 
-<a id="toc-943-unicode-and-property-escapes"></a>
 ### 9.4.3 Unicode and Property Escapes
 
 **Unicode support** and **property escapes** for international text.
@@ -42592,7 +39375,6 @@ isValidPhone('+44 7911 123456');    // true
 
 ---
 
-<a id="toc-944-lastindex-and-stateful-regex"></a>
 ### 9.4.4 lastIndex and Stateful Regex
 
 **lastIndex** property maintains state for global and sticky regex.
@@ -42721,7 +39503,6 @@ let result2 = findNextMatch(/\d+/g, 'a1b2c3', result1.nextIndex);
 
 ---
 
-<a id="toc-945-match-indices-d-flag"></a>
 ### 9.4.5 Match Indices (d flag)
 
 **Match indices** ('d' flag) provides start and end positions of matches and groups.
@@ -42815,7 +39596,6 @@ checkHTMLTags('<div><p>text</div></p>');  // Mismatch detected
 
 ---
 
-<a id="toc-summary-advanced-regexp"></a>
 ## Summary: Advanced RegExp
 
 **Key Takeaways:**
@@ -42863,10 +39643,8 @@ let tokenRegex = /(\d+|[+\-*/])/y;
 
 ---
 
-<a id="toc-common-pitfalls-2"></a>
 ## Common Pitfalls
 
-<a id="toc-pitfall-1-forgetting-to-escape-special-characters"></a>
 ### Pitfall 1: Forgetting to Escape Special Characters
 
 ```javascript
@@ -42880,7 +39658,6 @@ console.log(regex.test('192X168Y1Z1'));  // false
 console.log(regex.test('192.168.1.1'));  // true
 ```
 
-<a id="toc-pitfall-2-global-flag-and-lastindex"></a>
 ### Pitfall 2: Global Flag and lastIndex
 
 ```javascript
@@ -42902,7 +39679,6 @@ const simpleRegex = /a/;  // No 'g' flag
 console.log(simpleRegex.test('banana'));  // Always starts fresh
 ```
 
-<a id="toc-pitfall-3-greedy-vs-lazy-matching"></a>
 ### Pitfall 3: Greedy vs Lazy Matching
 
 ```javascript
@@ -42918,7 +39694,6 @@ console.log(html.match(lazy)[0]);
 // '<div>Hello</div>' — matches minimum
 ```
 
-<a id="toc-pitfall-4-backtracking-performance"></a>
 ### Pitfall 4: Backtracking Performance
 
 ```javascript
@@ -42935,7 +39710,6 @@ console.timeEnd('evil');
 const safeRegex = /^a+$/;  // Simple, no backtracking
 ```
 
-<a id="toc-pitfall-5-unicode-without-the-u-flag"></a>
 ### Pitfall 5: Unicode Without the u Flag
 
 ```javascript
@@ -42949,7 +39723,6 @@ console.log(/^.$/u.test(emoji));  // true
 console.log(/\p{Emoji}/u.test(emoji));  // true (Unicode property)
 ```
 
-<a id="toc-pitfall-6-and-in-multiline"></a>
 ### Pitfall 6: ^ and $ in Multiline
 
 ```javascript
@@ -42963,7 +39736,6 @@ console.log(text.match(/^\w+/gm));  // ['line1', 'line2', 'line3']
 
 ---
 
-<a id="toc-95-regexp-summary"></a>
 ## 9.5 RegExp Summary
 
 | Flag | Meaning |
@@ -42981,24 +39753,20 @@ console.log(text.match(/^\w+/gm));  // ['line1', 'line2', 'line3']
 **End of Chapter 9: Regular Expressions**
 
 
-<a id="toc-10-symbolsmd"></a>
 # 10-Symbols.md
 
-<a id="toc-10-symbols"></a>
 # 10 Symbols
 
 Symbols are unique, immutable primitive values used as property keys. Well-known symbols customize object behavior.
 
 ---
 
-<a id="toc-101-symbol-basics"></a>
 ## 10.1 Symbol Basics
 
 **Symbols** are a primitive data type representing unique, immutable identifiers. They enable creating truly private object properties and special behavioral hooks.
 
 ---
 
-<a id="toc-1011-creating-symbols"></a>
 ### 10.1.1 Creating Symbols
 
 **Symbols are created with the `Symbol()` function.** Each call creates a unique symbol.
@@ -43045,7 +39813,6 @@ mySym.toString();                // 'Symbol(description)'
 
 ---
 
-<a id="toc-1012-symbol-description"></a>
 ### 10.1.2 Symbol Description
 
 **The optional description parameter** helps identify symbols during debugging.
@@ -43115,7 +39882,6 @@ console.log(HIDDEN_ID);          // Symbol(hidden id)
 
 ---
 
-<a id="toc-1013-global-symbol-registry"></a>
 ### 10.1.3 Global Symbol Registry
 
 **`Symbol.for()` and `Symbol.keyFor()`** manage a global registry of symbols.
@@ -43215,7 +39981,6 @@ service[external].getUser();     // works
 
 ---
 
-<a id="toc-1014-symbols-as-property-keys"></a>
 ### 10.1.4 Symbols as Property Keys
 
 **Symbols work as object property keys**, enabling private properties.
@@ -43377,7 +40142,6 @@ Object.getOwnPropertySymbols(copied).length; // 1 (symbol copied too)
 
 ---
 
-<a id="toc-1015-symbol-uniqueness-and-identity"></a>
 ### 10.1.5 Symbol Uniqueness and Identity
 
 **Symbols are always unique**, making them perfect for identity-based operations.
@@ -43517,7 +40281,6 @@ processor[RENDERER];             // undefined - needs symbol
 
 ---
 
-<a id="toc-summary-symbol-basics"></a>
 ## Summary: Symbol Basics
 
 **Key Takeaways:**
@@ -43552,14 +40315,12 @@ processor[RENDERER];             // undefined - needs symbol
 - Consider symbols over underscore convention
 - Document which symbols are private vs public
 - Use global symbols carefully to avoid conflicts
-<a id="toc-102-well-known-symbols"></a>
 ## 10.2 Well-known Symbols
 
 **Well-known symbols** are built-in symbols that customize how objects interact with language features and built-in operations. They enable protocol implementation.
 
 ---
 
-<a id="toc-1021-symboliterator"></a>
 ### 10.2.1 Symbol.iterator
 
 **Symbol.iterator** enables objects to work with `for...of` loops and spread operator.
@@ -43713,7 +40474,6 @@ let tree = new Tree(1,
 
 ---
 
-<a id="toc-1022-symbolasynciterator"></a>
 ### 10.2.2 Symbol.asyncIterator
 
 **Symbol.asyncIterator** enables async iteration with `for await...of` loops.
@@ -43864,7 +40624,6 @@ async function queryDatabase() {
 
 ---
 
-<a id="toc-1023-symboltostringtag"></a>
 ### 10.2.3 Symbol.toStringTag
 
 **Symbol.toStringTag** customizes the output of `Object.prototype.toString()`.
@@ -43965,7 +40724,6 @@ Object.prototype.toString.call(jsonParser);  // '[object JSONParser]'
 
 ---
 
-<a id="toc-1024-symboltoprimitive"></a>
 ### 10.2.4 Symbol.toPrimitive
 
 **Symbol.toPrimitive** defines how objects convert to primitives in coercion.
@@ -44098,7 +40856,6 @@ flex + 0;                        // Log: 'Converting with hint: default' -> 42
 
 ---
 
-<a id="toc-1025-symbolhasinstance"></a>
 ### 10.2.5 Symbol.hasInstance
 
 **Symbol.hasInstance** customizes the `instanceof` operator.
@@ -44200,7 +40957,6 @@ validate(user, Serializable);    // true
 
 ---
 
-<a id="toc-1026-symbolspecies"></a>
 ### 10.2.6 Symbol.species
 
 **Symbol.species** controls which constructor is used for derived objects.
@@ -44328,7 +41084,6 @@ let unique = coll.map(x => x);  // Returns Array
 
 ---
 
-<a id="toc-1027-string-pattern-symbols"></a>
 ### 10.2.7 String Pattern Symbols
 
 **Symbol.match, Symbol.replace, Symbol.search, Symbol.split** customize regex behavior with strings.
@@ -44436,7 +41191,6 @@ for (let m of 'hello'.matchAll(matcher)) {
 
 ---
 
-<a id="toc-1028-other-well-known-symbols"></a>
 ### 10.2.8 Other Well-known Symbols
 
 **Symbol.unscopables, Symbol.isConcatSpreadable, Symbol.for(), etc.**
@@ -44547,7 +41301,6 @@ coll instanceof CustomCollection;  // true
 
 ---
 
-<a id="toc-summary-well-known-symbols-chapter-10"></a>
 ## Summary: Well-known Symbols - Chapter 10
 
 **Complete Chapter 10: Symbols**
@@ -44599,7 +41352,6 @@ coll instanceof CustomCollection;  // true
 - Document symbol purposes with descriptions
 - Consider user expectations for duck typing
 
-<a id="toc-103-symbols-summary"></a>
 ## 10.3 Symbols Summary
 
 | Well-Known Symbol | Purpose |
@@ -44615,31 +41367,25 @@ coll instanceof CustomCollection;  // true
 **End of Chapter 10: Symbols**
 
 
-<a id="toc-11-iterators-and-generatorsmd"></a>
 # 11-Iterators-and-Generators.md
 
-<a id="toc-11-iterators-and-generators"></a>
 # 11 Iterators and Generators
 
 The iteration protocol defines how objects produce sequences of values. Generators are functions that can pause and resume, implementing the iterator protocol.
 
 ---
 
-<a id="toc-iteration-protocols"></a>
 ## Iteration Protocols
 
 
-<a id="toc-the-iterable-protocol"></a>
 ## The Iterable Protocol
 
-<a id="toc-what-is-the-iterable-protocol"></a>
 ### What is the Iterable Protocol?
 
 The **iterable protocol** defines how objects become iterable, allowing them to work with `for...of` loops, spread operator, and destructuring.
 
 **Core requirement:** An object must have a method accessible via `Symbol.iterator` that returns an iterator object.
 
-<a id="toc-interface-definition"></a>
 ### Interface Definition
 
 ```javascript
@@ -44652,7 +41398,6 @@ object[Symbol.iterator]() {
 }
 ```
 
-<a id="toc-simple-example"></a>
 ### Simple Example
 
 ```javascript
@@ -44678,7 +41423,6 @@ for (const value of iterable) {
 }
 ```
 
-<a id="toc-key-points"></a>
 ### Key Points
 
 - The iterable protocol defines **how** to iterate
@@ -44688,17 +41432,14 @@ for (const value of iterable) {
 
 ---
 
-<a id="toc-the-iterator-protocol"></a>
 ## The Iterator Protocol
 
-<a id="toc-what-is-the-iterator-protocol"></a>
 ### What is the Iterator Protocol?
 
 The **iterator protocol** defines the `next()` method that returns objects with `{ value, done }` structure.
 
 **Core requirement:** An iterator must have a `next()` method that returns a result object.
 
-<a id="toc-result-object-structure"></a>
 ### Result Object Structure
 
 ```javascript
@@ -44709,7 +41450,6 @@ The **iterator protocol** defines the `next()` method that returns objects with 
 }
 ```
 
-<a id="toc-simple-example-1"></a>
 ### Simple Example
 
 ```javascript
@@ -44736,7 +41476,6 @@ console.log(iterator.next());  // { value: 'c', done: false }
 console.log(iterator.next());  // { done: true }
 ```
 
-<a id="toc-iterator-with-return-value"></a>
 ### Iterator with Return Value
 
 ```javascript
@@ -44767,7 +41506,6 @@ while (!result.done) {
 console.log(result.value);  // 'FINISHED'
 ```
 
-<a id="toc-key-points-1"></a>
 ### Key Points
 
 - Iterator protocol defines **mechanism** of iteration
@@ -44777,10 +41515,8 @@ console.log(result.value);  // 'FINISHED'
 
 ---
 
-<a id="toc-symboliterator"></a>
 ## Symbol.iterator
 
-<a id="toc-connecting-iterable-and-iterator"></a>
 ### Connecting Iterable and Iterator
 
 `Symbol.iterator` is the bridge between:
@@ -44796,7 +41532,6 @@ object[Symbol.iterator]() → returns → iterator
                                     returns { value, done }
 ```
 
-<a id="toc-complete-example"></a>
 ### Complete Example
 
 ```javascript
@@ -44837,7 +41572,6 @@ const [first, second] = counter;
 console.log(first, second);  // 1, 2
 ```
 
-<a id="toc-checking-if-something-is-iterable"></a>
 ### Checking if Something is Iterable
 
 ```javascript
@@ -44864,7 +41598,6 @@ const iter = getIterator([1, 2]);
 console.log(iter.next());  // { value: 1, done: false }
 ```
 
-<a id="toc-symboliterator-is-a-symbol"></a>
 ### Symbol.iterator is a Symbol
 
 ```javascript
@@ -44890,10 +41623,8 @@ console.log(Object.getOwnPropertySymbols(b)[0] === Symbol.iterator);  // true
 
 ---
 
-<a id="toc-making-objects-iterable"></a>
 ## Making Objects Iterable
 
-<a id="toc-pattern-1-simple-object-iteration"></a>
 ### Pattern 1: Simple Object Iteration
 
 ```javascript
@@ -44920,7 +41651,6 @@ for (const value of person) {
 }
 ```
 
-<a id="toc-pattern-2-iterating-object-entries"></a>
 ### Pattern 2: Iterating Object Entries
 
 ```javascript
@@ -44950,7 +41680,6 @@ for (const [key, value] of config) {
 // debug: true
 ```
 
-<a id="toc-pattern-3-filtering-iteration"></a>
 ### Pattern 3: Filtering Iteration
 
 ```javascript
@@ -44983,7 +41712,6 @@ for (const num of new Numbers(10)) {
 }
 ```
 
-<a id="toc-pattern-4-stateful-iteration"></a>
 ### Pattern 4: Stateful Iteration
 
 ```javascript
@@ -45017,7 +41745,6 @@ for (const num of new Fibonacci(8)) {
 }
 ```
 
-<a id="toc-pattern-5-infinite-iterator"></a>
 ### Pattern 5: Infinite Iterator
 
 ```javascript
@@ -45044,7 +41771,6 @@ for (const num of new InfiniteCounter(100)) {
 }
 ```
 
-<a id="toc-pattern-6-multi-value-iteration"></a>
 ### Pattern 6: Multi-Value Iteration
 
 ```javascript
@@ -45082,10 +41808,8 @@ for (const [a, b] of new Pairs([1, 2, 3, 4, 5])) {
 
 ---
 
-<a id="toc-practical-examples"></a>
 ## Practical Examples
 
-<a id="toc-example-1-range-iterator"></a>
 ### Example 1: Range Iterator
 
 ```javascript
@@ -45128,7 +41852,6 @@ console.log([...new Range(0, 10, 2)]);       // [0, 2, 4, 6, 8]
 console.log([...new Range(10, 0, -1)]);      // [10, 9, 8, ..., 1]
 ```
 
-<a id="toc-example-2-tree-traversal"></a>
 ### Example 2: Tree Traversal
 
 ```javascript
@@ -45160,7 +41883,6 @@ const tree = new TreeNode(1, [
 console.log([...tree]);  // [1, 2, 4, 5, 3, 6]
 ```
 
-<a id="toc-example-3-linked-list"></a>
 ### Example 3: Linked List
 
 ```javascript
@@ -45211,7 +41933,6 @@ for (const value of list) {
 console.log([...list]);  // [1, 2, 3]
 ```
 
-<a id="toc-example-4-filtered-iterator"></a>
 ### Example 4: Filtered Iterator
 
 ```javascript
@@ -45249,10 +41970,8 @@ console.log([...evens]);  // [2, 4, 6, 8, 10]
 
 ---
 
-<a id="toc-common-patterns-4"></a>
 ## Common Patterns
 
-<a id="toc-pattern-iterator-wrapper"></a>
 ### Pattern: Iterator Wrapper
 
 ```javascript
@@ -45276,7 +41995,6 @@ for (const value of wrapped) {
 }
 ```
 
-<a id="toc-pattern-lazy-iterator"></a>
 ### Pattern: Lazy Iterator
 
 ```javascript
@@ -45309,7 +42027,6 @@ const squared = new LazyMap(numbers, x => x * x);
 console.log([...squared]);  // [1, 4, 9, 16, 25]
 ```
 
-<a id="toc-pattern-iterator-composition"></a>
 ### Pattern: Iterator Composition
 
 ```javascript
@@ -45326,10 +42043,8 @@ console.log(result);  // [1, 2, 3, 4, 5]
 
 ---
 
-<a id="toc-best-practices-8"></a>
 ## Best Practices
 
-<a id="toc-✅-do"></a>
 ### ✅ DO
 
 ```javascript
@@ -45371,7 +42086,6 @@ class Independent {
 }
 ```
 
-<a id="toc-❌-dont"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -45423,7 +42137,6 @@ class Bad3 {
 }
 ```
 
-<a id="toc-performance-considerations"></a>
 ### Performance Considerations
 
 ```javascript
@@ -45462,10 +42175,8 @@ class Inefficient {
 
 ---
 
-<a id="toc-summary-7"></a>
 ## Summary
 
-<a id="toc-key-concepts"></a>
 ### Key Concepts
 
 | Concept | Purpose |
@@ -45476,7 +42187,6 @@ class Inefficient {
 | **for...of loop** | Consumes iterables automatically |
 | **Spread operator** | Converts iterables to arrays |
 
-<a id="toc-protocol-requirements"></a>
 ### Protocol Requirements
 
 **Iterable (object) must have:**
@@ -45488,7 +42198,6 @@ class Inefficient {
 - Returns `{ value, done }` object
 - `done` = true when finished
 
-<a id="toc-common-use-cases-1"></a>
 ### Common Use Cases
 
 ```javascript
@@ -45514,22 +42223,17 @@ class Multi {
 }
 ```
 
-<a id="toc-next-steps"></a>
 ### Next Steps
 
 - **Module 11.2** - Learn about built-in iterables (Array, String, Map, Set)
 - **Module 11.3** - Use generators to simplify iterator creation
 - **Module 11.4** - Async iterators for asynchronous operations
-<a id="toc-generators-built-in-iterables-async-iterators"></a>
 ## Generators, Built-in Iterables & Async Iterators
-<a id="toc-part-1-built-in-iterables-module-112"></a>
 ## Part 1: Built-in Iterables (Module 11.2)
 
 
-<a id="toc-built-in-iterables-overview"></a>
 ## Built-in Iterables Overview
 
-<a id="toc-what-objects-are-iterable"></a>
 ### What Objects are Iterable?
 
 JavaScript provides several built-in iterable objects:
@@ -45560,10 +42264,8 @@ console.log(isIterable({ a: 1 })); // false
 
 ---
 
-<a id="toc-arrays"></a>
 ## Arrays
 
-<a id="toc-array-iteration"></a>
 ### Array Iteration
 
 ```javascript
@@ -45590,7 +42292,6 @@ console.log(iterator.next());  // { value: 10, done: false }
 console.log(iterator.next());  // { value: 20, done: false }
 ```
 
-<a id="toc-array-iterator-details"></a>
 ### Array Iterator Details
 
 ```javascript
@@ -45609,7 +42310,6 @@ const mapped = arr.map(x => x * 2);
 const filtered = arr.filter(x => x > 1);
 ```
 
-<a id="toc-array-subclass-iteration"></a>
 ### Array Subclass Iteration
 
 ```javascript
@@ -45641,10 +42341,8 @@ console.log([...reversed]);  // [3, 2, 1]
 
 ---
 
-<a id="toc-strings"></a>
 ## Strings
 
-<a id="toc-string-iteration"></a>
 ### String Iteration
 
 ```javascript
@@ -45667,7 +42365,6 @@ const iterator = str[Symbol.iterator]();
 console.log(iterator.next());  // { value: 'h', done: false }
 ```
 
-<a id="toc-unicode-aware-string-iteration"></a>
 ### Unicode-Aware String Iteration
 
 ```javascript
@@ -45688,7 +42385,6 @@ console.log(text2.length);      // 2 (two UTF-16 code units)
 console.log([...text2].length);  // 1 (one grapheme)
 ```
 
-<a id="toc-string-processing-with-forof"></a>
 ### String Processing with for...of
 
 ```javascript
@@ -45721,10 +42417,8 @@ console.log(removeVowels("Hello World"));  // "Hll Wrld"
 
 ---
 
-<a id="toc-maps-and-sets"></a>
 ## Maps and Sets
 
-<a id="toc-map-iteration"></a>
 ### Map Iteration
 
 ```javascript
@@ -45762,7 +42456,6 @@ const entries = [...map];  // [['name', 'Alice'], ['age', 30], ...]
 const [first, second] = map;  // ['name', 'Alice'], ['age', 30]
 ```
 
-<a id="toc-set-iteration"></a>
 ### Set Iteration
 
 ```javascript
@@ -45796,7 +42489,6 @@ const arr = [...set];  // [1, 2, 3]
 set.forEach(value => console.log(value));
 ```
 
-<a id="toc-weakmap-and-weakset"></a>
 ### WeakMap and WeakSet
 
 ```javascript
@@ -45813,10 +42505,8 @@ console.log(typeof weakSet[Symbol.iterator]);  // undefined
 
 ---
 
-<a id="toc-typedarrays"></a>
 ## TypedArrays
 
-<a id="toc-typedarray-iteration"></a>
 ### TypedArray Iteration
 
 ```javascript
@@ -45841,7 +42531,6 @@ const iterator = int16[Symbol.iterator]();
 console.log(iterator.next());  // { value: 100, done: false }
 ```
 
-<a id="toc-typedarray-types"></a>
 ### TypedArray Types
 
 ```javascript
@@ -45873,10 +42562,8 @@ for (const value of bigInt) {
 
 ---
 
-<a id="toc-dom-nodelists"></a>
 ## DOM NodeLists
 
-<a id="toc-nodelist-iteration"></a>
 ### NodeList Iteration
 
 ```javascript
@@ -45898,7 +42585,6 @@ const ids = [...elements].map(el => el.id);
 const withClass = [...elements].filter(el => el.classList.length > 0);
 ```
 
-<a id="toc-htmlcollection-vs-nodelist"></a>
 ### HTMLCollection vs NodeList
 
 ```javascript
@@ -45923,14 +42609,11 @@ for (const element of liveCollection) {
 
 ---
 
-<a id="toc-part-2-generator-functions-module-113"></a>
 ## Part 2: Generator Functions (Module 11.3)
 
 
-<a id="toc-generator-function-basics"></a>
 ## Generator Function Basics
 
-<a id="toc-what-are-generator-functions"></a>
 ### What are Generator Functions?
 
 A **generator function** is a function that can be paused and resumed, making it easy to create iterators.
@@ -45959,7 +42642,6 @@ for (const value of myGenerator()) {
 const arr = [...myGenerator()];  // [1, 2, 3]
 ```
 
-<a id="toc-generator-syntax-variations"></a>
 ### Generator Syntax Variations
 
 ```javascript
@@ -46001,10 +42683,8 @@ for (const x of new MyClass().gen4()) { }
 
 ---
 
-<a id="toc-the-yield-mechanism"></a>
 ## The yield Mechanism
 
-<a id="toc-basic-yield"></a>
 ### Basic yield
 
 ```javascript
@@ -46025,7 +42705,6 @@ console.log(iter.next());  // Logs 'between 2 and 3', returns { value: 3, done: 
 console.log(iter.next());  // Logs 'end', returns { done: true }
 ```
 
-<a id="toc-return-value-from-generator"></a>
 ### Return Value from Generator
 
 ```javascript
@@ -46047,7 +42726,6 @@ console.log(iterator.next());  // { value: 2, done: false }
 console.log(iterator.next());  // { value: 'DONE', done: true }
 ```
 
-<a id="toc-early-exit-with-return"></a>
 ### Early Exit with return
 
 ```javascript
@@ -46066,7 +42744,6 @@ for (const value of earlyExit()) {
 }
 ```
 
-<a id="toc-yield-expression-value"></a>
 ### yield Expression Value
 
 ```javascript
@@ -46087,10 +42764,8 @@ console.log(iter.next(20));            // Logs 'received: 20', returns { done: t
 
 ---
 
-<a id="toc-generator-delegation-yield"></a>
 ## Generator Delegation (yield*)
 
-<a id="toc-what-is-yield"></a>
 ### What is yield*?
 
 The `yield*` operator delegates to another iterable or generator.
@@ -46110,7 +42785,6 @@ function* outer() {
 console.log([...outer()]);  // [1, 2, 3]
 ```
 
-<a id="toc-recursive-generators-with-yield"></a>
 ### Recursive Generators with yield*
 
 ```javascript
@@ -46134,7 +42808,6 @@ const tree = {
 console.log([...traverse(tree)]);  // [1, 2, 4, 5, 3, 6]
 ```
 
-<a id="toc-yield-with-arrays"></a>
 ### yield* with Arrays
 
 ```javascript
@@ -46148,7 +42821,6 @@ function* flatten() {
 console.log([...flatten()]);  // [1, 2, 3, 'a', 'b', 'c', 4, 5, 6]
 ```
 
-<a id="toc-bidirectional-communication-with-yield"></a>
 ### Bidirectional Communication with yield*
 
 ```javascript
@@ -46173,10 +42845,8 @@ console.log(iter.next());        // { done: true }
 
 ---
 
-<a id="toc-passing-values-to-generators"></a>
 ## Passing Values to Generators
 
-<a id="toc-sending-values-with-next"></a>
 ### Sending Values with next()
 
 ```javascript
@@ -46205,7 +42875,6 @@ const result = iter.next(30);  // Logs 'You are 30 years old'
 console.log(result.value);  // 'Nice to meet you, Alice!'
 ```
 
-<a id="toc-practical-example-range-with-step"></a>
 ### Practical Example: Range with Step
 
 ```javascript
@@ -46244,10 +42913,8 @@ console.log([...range(10, 0, -1)]);   // [10, 9, 8, ..., 1]
 
 ---
 
-<a id="toc-error-handling-in-generators"></a>
 ## Error Handling in Generators
 
-<a id="toc-throwing-errors-into-generators"></a>
 ### Throwing Errors into Generators
 
 ```javascript
@@ -46267,7 +42934,6 @@ console.log(iter.next());        // { value: 'value1', done: false }
 console.log(iter.throw(new Error('oops')));  // Logs 'caught error: oops', returns { value: 'value2', done: false }
 ```
 
-<a id="toc-generator-error-recovery"></a>
 ### Generator Error Recovery
 
 ```javascript
@@ -46289,7 +42955,6 @@ console.log(iter.throw(new Error('fail')));  // Logs error, yields next
 console.log(iter.next());              // { value: 'attempt 2', done: false }
 ```
 
-<a id="toc-generator-finally-block"></a>
 ### Generator finally Block
 
 ```javascript
@@ -46316,10 +42981,8 @@ try {
 
 ---
 
-<a id="toc-infinite-sequences-1"></a>
 ## Infinite Sequences
 
-<a id="toc-infinite-counter"></a>
 ### Infinite Counter
 
 ```javascript
@@ -46339,7 +43002,6 @@ for (const num of infiniteCounter(100)) {
 }
 ```
 
-<a id="toc-fibonacci-sequence"></a>
 ### Fibonacci Sequence
 
 ```javascript
@@ -46363,7 +43025,6 @@ const fibs2 = Array.from({ length: 10 }, () => gen.next().value);
 console.log(fibs2);  // [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 ```
 
-<a id="toc-prime-numbers"></a>
 ### Prime Numbers
 
 ```javascript
@@ -46392,10 +43053,8 @@ console.log(first10);  // [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
 
 ---
 
-<a id="toc-practical-generator-examples"></a>
 ## Practical Generator Examples
 
-<a id="toc-example-1-file-reading-simulation"></a>
 ### Example 1: File Reading Simulation
 
 ```javascript
@@ -46414,7 +43073,6 @@ for (const line of readLines(content)) {
 }
 ```
 
-<a id="toc-example-2-permutations"></a>
 ### Example 2: Permutations
 
 ```javascript
@@ -46435,7 +43093,6 @@ console.log([...permutations([1, 2, 3])]);
 // Output: all 6 permutations of [1,2,3]
 ```
 
-<a id="toc-example-3-api-pagination"></a>
 ### Example 3: API Pagination
 
 ```javascript
@@ -46464,7 +43121,6 @@ for (const batch of paginate(mockApi, 5)) {
 }
 ```
 
-<a id="toc-example-4-generator-composition"></a>
 ### Example 4: Generator Composition
 
 ```javascript
@@ -46508,14 +43164,11 @@ console.log(result);  // [6, 8, 10]
 
 ---
 
-<a id="toc-part-3-async-iterators-module-114"></a>
 ## Part 3: Async Iterators (Module 11.4)
 
 
-<a id="toc-async-iterable-protocol"></a>
 ## Async Iterable Protocol
 
-<a id="toc-what-is-the-async-iterable-protocol"></a>
 ### What is the Async Iterable Protocol?
 
 The **async iterable protocol** allows iteration over asynchronous data streams using `for await...of`.
@@ -46534,7 +43187,6 @@ object[Symbol.asyncIterator]() {
 }
 ```
 
-<a id="toc-synchronous-vs-asynchronous-iteration"></a>
 ### Synchronous vs Asynchronous Iteration
 
 ```javascript
@@ -46579,10 +43231,8 @@ for await (const value of asyncIterable) {
 
 ---
 
-<a id="toc-symbolasynciterator"></a>
 ## Symbol.asyncIterator
 
-<a id="toc-creating-async-iterables"></a>
 ### Creating Async Iterables
 
 ```javascript
@@ -46618,7 +43268,6 @@ for await (const num of new AsyncRange(1, 5, 500)) {
 }
 ```
 
-<a id="toc-checking-for-async-iterability"></a>
 ### Checking for Async Iterability
 
 ```javascript
@@ -46656,10 +43305,8 @@ for await (const x of new BothIterables()) { }  // Async
 
 ---
 
-<a id="toc-for-awaitof-loops"></a>
 ## for await...of Loops
 
-<a id="toc-basic-for-awaitof"></a>
 ### Basic for await...of
 
 ```javascript
@@ -46682,7 +43329,6 @@ async function main() {
 main();
 ```
 
-<a id="toc-for-awaitof-with-promises"></a>
 ### for await...of with Promises
 
 ```javascript
@@ -46702,7 +43348,6 @@ async function processPromises() {
 // ⚠️ Still waits for all, not just next available
 ```
 
-<a id="toc-error-handling-in-for-awaitof"></a>
 ### Error Handling in for await...of
 
 ```javascript
@@ -46727,10 +43372,8 @@ main();
 
 ---
 
-<a id="toc-async-generators"></a>
 ## Async Generators
 
-<a id="toc-async-generator-syntax"></a>
 ### Async Generator Syntax
 
 ```javascript
@@ -46753,7 +43396,6 @@ async function main() {
 main();
 ```
 
-<a id="toc-combining-async-and-yield"></a>
 ### Combining async and yield
 
 ```javascript
@@ -46784,7 +43426,6 @@ async function main() {
 }
 ```
 
-<a id="toc-yielding-promises"></a>
 ### Yielding Promises
 
 ```javascript
@@ -46813,10 +43454,8 @@ main();
 
 ---
 
-<a id="toc-streaming-data"></a>
 ## Streaming Data
 
-<a id="toc-example-1-reading-file-chunks-nodejs"></a>
 ### Example 1: Reading File Chunks (Node.js)
 
 ```javascript
@@ -46834,7 +43473,6 @@ async function readFile() {
 readFile();
 ```
 
-<a id="toc-example-2-custom-stream-generator"></a>
 ### Example 2: Custom Stream Generator
 
 ```javascript
@@ -46862,7 +43500,6 @@ async function processStream() {
 processStream();
 ```
 
-<a id="toc-example-3-database-cursor-iteration"></a>
 ### Example 3: Database Cursor Iteration
 
 ```javascript
@@ -46892,10 +43529,8 @@ async function main() {
 
 ---
 
-<a id="toc-pagination-with-async"></a>
 ## Pagination with Async
 
-<a id="toc-example-1-api-pagination"></a>
 ### Example 1: API Pagination
 
 ```javascript
@@ -46925,7 +43560,6 @@ async function main() {
 main();
 ```
 
-<a id="toc-example-2-cursor-based-pagination"></a>
 ### Example 2: Cursor-Based Pagination
 
 ```javascript
@@ -46964,10 +43598,8 @@ main();
 
 ---
 
-<a id="toc-error-handling-1"></a>
 ## Error Handling
 
-<a id="toc-try-catch-in-async-generators"></a>
 ### Try-Catch in Async Generators
 
 ```javascript
@@ -47015,7 +43647,6 @@ async function main() {
 main();
 ```
 
-<a id="toc-handling-individual-item-errors"></a>
 ### Handling Individual Item Errors
 
 ```javascript
@@ -47044,10 +43675,8 @@ main();
 
 ---
 
-<a id="toc-summary-8"></a>
 ## Summary
 
-<a id="toc-key-concepts-across-all-modules"></a>
 ### Key Concepts Across All Modules
 
 | Concept | Purpose |
@@ -47061,7 +43690,6 @@ main();
 | **for...of** | Iterate over iterables |
 | **for await...of** | Iterate over async iterables |
 
-<a id="toc-common-use-cases-2"></a>
 ### Common Use Cases
 
 **Module 11.1 - Iteration Protocols:**
@@ -47084,7 +43712,6 @@ main();
 - Pagination and cursor-based fetching
 - Real-time data processing
 
-<a id="toc-next-steps-1"></a>
 ### Next Steps
 
 - Combine all techniques for advanced data processing
@@ -47092,7 +43719,6 @@ main();
 - Build production-grade async data pipelines
 - Explore advanced patterns like backpressure and flow control
 
-<a id="toc-113-iterators-summary"></a>
 ## 11.3 Iterators Summary
 
 | Protocol | Required Method |
@@ -47107,25 +43733,20 @@ main();
 **End of Chapter 11: Iterators and Generators**
 
 
-<a id="toc-12-collectionsmd"></a>
 # 12-Collections.md
 
-<a id="toc-12-collections"></a>
 # 12 Collections
 
 ES6 introduced `Map`, `Set`, `WeakMap`, and `WeakSet`—specialized collections for specific use cases beyond plain objects and arrays.
 
 ---
 
-<a id="toc-maps-and-weakmaps"></a>
 ## Maps and WeakMaps
 
 
 
-<a id="toc-creating-maps"></a>
 ## Creating Maps
 
-<a id="toc-basic-map-creation"></a>
 ### Basic Map Creation
 
 ```javascript
@@ -47148,7 +43769,6 @@ const map3 = new Map(Object.entries(obj));
 console.log(map3.get('x'));  // 10
 ```
 
-<a id="toc-creating-maps-with-different-key-types"></a>
 ### Creating Maps with Different Key Types
 
 ```javascript
@@ -47188,7 +43808,6 @@ map.set(false, 'false');
 map.set(0, 'zero');
 ```
 
-<a id="toc-map-with-complex-initialization"></a>
 ### Map with Complex Initialization
 
 ```javascript
@@ -47210,10 +43829,8 @@ const mapFromArray = new Map(pairs);
 
 ---
 
-<a id="toc-map-methods-set-get-has-delete-clear"></a>
 ## Map Methods: set(), get(), has(), delete(), clear()
 
-<a id="toc-set-adding-and-updating-values"></a>
 ### set() - Adding and Updating Values
 
 ```javascript
@@ -47245,7 +43862,6 @@ map.set('null', null);
 map.set('undefined', undefined);
 ```
 
-<a id="toc-get-retrieving-values"></a>
 ### get() - Retrieving Values
 
 ```javascript
@@ -47281,7 +43897,6 @@ console.log(getOrDefault(map, 'name', 'Unknown'));    // 'Alice'
 console.log(getOrDefault(map, 'age', 25));            // 25
 ```
 
-<a id="toc-has-checking-for-keys"></a>
 ### has() - Checking for Keys
 
 ```javascript
@@ -47316,7 +43931,6 @@ function getValue(map, key) {
 }
 ```
 
-<a id="toc-delete-removing-values"></a>
 ### delete() - Removing Values
 
 ```javascript
@@ -47354,7 +43968,6 @@ const obj2 = { id: 1 };  // Different instance
 console.log(map2.has(obj2));  // false
 ```
 
-<a id="toc-clear-removing-all-values"></a>
 ### clear() - Removing All Values
 
 ```javascript
@@ -47381,10 +43994,8 @@ console.log(map.size);  // 1
 
 ---
 
-<a id="toc-map-size-and-properties"></a>
 ## Map Size and Properties
 
-<a id="toc-the-size-property"></a>
 ### The size Property
 
 ```javascript
@@ -47420,7 +44031,6 @@ const obj = { a: 1, b: 2 };
 console.log(Object.keys(obj).length);  // Need to count manually
 ```
 
-<a id="toc-constructor-property"></a>
 ### Constructor Property
 
 ```javascript
@@ -47441,10 +44051,8 @@ console.log(isMap(new Set()));      // false
 
 ---
 
-<a id="toc-iterating-maps"></a>
 ## Iterating Maps
 
-<a id="toc-iterating-with-forof"></a>
 ### Iterating with for...of
 
 ```javascript
@@ -47469,7 +44077,6 @@ for (const entry of map) {
 }
 ```
 
-<a id="toc-keys-iterating-keys-only"></a>
 ### keys() - Iterating Keys Only
 
 ```javascript
@@ -47493,7 +44100,6 @@ const keys = Array.from(map.keys());
 const hasKeyStartingWithB = keys.some(k => String(k).startsWith('b'));
 ```
 
-<a id="toc-values-iterating-values-only"></a>
 ### values() - Iterating Values Only
 
 ```javascript
@@ -47517,7 +44123,6 @@ const total = Array.from(map.values()).reduce((sum, v) => sum + v, 0);
 console.log(total);  // 60
 ```
 
-<a id="toc-entries-explicit-entry-iteration"></a>
 ### entries() - Explicit Entry Iteration
 
 ```javascript
@@ -47541,7 +44146,6 @@ const entriesArray = Array.from(map.entries());
 console.log(entriesArray);  // [['x', 100], ['y', 200]]
 ```
 
-<a id="toc-foreach-functional-iteration"></a>
 ### forEach() - Functional Iteration
 
 ```javascript
@@ -47579,10 +44183,8 @@ console.log(values);
 
 ---
 
-<a id="toc-maps-vs-objects"></a>
 ## Maps vs Objects
 
-<a id="toc-feature-comparison"></a>
 ### Feature Comparison
 
 ```javascript
@@ -47600,7 +44202,6 @@ obj[() => {}] = 'value';  // Key becomes string representation
 console.log(Object.keys(obj));  // All string keys
 ```
 
-<a id="toc-size-property"></a>
 ### Size Property
 
 ```javascript
@@ -47614,7 +44215,6 @@ console.log(obj.size);  // undefined
 console.log(Object.keys(obj).length);  // Manual count needed
 ```
 
-<a id="toc-iteration"></a>
 ### Iteration
 
 ```javascript
@@ -47631,7 +44231,6 @@ for (const key of Object.keys(obj)) {
 }
 ```
 
-<a id="toc-performance"></a>
 ### Performance
 
 ```javascript
@@ -47651,7 +44250,6 @@ for (let i = 0; i < 1000000; i++) {
 }
 ```
 
-<a id="toc-when-to-use-each-1"></a>
 ### When to Use Each
 
 ```javascript
@@ -47685,10 +44283,8 @@ const config = {
 
 ---
 
-<a id="toc-practical-map-examples"></a>
 ## Practical Map Examples
 
-<a id="toc-example-1-user-registry"></a>
 ### Example 1: User Registry
 
 ```javascript
@@ -47731,7 +44327,6 @@ console.log(registry.get(1));   // { id: 1, name: 'Alice', ... }
 console.log(registry.getAll()); // [{ id: 1, ... }, { id: 2, ... }]
 ```
 
-<a id="toc-example-2-frequency-counter"></a>
 ### Example 2: Frequency Counter
 
 ```javascript
@@ -47768,7 +44363,6 @@ for (const [item, count] of counts) {
 console.log(`Most common: ${maxItem} (${max} times)`);
 ```
 
-<a id="toc-example-3-graph-adjacency-list"></a>
 ### Example 3: Graph Adjacency List
 
 ```javascript
@@ -47813,7 +44407,6 @@ graph.display();
 // C -> B, A
 ```
 
-<a id="toc-example-4-command-handler-registry"></a>
 ### Example 4: Command Handler Registry
 
 ```javascript
@@ -47857,10 +44450,8 @@ console.log(dispatcher.listCommands());                // ['greet', 'add', 'mult
 
 ---
 
-<a id="toc-weakmap-weak-references"></a>
 ## WeakMap: Weak References
 
-<a id="toc-what-is-a-weakmap"></a>
 ### What is a WeakMap?
 
 A **WeakMap** is like a Map but:
@@ -47888,7 +44479,6 @@ const wm = new WeakMap();
 // wm.set(true, 'value');       // TypeError
 ```
 
-<a id="toc-weak-references-explained"></a>
 ### Weak References Explained
 
 ```javascript
@@ -47917,7 +44507,6 @@ obj2 = null;
 console.log(weakMap.size);  // ❌ No .size property!
 ```
 
-<a id="toc-weakmap-methods-and-behavior"></a>
 ### WeakMap Methods and Behavior
 
 ```javascript
@@ -47949,10 +44538,8 @@ console.log(weakMap.size);  // undefined
 
 ---
 
-<a id="toc-weakmap-use-cases"></a>
 ## WeakMap Use Cases
 
-<a id="toc-use-case-1-private-data-storage"></a>
 ### Use Case 1: Private Data Storage
 
 ```javascript
@@ -47992,7 +44579,6 @@ console.log(user.getEmail());  // 'alice@example.com' (private access)
 const data = privateData;  // Would need reference to weakMap
 ```
 
-<a id="toc-use-case-2-caching-with-automatic-cleanup"></a>
 ### Use Case 2: Caching with Automatic Cleanup
 
 ```javascript
@@ -48029,7 +44615,6 @@ div = null;  // Reference removed
 // Cache entry will disappear automatically
 ```
 
-<a id="toc-use-case-3-object-metadata"></a>
 ### Use Case 3: Object Metadata
 
 ```javascript
@@ -48065,7 +44650,6 @@ console.log(getMetadata(user2).role);  // 'user'
 console.log(user1);  // { name: 'Alice' } - no metadata property
 ```
 
-<a id="toc-use-case-4-dom-element-events"></a>
 ### Use Case 4: DOM Element Events
 
 ```javascript
@@ -48112,10 +44696,8 @@ button = null;  // Can be garbage collected
 
 ---
 
-<a id="toc-best-practices-9"></a>
 ## Best Practices
 
-<a id="toc-✅-do-1"></a>
 ### ✅ DO
 
 ```javascript
@@ -48151,7 +44733,6 @@ weakMap.set(key, 'value');
 console.log(weakMap.has(key));  // Works while key reference exists
 ```
 
-<a id="toc-❌-dont-1"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -48183,7 +44764,6 @@ console.log(wm.size);  // undefined
 // WeakMap is for private data, caching, metadata
 ```
 
-<a id="toc-performance-considerations-1"></a>
 ### Performance Considerations
 
 ```javascript
@@ -48208,10 +44788,8 @@ for (const [key, value] of settings) {
 
 ---
 
-<a id="toc-summary-9"></a>
 ## Summary
 
-<a id="toc-maps-key-points"></a>
 ### Maps Key Points
 
 | Feature | Details |
@@ -48222,7 +44800,6 @@ for (const [key, value] of settings) {
 | **Size** | .size property available |
 | **Use when** | Non-string keys, frequent add/delete, need .size |
 
-<a id="toc-weakmaps-key-points"></a>
 ### WeakMaps Key Points
 
 | Feature | Details |
@@ -48234,7 +44811,6 @@ for (const [key, value] of settings) {
 | **Size** | ❌ No .size property |
 | **Use when** | Private data, metadata, caching, DOM associations |
 
-<a id="toc-quick-comparison"></a>
 ### Quick Comparison
 
 ```javascript
@@ -48253,22 +44829,18 @@ wm.set({}, 'metadata');
 // Keys can be garbage collected
 ```
 
-<a id="toc-next-steps-2"></a>
 ### Next Steps
 
 - **Module 12.3** - Learn about Sets and their operations
 - **Module 12.4** - Explore WeakSets for object tagging
 - Combine Maps/WeakMaps with other data structures
 - Use in real applications for caching and state management
-<a id="toc-sets-and-weaksets"></a>
 ## Sets and WeakSets
 
 
 
-<a id="toc-creating-sets"></a>
 ## Creating Sets
 
-<a id="toc-basic-set-creation"></a>
 ### Basic Set Creation
 
 ```javascript
@@ -48292,7 +44864,6 @@ const set4 = new Set(new Map([['key1', 'val1'], ['key2', 'val2']]).keys());
 console.log([...set4]);  // ['key1', 'key2']
 ```
 
-<a id="toc-creating-sets-with-different-value-types"></a>
 ### Creating Sets with Different Value Types
 
 ```javascript
@@ -48331,10 +44902,8 @@ console.log(set.size);  // Still 13, not 14
 
 ---
 
-<a id="toc-set-methods-add-has-delete-clear"></a>
 ## Set Methods: add(), has(), delete(), clear()
 
-<a id="toc-add-adding-values"></a>
 ### add() - Adding Values
 
 ```javascript
@@ -48364,7 +44933,6 @@ set2.add(null);
 set2.add(undefined);
 ```
 
-<a id="toc-has-checking-for-values"></a>
 ### has() - Checking for Values
 
 ```javascript
@@ -48398,7 +44966,6 @@ console.log(checkValue(2));  // 'found'
 console.log(checkValue(5));  // 'not found'
 ```
 
-<a id="toc-delete-removing-values-1"></a>
 ### delete() - Removing Values
 
 ```javascript
@@ -48427,7 +44994,6 @@ console.log(set3.delete(obj));      // true
 console.log(set3.delete({ id: 1 })); // false (different reference)
 ```
 
-<a id="toc-clear-removing-all-values-1"></a>
 ### clear() - Removing All Values
 
 ```javascript
@@ -48448,10 +45014,8 @@ console.log(set.size);  // 1
 
 ---
 
-<a id="toc-set-size-and-properties"></a>
 ## Set Size and Properties
 
-<a id="toc-the-size-property-1"></a>
 ### The size Property
 
 ```javascript
@@ -48484,7 +45048,6 @@ set.size = 100;  // Fails silently
 console.log(set.size);  // Still 0
 ```
 
-<a id="toc-constructor-property-1"></a>
 ### Constructor Property
 
 ```javascript
@@ -48504,10 +45067,8 @@ console.log(isSet(new Map()));    // false
 
 ---
 
-<a id="toc-iterating-sets"></a>
 ## Iterating Sets
 
-<a id="toc-forof-loop-1"></a>
 ### for...of Loop
 
 ```javascript
@@ -48528,7 +45089,6 @@ const [first, second] = set;
 console.log(first, second);  // 'a', 'b'
 ```
 
-<a id="toc-values-iterating-values"></a>
 ### values() - Iterating Values
 
 ```javascript
@@ -48549,7 +45109,6 @@ const firstValue = iterator.next().value;
 console.log(firstValue);  // 10
 ```
 
-<a id="toc-keys-same-as-values"></a>
 ### keys() - Same as values()
 
 ```javascript
@@ -48565,7 +45124,6 @@ console.log(set.keys() === set.values());  // false (different iterators)
 console.log([...set.keys()]);  // ['x', 'y', 'z']
 ```
 
-<a id="toc-entries-value-value-pairs"></a>
 ### entries() - [value, value] Pairs
 
 ```javascript
@@ -48581,7 +45139,6 @@ const entriesArray = [...set.entries()];
 console.log(entriesArray);  // [['a', 'a'], ['b', 'b'], ['c', 'c']]
 ```
 
-<a id="toc-foreach-functional-iteration-1"></a>
 ### forEach() - Functional Iteration
 
 ```javascript
@@ -48616,10 +45173,8 @@ console.log(doubled);  // [2, 4, 6, 8, 10]
 
 ---
 
-<a id="toc-set-operations"></a>
 ## Set Operations
 
-<a id="toc-union-combine-two-sets"></a>
 ### Union (Combine Two Sets)
 
 ```javascript
@@ -48639,7 +45194,6 @@ const result = setUnion(set1, set2);
 console.log([...result]);  // [1, 2, 3, 4]
 ```
 
-<a id="toc-intersection-common-elements"></a>
 ### Intersection (Common Elements)
 
 ```javascript
@@ -48659,7 +45213,6 @@ const result = setIntersection(set1, set2);
 console.log([...result]);  // [2, 3]
 ```
 
-<a id="toc-difference-elements-in-a-but-not-in-b"></a>
 ### Difference (Elements in A but not in B)
 
 ```javascript
@@ -48679,7 +45232,6 @@ const result = setDifference(set1, set2);
 console.log([...result]);  // [1, 4]
 ```
 
-<a id="toc-symmetric-difference-elements-in-either-a-or-b-but-not-both"></a>
 ### Symmetric Difference (Elements in either A or B, but not both)
 
 ```javascript
@@ -48702,7 +45254,6 @@ function setSymmetricDifference(setA, setB) {
 }
 ```
 
-<a id="toc-subset-check-all-of-a-in-b"></a>
 ### Subset Check (All of A in B)
 
 ```javascript
@@ -48723,10 +45274,8 @@ console.log(isSubset(set2, set1));  // false
 
 ---
 
-<a id="toc-sets-vs-arrays"></a>
 ## Sets vs Arrays
 
-<a id="toc-performance-comparison"></a>
 ### Performance Comparison
 
 ```javascript
@@ -48748,7 +45297,6 @@ for (let i = 0; i < 100000; i++) {
 console.timeEnd('Set has');  // Much faster
 ```
 
-<a id="toc-when-to-use-each-2"></a>
 ### When to Use Each
 
 ```javascript
@@ -48774,7 +45322,6 @@ const doubled = numbers.map(x => x * 2);
 console.log(numbers[0]);  // Index access
 ```
 
-<a id="toc-converting-between-set-and-array"></a>
 ### Converting Between Set and Array
 
 ```javascript
@@ -48798,10 +45345,8 @@ console.log(deduplicate([1, 2, 2, 3, 3, 3]));  // [1, 2, 3]
 
 ---
 
-<a id="toc-practical-set-examples"></a>
 ## Practical Set Examples
 
-<a id="toc-example-1-unique-items-tracking"></a>
 ### Example 1: Unique Items Tracking
 
 ```javascript
@@ -48844,7 +45389,6 @@ console.log(tracker.add('item2'));  // true
 console.log(tracker.count());       // 2
 ```
 
-<a id="toc-example-2-finding-unique-elements"></a>
 ### Example 2: Finding Unique Elements
 
 ```javascript
@@ -48876,7 +45420,6 @@ const result = findUnique([
 console.log(result);  // [1, 5, 6] (appear in only one array)
 ```
 
-<a id="toc-example-3-tag-system"></a>
 ### Example 3: Tag System
 
 ```javascript
@@ -48919,7 +45462,6 @@ console.log(post.getTags());        // ['javascript', 'tutorial']
 console.log(post.getTagCount());    // 2
 ```
 
-<a id="toc-example-4-word-frequency-analysis"></a>
 ### Example 4: Word Frequency Analysis
 
 ```javascript
@@ -48944,10 +45486,8 @@ console.log(analysis);
 
 ---
 
-<a id="toc-weakset-weak-references"></a>
 ## WeakSet: Weak References
 
-<a id="toc-what-is-a-weakset"></a>
 ### What is a WeakSet?
 
 A **WeakSet** is like a Set but:
@@ -48976,7 +45516,6 @@ const ws = new WeakSet();
 // ws.add(true);       // TypeError
 ```
 
-<a id="toc-weakset-methods-and-behavior"></a>
 ### WeakSet Methods and Behavior
 
 ```javascript
@@ -49004,10 +45543,8 @@ console.log(weakSet.size);  // undefined
 
 ---
 
-<a id="toc-weakset-use-cases"></a>
 ## WeakSet Use Cases
 
-<a id="toc-use-case-1-object-tagging"></a>
 ### Use Case 1: Object Tagging
 
 ```javascript
@@ -49034,7 +45571,6 @@ processor.process(obj);   // Processing: { data: 'value' }
 processor.process(obj);   // Already processed
 ```
 
-<a id="toc-use-case-2-detecting-cycles-in-graphs"></a>
 ### Use Case 2: Detecting Cycles in Graphs
 
 ```javascript
@@ -49075,7 +45611,6 @@ console.log(hasCycle(circular));  // true
 console.log(hasCycle({ a: 1 }));  // false
 ```
 
-<a id="toc-use-case-3-tracking-dom-elements"></a>
 ### Use Case 3: Tracking DOM Elements
 
 ```javascript
@@ -49109,7 +45644,6 @@ if (button) {
 }
 ```
 
-<a id="toc-use-case-4-request-tracking"></a>
 ### Use Case 4: Request Tracking
 
 ```javascript
@@ -49146,10 +45680,8 @@ console.log(manager.isActive(controller));  // true
 
 ---
 
-<a id="toc-best-practices-10"></a>
 ## Best Practices
 
-<a id="toc-✅-do-2"></a>
 ### ✅ DO
 
 ```javascript
@@ -49176,7 +45708,6 @@ const union = new Set([...set1, ...set2]);
 const doubled = [...set].map(x => x * 2);
 ```
 
-<a id="toc-❌-dont-2"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -49208,10 +45739,8 @@ const unique = new Set(arr);
 
 ---
 
-<a id="toc-summary-10"></a>
 ## Summary
 
-<a id="toc-sets-key-points"></a>
 ### Sets Key Points
 
 | Feature | Details |
@@ -49223,7 +45752,6 @@ const unique = new Set(arr);
 | **Size** | .size property available |
 | **Operations** | Union, intersection, difference, symmetric difference |
 
-<a id="toc-weaksets-key-points"></a>
 ### WeakSets Key Points
 
 | Feature | Details |
@@ -49235,7 +45763,6 @@ const unique = new Set(arr);
 | **Size** | ❌ No .size property |
 | **Use when** | Object tagging, cycle detection, tracking |
 
-<a id="toc-quick-comparison-1"></a>
 ### Quick Comparison
 
 ```javascript
@@ -49252,10 +45779,8 @@ ws.add(obj);  // Won't prevent GC
 
 ---
 
-<a id="toc-common-pitfalls-3"></a>
 ## Common Pitfalls
 
-<a id="toc-pitfall-1-object-keys-in-map"></a>
 ### Pitfall 1: Object Keys in Map
 
 ```javascript
@@ -49275,7 +45800,6 @@ map.set('user:1', 'user1');
 console.log(map.get('user:1'));  // 'user1'
 ```
 
-<a id="toc-pitfall-2-weakmap-with-primitives"></a>
 ### Pitfall 2: WeakMap with Primitives
 
 ```javascript
@@ -49291,7 +45815,6 @@ weakMap.set(new Date(), 'value'); // OK
 weakMap.set([], 'value');         // OK (arrays are objects)
 ```
 
-<a id="toc-pitfall-3-set-doesnt-dedupe-objects"></a>
 ### Pitfall 3: Set Doesn't Dedupe Objects
 
 ```javascript
@@ -49310,7 +45833,6 @@ set2.add(JSON.stringify({ name: 'Alice' }));
 console.log(set2.size);  // 1 (strings are compared by value)
 ```
 
-<a id="toc-pitfall-4-map-vs-object-performance"></a>
 ### Pitfall 4: Map vs Object Performance
 
 ```javascript
@@ -49335,7 +45857,6 @@ userCache.set(userId, user);
 console.log(userCache.size);  // O(1) size access
 ```
 
-<a id="toc-pitfall-5-weakmap-doesnt-prevent-closure-leaks"></a>
 ### Pitfall 5: WeakMap Doesn't Prevent Closure Leaks
 
 ```javascript
@@ -49364,7 +45885,6 @@ function attachMetadata(element, metadata) {
 
 ---
 
-<a id="toc-next-steps-3"></a>
 ### Next Steps
 
 - Combine Maps/WeakMaps with Sets/WeakSets
@@ -49372,7 +45892,6 @@ function attachMetadata(element, metadata) {
 - Use in caching and memoization
 - Handle special memory scenarios with WeakSet
 
-<a id="toc-123-collections-summary"></a>
 ## 12.3 Collections Summary
 
 | Collection | Key Type | Iteration | Weak |
@@ -49387,13 +45906,10 @@ function attachMetadata(element, metadata) {
 **End of Chapter 12: Collections**
 
 
-<a id="toc-13-async-javascriptmd"></a>
 # 13-Async-JavaScript.md
 
-<a id="toc-13-asynchronous-javascript"></a>
 # 13 Asynchronous JavaScript
 
-<a id="toc-why-async-matters"></a>
 ### Why Async Matters
 
 JavaScript runs on a **single thread** — it can only do one thing at a time. Without async patterns, any slow operation (network requests, file reads, timers) would freeze the entire program.
@@ -49412,12 +45928,10 @@ Understanding async is essential because:
 
 ---
 
-<a id="toc-131-event-loop"></a>
 ## 13.1 Event Loop
 
 The event loop is JavaScript's mechanism for handling async operations while remaining single-threaded.
 
-<a id="toc-call-stack"></a>
 ### Call Stack
 
 The **Call Stack** is a data structure that tracks function calls and their execution context.
@@ -49452,7 +45966,6 @@ a();
 // A: end
 ```
 
-<a id="toc-call-stack-overflow"></a>
 ### Call Stack Overflow
 
 ```javascript
@@ -49472,7 +45985,6 @@ function factorial(n) {
 console.log(factorial(5));  // 120
 ```
 
-<a id="toc-stack-trace"></a>
 ### Stack Trace
 
 ```javascript
@@ -49499,10 +46011,8 @@ try {
 
 ---
 
-<a id="toc-task-queue-macrotasks"></a>
 ## Task Queue (Macrotasks)
 
-<a id="toc-what-is-a-macrotask"></a>
 ### What is a Macrotask?
 
 **Macrotasks** include:
@@ -49534,7 +46044,6 @@ console.log('End');
 // Macrotask 2
 ```
 
-<a id="toc-processing-macrotasks"></a>
 ### Processing Macrotasks
 
 ```javascript
@@ -49555,7 +46064,6 @@ setTimeout(() => {
 // (Each task fully completes before next begins)
 ```
 
-<a id="toc-macrotask-order"></a>
 ### Macrotask Order
 
 ```javascript
@@ -49577,10 +46085,8 @@ console.log('Sync code');
 
 ---
 
-<a id="toc-microtask-queue"></a>
 ## Microtask Queue
 
-<a id="toc-what-is-a-microtask"></a>
 ### What is a Microtask?
 
 **Microtasks** include:
@@ -49611,7 +46117,6 @@ console.log('End');
 // Macrotask
 ```
 
-<a id="toc-microtask-priority"></a>
 ### Microtask Priority
 
 ```javascript
@@ -49652,10 +46157,8 @@ console.log('7. Sync');
 
 ---
 
-<a id="toc-event-loop-phases"></a>
 ## Event Loop Phases
 
-<a id="toc-the-event-loop-algorithm"></a>
 ### The Event Loop Algorithm
 
 ```
@@ -49668,7 +46171,6 @@ console.log('7. Sync');
    e. Repeat from step 2b
 ```
 
-<a id="toc-phase-breakdown"></a>
 ### Phase Breakdown
 
 ```javascript
@@ -49695,7 +46197,6 @@ console.log('Phase 1: Sync end');
 // Phase 2: Macrotask
 ```
 
-<a id="toc-multiple-macrotasks-and-microtasks"></a>
 ### Multiple Macrotasks and Microtasks
 
 ```javascript
@@ -49733,10 +46234,8 @@ console.log('6. End');
 
 ---
 
-<a id="toc-settimeout-and-setinterval-timing"></a>
 ## setTimeout and setInterval Timing
 
-<a id="toc-how-settimeout-works"></a>
 ### How setTimeout Works
 
 ```javascript
@@ -49751,7 +46250,6 @@ setTimeout(() => {
 // Actual delay depends on what's in call stack
 ```
 
-<a id="toc-settimeout0-≠-immediate-execution"></a>
 ### setTimeout(0) ≠ Immediate Execution
 
 ```javascript
@@ -49773,7 +46271,6 @@ console.log('End');
 // It's queued after current script finishes
 ```
 
-<a id="toc-blocking-delays"></a>
 ### Blocking Delays
 
 ```javascript
@@ -49794,7 +46291,6 @@ while (Date.now() - start < 200) {
 // The timer must wait for blocking code to finish
 ```
 
-<a id="toc-setinterval-behavior"></a>
 ### setInterval Behavior
 
 ```javascript
@@ -49811,7 +46307,6 @@ const interval = setInterval(() => {
 // Each callback is queued as separate macrotask
 ```
 
-<a id="toc-nested-timers"></a>
 ### Nested Timers
 
 ```javascript
@@ -49829,10 +46324,8 @@ setTimeout(() => {
 
 ---
 
-<a id="toc-queuemicrotask"></a>
 ## queueMicrotask()
 
-<a id="toc-basic-usage-4"></a>
 ### Basic Usage
 
 ```javascript
@@ -49851,7 +46344,6 @@ console.log('End');
 // Microtask
 ```
 
-<a id="toc-comparison-with-promisethen"></a>
 ### Comparison with Promise.then()
 
 ```javascript
@@ -49875,7 +46367,6 @@ console.log('End');
 // queueMicrotask (or Promise)
 ```
 
-<a id="toc-nested-microtasks"></a>
 ### Nested Microtasks
 
 ```javascript
@@ -49900,7 +46391,6 @@ console.log('5');
 // All original microtasks before newly queued ones
 ```
 
-<a id="toc-use-cases-2"></a>
 ### Use Cases
 
 ```javascript
@@ -49930,10 +46420,8 @@ promisify(() => {
 
 ---
 
-<a id="toc-execution-order-2"></a>
 ## Execution Order
 
-<a id="toc-complete-example-1"></a>
 ### Complete Example
 
 ```javascript
@@ -49987,7 +46475,6 @@ console.log('Script end');
 // setTimeout inside queueMicrotask
 ```
 
-<a id="toc-execution-timeline"></a>
 ### Execution Timeline
 
 ```
@@ -50013,10 +46500,8 @@ console.log('Script end');
 
 ---
 
-<a id="toc-visual-mental-models"></a>
 ## Visual Mental Models
 
-<a id="toc-model-1-stack-and-queues"></a>
 ### Model 1: Stack and Queues
 
 ```
@@ -50036,7 +46521,6 @@ console.log('Script end');
 └─────────────────────────────┘
 ```
 
-<a id="toc-model-2-event-loop-cycle"></a>
 ### Model 2: Event Loop Cycle
 
 ```
@@ -50060,7 +46544,6 @@ START EVENT LOOP CYCLE
 └─ Repeat until all queues empty
 ```
 
-<a id="toc-model-3-priority-levels"></a>
 ### Model 3: Priority Levels
 
 ```
@@ -50075,10 +46558,8 @@ Level 4 (Lowest):  UI Rendering (requestAnimationFrame)
 
 ---
 
-<a id="toc-common-pitfalls-4"></a>
 ## Common Pitfalls
 
-<a id="toc-pitfall-1-confusing-settimeout0"></a>
 ### Pitfall 1: Confusing setTimeout(0)
 
 ```javascript
@@ -50094,7 +46575,6 @@ console.log('3');
 // Output: 1, 3, 2 (NOT: 1, 2, 3)
 ```
 
-<a id="toc-pitfall-2-promise-timing"></a>
 ### Pitfall 2: Promise Timing
 
 ```javascript
@@ -50115,7 +46595,6 @@ console.log('4');
 // Promise runs BEFORE setTimeout!
 ```
 
-<a id="toc-pitfall-3-forgetting-microtasks"></a>
 ### Pitfall 3: Forgetting Microtasks
 
 ```javascript
@@ -50140,7 +46619,6 @@ console.log('5');
 // Promises complete before timer!
 ```
 
-<a id="toc-pitfall-4-race-conditions"></a>
 ### Pitfall 4: Race Conditions
 
 ```javascript
@@ -50161,12 +46639,10 @@ setTimeout(() => {
 
 ---
 
-<a id="toc-nodejs-event-loop-phases-deep-dive"></a>
 ## Node.js Event Loop Phases (Deep Dive)
 
 The Node.js event loop is more complex than the browser's, with **6 distinct phases**:
 
-<a id="toc-the-six-phases"></a>
 ### The Six Phases
 
 ```
@@ -50190,7 +46666,6 @@ The Node.js event loop is more complex than the browser's, with **6 distinct pha
    └───────────────────────────┘
 ```
 
-<a id="toc-phase-details"></a>
 ### Phase Details
 
 ```javascript
@@ -50221,7 +46696,6 @@ setImmediate(() => console.log('Check phase'));
 // Close event callbacks (socket.on('close'))
 ```
 
-<a id="toc-setimmediate-vs-settimeout0"></a>
 ### setImmediate vs setTimeout(0)
 
 ```javascript
@@ -50246,7 +46720,6 @@ fs.readFile(__filename, () => {
 // (because we're in poll phase, check phase comes next)
 ```
 
-<a id="toc-processnexttick-vs-setimmediate"></a>
 ### process.nextTick vs setImmediate
 
 ```javascript
@@ -50271,7 +46744,6 @@ console.log('5. Sync end');
 // 2. setImmediate
 ```
 
-<a id="toc-nodejs-microtask-priority"></a>
 ### Node.js Microtask Priority
 
 ```javascript
@@ -50293,7 +46765,6 @@ process.nextTick(() => console.log('4. nextTick 2'));
 // ALL nextTicks run before ANY Promises!
 ```
 
-<a id="toc-danger-nexttick-starvation"></a>
 ### Danger: nextTick Starvation
 
 ```javascript
@@ -50312,10 +46783,8 @@ function recursiveImmediate() {
 
 ---
 
-<a id="toc-queuemicrotask-vs-promisethen"></a>
 ## queueMicrotask vs Promise.then
 
-<a id="toc-the-difference"></a>
 ### The Difference
 
 ```javascript
@@ -50332,7 +46801,6 @@ Promise.resolve().then(() => {
 });
 ```
 
-<a id="toc-when-to-use-each-3"></a>
 ### When to Use Each
 
 ```javascript
@@ -50357,7 +46825,6 @@ Promise.resolve(data)
   .catch(handleError);
 ```
 
-<a id="toc-performance-comparison-1"></a>
 ### Performance Comparison
 
 ```javascript
@@ -50380,7 +46847,6 @@ Promise.resolve().then(() => {
 });
 ```
 
-<a id="toc-error-handling-difference"></a>
 ### Error Handling Difference
 
 ```javascript
@@ -50402,10 +46868,8 @@ Promise.resolve()
 
 ---
 
-<a id="toc-browser-render-pipeline"></a>
 ## Browser Render Pipeline
 
-<a id="toc-event-loop-and-rendering"></a>
 ### Event Loop and Rendering
 
 ```
@@ -50428,7 +46892,6 @@ Promise.resolve()
 └─────────────────────────────────────────────────────────┘
 ```
 
-<a id="toc-requestanimationframe-timing"></a>
 ### requestAnimationFrame Timing
 
 ```javascript
@@ -50450,7 +46913,6 @@ Promise.resolve().then(() => console.log('4. Promise'));
 // 2. setTimeout
 ```
 
-<a id="toc-avoiding-layout-thrashing"></a>
 ### Avoiding Layout Thrashing
 
 ```javascript
@@ -50474,7 +46936,6 @@ elements.forEach((el, i) => {
 });
 ```
 
-<a id="toc-requestidlecallback-for-non-critical-work"></a>
 ### requestIdleCallback for Non-Critical Work
 
 ```javascript
@@ -50496,7 +46957,6 @@ function processBackgroundTasks(deadline) {
 requestIdleCallback(processBackgroundTasks);
 ```
 
-<a id="toc-animation-frame-vs-settimeout-for-animation"></a>
 ### Animation Frame vs setTimeout for Animation
 
 ```javascript
@@ -50529,10 +46989,8 @@ function animateWithRAF(element, targetX) {
 
 ---
 
-<a id="toc-summary-11"></a>
 ## Summary
 
-<a id="toc-key-concepts-1"></a>
 ### Key Concepts
 
 | Concept | Details |
@@ -50543,7 +47001,6 @@ function animateWithRAF(element, targetX) {
 | **Event Loop** | Coordinates execution between queues |
 | **Priority** | Sync → Microtasks → Macrotasks → Rendering |
 
-<a id="toc-execution-rules"></a>
 ### Execution Rules
 
 1. **Execute all synchronous code first**
@@ -50552,7 +47009,6 @@ function animateWithRAF(element, targetX) {
 4. **Then execute ALL newly queued microtasks**
 5. **Repeat from step 3**
 
-<a id="toc-quick-reference"></a>
 ### Quick Reference
 
 ```javascript
@@ -50572,22 +47028,18 @@ console.log('4');                    // Sync: 4
 // Output: 1, 4, 3, 2
 ```
 
-<a id="toc-next-steps-4"></a>
 ### Next Steps
 
 - Understand callbacks and their limitations
 - Learn how Promises handle the event loop
 - Master async/await patterns
 - Apply async patterns to real-world scenarios
-<a id="toc-callbacks"></a>
 ## Callbacks 
 
 
 
-<a id="toc-callback-pattern"></a>
 ## Callback Pattern
 
-<a id="toc-basic-callback-pattern"></a>
 ### Basic Callback Pattern
 
 ```javascript
@@ -50607,7 +47059,6 @@ fetchData('https://api.example.com/user', (data) => {
 // Output: Data received: { id: 1, name: 'User' }
 ```
 
-<a id="toc-callback-with-multiple-parameters"></a>
 ### Callback with Multiple Parameters
 
 ```javascript
@@ -50626,7 +47077,6 @@ calculateAsync(5, 3, (result) => {
 // Output: Result: 8
 ```
 
-<a id="toc-array-methods-with-callbacks"></a>
 ### Array Methods with Callbacks
 
 ```javascript
@@ -50650,7 +47100,6 @@ const sum = numbers.reduce((acc, num) => acc + num, 0);
 console.log(sum);  // 15
 ```
 
-<a id="toc-event-listeners-with-callbacks"></a>
 ### Event Listeners with Callbacks
 
 ```javascript
@@ -50672,10 +47121,8 @@ button.removeEventListener('click', handleClick);
 
 ---
 
-<a id="toc-error-first-callbacks"></a>
 ## Error-First Callbacks
 
-<a id="toc-the-error-first-convention"></a>
 ### The Error-First Convention
 
 The **error-first callback** (Node.js convention) takes error as the first parameter:
@@ -50712,7 +47159,6 @@ readFile('nonexistent.txt', (error, data) => {
 });
 ```
 
-<a id="toc-multiple-callbacks-for-different-states"></a>
 ### Multiple Callbacks for Different States
 
 ```javascript
@@ -50738,7 +47184,6 @@ fetchUserData(
 );
 ```
 
-<a id="toc-callback-with-finally"></a>
 ### Callback with Finally
 
 ```javascript
@@ -50773,10 +47218,8 @@ performOperation(() => {
 
 ---
 
-<a id="toc-callback-hell"></a>
 ## Callback Hell
 
-<a id="toc-what-is-callback-hell"></a>
 ### What is Callback Hell?
 
 **Callback hell** (or "pyramid of doom") occurs when multiple nested callbacks make code hard to read and maintain.
@@ -50819,7 +47262,6 @@ getData((data) => {
 });
 ```
 
-<a id="toc-problems-with-callback-hell"></a>
 ### Problems with Callback Hell
 
 1. **Difficult to read** - Code flows right, not down
@@ -50827,7 +47269,6 @@ getData((data) => {
 3. **Error handling is complex** - Need try-catch at each level
 4. **Testing is harder** - Hard to isolate functionality
 
-<a id="toc-solutions-to-callback-hell"></a>
 ### Solutions to Callback Hell
 
 **Solution 1: Named Functions**
@@ -50890,10 +47331,8 @@ fetchComments();
 
 ---
 
-<a id="toc-inversion-of-control"></a>
 ## Inversion of Control
 
-<a id="toc-what-is-inversion-of-control"></a>
 ### What is Inversion of Control?
 
 **Inversion of Control (IoC)** means you lose control of when and how your callback is executed. You must trust the library/function to call it correctly.
@@ -50917,7 +47356,6 @@ saveUserData({ name: 'John' }, (result) => {
 });
 ```
 
-<a id="toc-risks-of-ioc-with-callbacks"></a>
 ### Risks of IoC with Callbacks
 
 ```javascript
@@ -50965,7 +47403,6 @@ wrongContext(function() {
 });
 ```
 
-<a id="toc-ioc-solutions-with-promises"></a>
 ### IoC Solutions with Promises
 
 ```javascript
@@ -50993,10 +47430,8 @@ promise
 
 ---
 
-<a id="toc-advanced-callback-patterns"></a>
 ## Advanced Callback Patterns
 
-<a id="toc-continuation-passing-style-cps"></a>
 ### Continuation-Passing Style (CPS)
 
 ```javascript
@@ -51020,7 +47455,6 @@ add(2, 3, (result1) => {
 });
 ```
 
-<a id="toc-transforming-callbacks-to-promises-promisification"></a>
 ### Transforming Callbacks to Promises (Promisification)
 
 ```javascript
@@ -51054,7 +47488,6 @@ async function readFiles() {
 readFiles();
 ```
 
-<a id="toc-callback-composition"></a>
 ### Callback Composition
 
 ```javascript
@@ -51098,10 +47531,8 @@ pipeline(5, (error, result) => {
 
 ---
 
-<a id="toc-best-practices-11"></a>
 ## Best Practices
 
-<a id="toc-✅-do-3"></a>
 ### ✅ DO
 
 ```javascript
@@ -51155,7 +47586,6 @@ function newFeature(input) {
 }
 ```
 
-<a id="toc-❌-dont-3"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -51198,10 +47628,8 @@ sync((result) => {
 
 ---
 
-<a id="toc-summary-12"></a>
 ## Summary
 
-<a id="toc-callback-key-points"></a>
 ### Callback Key Points
 
 | Concept | Details |
@@ -51214,7 +47642,6 @@ sync((result) => {
 | **IoC Problem** | Loss of control over callback execution |
 | **Solutions** | Promises, async/await, named functions |
 
-<a id="toc-when-to-use-callbacks"></a>
 ### When to Use Callbacks
 
 ✅ **Still useful for:**
@@ -51228,7 +47655,6 @@ sync((result) => {
 - Multiple sequential operations
 - New code (use Promises/async-await)
 
-<a id="toc-callback-vs-promises-vs-asyncawait"></a>
 ### Callback vs Promises vs Async/Await
 
 ```javascript
@@ -51252,22 +47678,18 @@ try {
 }
 ```
 
-<a id="toc-next-steps-5"></a>
 ### Next Steps
 
 - Master Promises and their power
 - Learn async/await syntax
 - Understand async patterns and antipatterns
 - Apply to real-world projects
-<a id="toc-promises"></a>
 ## Promises 
 
 
 
-<a id="toc-promise-states"></a>
 ## Promise States
 
-<a id="toc-the-three-states"></a>
 ### The Three States
 
 A Promise is always in one of three states:
@@ -51304,7 +47726,6 @@ settled.then((value) => {
 });
 ```
 
-<a id="toc-state-transitions"></a>
 ### State Transitions
 
 ```
@@ -51327,10 +47748,8 @@ settled.then((value) => {
 
 ---
 
-<a id="toc-creating-promises"></a>
 ## Creating Promises
 
-<a id="toc-basic-promise-creation"></a>
 ### Basic Promise Creation
 
 ```javascript
@@ -51363,7 +47782,6 @@ const conditional = new Promise((resolve, reject) => {
 });
 ```
 
-<a id="toc-promise-executor-function"></a>
 ### Promise Executor Function
 
 ```javascript
@@ -51385,7 +47803,6 @@ promise.then((value) => {
 });
 ```
 
-<a id="toc-common-promise-patterns"></a>
 ### Common Promise Patterns
 
 ```javascript
@@ -51423,10 +47840,8 @@ timeoutPromise(100).then((msg) => console.log(msg));
 
 ---
 
-<a id="toc-then-catch-finally"></a>
 ## then(), catch(), finally()
 
-<a id="toc-then-handle-fulfilled-state"></a>
 ### then() - Handle Fulfilled State
 
 ```javascript
@@ -51454,7 +47869,6 @@ Promise.resolve(5)
   .then((result) => console.log(result));  // 20
 ```
 
-<a id="toc-catch-handle-rejected-state"></a>
 ### catch() - Handle Rejected State
 
 ```javascript
@@ -51485,7 +47899,6 @@ Promise.reject(new Error('Error 1'))
   });
 ```
 
-<a id="toc-finally-always-execute"></a>
 ### finally() - Always Execute
 
 ```javascript
@@ -51524,10 +47937,8 @@ function withResource(resourceId) {
 
 ---
 
-<a id="toc-promise-chaining"></a>
 ## Promise Chaining
 
-<a id="toc-method-chaining"></a>
 ### Method Chaining
 
 ```javascript
@@ -51562,7 +47973,6 @@ step1()
   });
 ```
 
-<a id="toc-returning-promises-from-handlers"></a>
 ### Returning Promises from Handlers
 
 ```javascript
@@ -51589,7 +47999,6 @@ Promise.resolve(1)
 // Output: Value: 1, Doubled: 2, Final: 12
 ```
 
-<a id="toc-flattening-chains"></a>
 ### Flattening Chains
 
 ```javascript
@@ -51607,10 +48016,8 @@ nested.then((value) => {
 
 ---
 
-<a id="toc-error-propagation"></a>
 ## Error Propagation
 
-<a id="toc-error-handling-in-chains"></a>
 ### Error Handling in Chains
 
 ```javascript
@@ -51638,7 +48045,6 @@ Promise.reject(new Error('Initial error'))
   });
 ```
 
-<a id="toc-re-throwing-errors"></a>
 ### Re-throwing Errors
 
 ```javascript
@@ -51669,10 +48075,8 @@ Promise.reject(new Error('Network error'))
 
 ---
 
-<a id="toc-promiseresolve-and-promisereject"></a>
 ## Promise.resolve() and Promise.reject()
 
-<a id="toc-promiseresolve"></a>
 ### Promise.resolve()
 
 ```javascript
@@ -51709,7 +48113,6 @@ const promises = [1, 2, 3]
 // All are now promises
 ```
 
-<a id="toc-promisereject"></a>
 ### Promise.reject()
 
 ```javascript
@@ -51728,10 +48131,8 @@ Promise.reject('Rejection reason')
 
 ---
 
-<a id="toc-promiseall"></a>
 ## Promise.all()
 
-<a id="toc-execute-multiple-promises-in-parallel"></a>
 ### Execute Multiple Promises in Parallel
 
 ```javascript
@@ -51757,7 +48158,6 @@ Promise.all([
   });
 ```
 
-<a id="toc-practical-promiseall-examples"></a>
 ### Practical Promise.all() Examples
 
 ```javascript
@@ -51802,10 +48202,8 @@ Promise.all(loadImages)
 
 ---
 
-<a id="toc-promiserace"></a>
 ## Promise.race()
 
-<a id="toc-first-promise-to-settle-wins"></a>
 ### First Promise to Settle Wins
 
 ```javascript
@@ -51829,7 +48227,6 @@ Promise.race([
   });
 ```
 
-<a id="toc-practical-race-examples"></a>
 ### Practical Race Examples
 
 ```javascript
@@ -51862,10 +48259,8 @@ const fetchFromMirrors = Promise.race([
 
 ---
 
-<a id="toc-promiseallsettled"></a>
 ## Promise.allSettled()
 
-<a id="toc-wait-for-all-promises-regardless-of-outcome"></a>
 ### Wait for All Promises Regardless of Outcome
 
 ```javascript
@@ -51899,7 +48294,6 @@ Promise.allSettled([
   });
 ```
 
-<a id="toc-use-cases-3"></a>
 ### Use Cases
 
 ```javascript
@@ -51938,10 +48332,8 @@ Promise.allSettled([
 
 ---
 
-<a id="toc-promiseany"></a>
 ## Promise.any()
 
-<a id="toc-first-fulfilled-promise-wins"></a>
 ### First Fulfilled Promise Wins
 
 ```javascript
@@ -51967,7 +48359,6 @@ Promise.any([
   });
 ```
 
-<a id="toc-practical-examples-1"></a>
 ### Practical Examples
 
 ```javascript
@@ -51988,10 +48379,8 @@ function fetchFromSources(url) {
 
 ---
 
-<a id="toc-promisetry-proposal"></a>
 ## Promise.try() (Proposal)
 
-<a id="toc-wrapping-sync-and-async-code"></a>
 ### Wrapping Sync and Async Code
 
 ```javascript
@@ -52025,10 +48414,8 @@ try {
 
 ---
 
-<a id="toc-practical-examples-2"></a>
 ## Practical Examples
 
-<a id="toc-example-1-sequential-fetch"></a>
 ### Example 1: Sequential Fetch
 
 ```javascript
@@ -52054,7 +48441,6 @@ function loadUserData(userId) {
 loadUserData(1).then(data => console.log(data));
 ```
 
-<a id="toc-example-2-parallel-requests-with-fallback"></a>
 ### Example 2: Parallel Requests with Fallback
 
 ```javascript
@@ -52070,7 +48456,6 @@ function loadWithFallback() {
 }
 ```
 
-<a id="toc-example-3-retry-logic"></a>
 ### Example 3: Retry Logic
 
 ```javascript
@@ -52094,10 +48479,8 @@ retryWithBackoff(() => fetch('/api/data'), 3)
 
 ---
 
-<a id="toc-best-practices-12"></a>
 ## Best Practices
 
-<a id="toc-✅-do-4"></a>
 ### ✅ DO
 
 ```javascript
@@ -52130,7 +48513,6 @@ promise
 });
 ```
 
-<a id="toc-❌-dont-4"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -52162,10 +48544,8 @@ promise
 
 ---
 
-<a id="toc-summary-13"></a>
 ## Summary
 
-<a id="toc-promise-methods-overview"></a>
 ### Promise Methods Overview
 
 | Method | Purpose | Returns |
@@ -52180,7 +48560,6 @@ promise
 | **Promise.allSettled()** | Wait for all | Promise |
 | **Promise.any()** | First fulfilled | Promise |
 
-<a id="toc-when-to-use-each-combinator"></a>
 ### When to Use Each Combinator
 
 ```javascript
@@ -52197,22 +48576,18 @@ Promise.allSettled([p1, p2, p3])
 Promise.any([p1, p2, p3])
 ```
 
-<a id="toc-next-steps-6"></a>
 ### Next Steps
 
 - Master async/await for cleaner syntax
 - Learn async patterns and best practices
 - Understand concurrency patterns
 - Apply to real-world scenarios
-<a id="toc-asyncawait"></a>
 ## Async/Await 
 
 
 
-<a id="toc-async-functions-1"></a>
 ## async Functions
 
-<a id="toc-declaring-async-functions"></a>
 ### Declaring async Functions
 
 ```javascript
@@ -52246,7 +48621,6 @@ const fetcher = {
 };
 ```
 
-<a id="toc-what-async-does"></a>
 ### What async Does
 
 ```javascript
@@ -52281,7 +48655,6 @@ error().catch(err => {
 });
 ```
 
-<a id="toc-async-function-scope"></a>
 ### Async Function Scope
 
 ```javascript
@@ -52306,10 +48679,8 @@ async function isolatedScope() {
 
 ---
 
-<a id="toc-await-expression"></a>
 ## await Expression
 
-<a id="toc-basic-await"></a>
 ### Basic await
 
 ```javascript
@@ -52331,7 +48702,6 @@ example();
 // 3. End
 ```
 
-<a id="toc-await-with-different-promise-states"></a>
 ### await with Different Promise States
 
 ```javascript
@@ -52360,7 +48730,6 @@ async function withDelay() {
 }
 ```
 
-<a id="toc-await-with-non-promise-values"></a>
 ### await with Non-Promise Values
 
 ```javascript
@@ -52386,7 +48755,6 @@ async function withThenable() {
 }
 ```
 
-<a id="toc-multiple-awaits"></a>
 ### Multiple Awaits
 
 ```javascript
@@ -52409,10 +48777,8 @@ sequential();
 
 ---
 
-<a id="toc-error-handling-with-trycatch"></a>
 ## Error Handling with try/catch
 
-<a id="toc-basic-trycatch-1"></a>
 ### Basic try/catch
 
 ```javascript
@@ -52440,7 +48806,6 @@ async function multipleAwaits() {
 }
 ```
 
-<a id="toc-error-propagation-1"></a>
 ### Error Propagation
 
 ```javascript
@@ -52476,7 +48841,6 @@ async function specificHandling() {
 }
 ```
 
-<a id="toc-finally-block-2"></a>
 ### finally Block
 
 ```javascript
@@ -52512,10 +48876,8 @@ async function withMetrics() {
 
 ---
 
-<a id="toc-parallel-execution-1"></a>
 ## Parallel Execution
 
-<a id="toc-running-awaits-in-parallel"></a>
 ### Running Awaits in Parallel
 
 ```javascript
@@ -52554,7 +48916,6 @@ async function parallelAlternative() {
 }
 ```
 
-<a id="toc-partial-parallelization"></a>
 ### Partial Parallelization
 
 ```javascript
@@ -52576,10 +48937,8 @@ async function partialParallel() {
 
 ---
 
-<a id="toc-sequential-vs-concurrent-patterns"></a>
 ## Sequential vs Concurrent Patterns
 
-<a id="toc-sequential-pattern-dependent-operations"></a>
 ### Sequential Pattern (Dependent Operations)
 
 ```javascript
@@ -52599,7 +48958,6 @@ async function sequential() {
 // Because getPosts needs user.id which we get from getUser
 ```
 
-<a id="toc-concurrent-pattern-independent-operations"></a>
 ### Concurrent Pattern (Independent Operations)
 
 ```javascript
@@ -52616,7 +48974,6 @@ async function concurrent() {
 }
 ```
 
-<a id="toc-mixed-pattern-some-dependent-some-independent"></a>
 ### Mixed Pattern (Some Dependent, Some Independent)
 
 ```javascript
@@ -52640,10 +48997,8 @@ async function mixed() {
 
 ---
 
-<a id="toc-top-level-await"></a>
 ## Top-Level await
 
-<a id="toc-using-await-outside-async-function"></a>
 ### Using await Outside async Function
 
 ```javascript
@@ -52658,7 +49013,6 @@ console.log('Data loaded:', data);
 // Must be in module context, not global scope
 ```
 
-<a id="toc-use-cases-4"></a>
 ### Use Cases
 
 ```javascript
@@ -52682,7 +49036,6 @@ await migrateDatabase();
 console.log('Database ready');
 ```
 
-<a id="toc-browser-support"></a>
 ### Browser Support
 
 ```javascript
@@ -52698,10 +49051,8 @@ console.log('Database ready');
 
 ---
 
-<a id="toc-async-function-return-values"></a>
 ## Async Function Return Values
 
-<a id="toc-return-types"></a>
 ### Return Types
 
 ```javascript
@@ -52740,7 +49091,6 @@ async function chainedPromises() {
 }
 ```
 
-<a id="toc-type-inference"></a>
 ### Type Inference
 
 ```javascript
@@ -52759,10 +49109,8 @@ async function flat() {
 
 ---
 
-<a id="toc-common-patterns-5"></a>
 ## Common Patterns
 
-<a id="toc-pattern-1-retry-with-exponential-backoff"></a>
 ### Pattern 1: Retry with Exponential Backoff
 
 ```javascript
@@ -52793,7 +49141,6 @@ const data = await retryWithBackoff(
 );
 ```
 
-<a id="toc-pattern-2-timeout"></a>
 ### Pattern 2: Timeout
 
 ```javascript
@@ -52819,7 +49166,6 @@ try {
 }
 ```
 
-<a id="toc-pattern-3-batch-processing"></a>
 ### Pattern 3: Batch Processing
 
 ```javascript
@@ -52842,7 +49188,6 @@ async function processBatch(items, batchSize = 5) {
 const allResults = await processBatch(hugeArray, 10);
 ```
 
-<a id="toc-pattern-4-sequential-operations"></a>
 ### Pattern 4: Sequential Operations
 
 ```javascript
@@ -52864,10 +49209,8 @@ const results = await sequentialOperations([1, 2, 3, 4, 5]);
 
 ---
 
-<a id="toc-best-practices-13"></a>
 ## Best Practices
 
-<a id="toc-✅-do-5"></a>
 ### ✅ DO
 
 ```javascript
@@ -52914,7 +49257,6 @@ async function withCleanup() {
 }
 ```
 
-<a id="toc-❌-dont-5"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -52973,10 +49315,8 @@ async function properReturn() {
 
 ---
 
-<a id="toc-summary-14"></a>
 ## Summary
 
-<a id="toc-asyncawait-key-points"></a>
 ### Async/Await Key Points
 
 | Concept | Details |
@@ -52989,7 +49329,6 @@ async function properReturn() {
 | **Sequential** | Use await in sequence for dependent operations |
 | **Top-level await** | ES2022, modules only |
 
-<a id="toc-execution-flow"></a>
 ### Execution Flow
 
 ```javascript
@@ -53007,7 +49346,6 @@ console.log('3');             // Executes before '2'
 // Output: 1, 3, 2
 ```
 
-<a id="toc-quick-comparison-2"></a>
 ### Quick Comparison
 
 ```javascript
@@ -53028,22 +49366,18 @@ try {
 }
 ```
 
-<a id="toc-next-steps-7"></a>
 ### Next Steps
 
 - Master async patterns
 - Learn concurrent patterns
 - Understand error handling strategies
 - Apply to production code
-<a id="toc-async-patterns"></a>
 ## Async Patterns
 
 
 
-<a id="toc-promisification"></a>
 ## Promisification
 
-<a id="toc-converting-callbacks-to-promises"></a>
 ### Converting Callbacks to Promises
 
 ```javascript
@@ -53086,7 +49420,6 @@ async function loadFiles() {
 loadFiles();
 ```
 
-<a id="toc-generic-promisification-helper"></a>
 ### Generic Promisification Helper
 
 ```javascript
@@ -53120,7 +49453,6 @@ const addAsync = promisify(add);
 const result = await addAsync(5, 3);  // 8
 ```
 
-<a id="toc-built-in-promisification"></a>
 ### Built-in Promisification
 
 ```javascript
@@ -53141,10 +49473,8 @@ loadFile();
 
 ---
 
-<a id="toc-throttling"></a>
 ## Throttling
 
-<a id="toc-what-is-throttling"></a>
 ### What is Throttling?
 
 **Throttling** ensures a function is called at most once per specified time interval, even if events fire repeatedly.
@@ -53173,7 +49503,6 @@ window.addEventListener(
 );
 ```
 
-<a id="toc-advanced-throttle-with-trailing-call"></a>
 ### Advanced Throttle with Trailing Call
 
 ```javascript
@@ -53217,7 +49546,6 @@ const onMouseMove = throttle(
 document.addEventListener('mousemove', onMouseMove);
 ```
 
-<a id="toc-use-cases-5"></a>
 ### Use Cases
 
 ```javascript
@@ -53239,10 +49567,8 @@ input.addEventListener('input', apiCall);
 
 ---
 
-<a id="toc-debouncing"></a>
 ## Debouncing
 
-<a id="toc-what-is-debouncing"></a>
 ### What is Debouncing?
 
 **Debouncing** ensures a function is only called after it stops being invoked for a specified time interval.
@@ -53275,7 +49601,6 @@ input.addEventListener('input', (e) => {
 });
 ```
 
-<a id="toc-advanced-debounce-with-immediate-option"></a>
 ### Advanced Debounce with Immediate Option
 
 ```javascript
@@ -53313,7 +49638,6 @@ const onClick = debounce(
 button.addEventListener('click', onClick);
 ```
 
-<a id="toc-debounce-vs-throttle"></a>
 ### Debounce vs Throttle
 
 ```javascript
@@ -53338,10 +49662,8 @@ window.addEventListener('scroll', throttledScroll);
 
 ---
 
-<a id="toc-retry-logic-1"></a>
 ## Retry Logic
 
-<a id="toc-simple-retry"></a>
 ### Simple Retry
 
 ```javascript
@@ -53366,7 +49688,6 @@ const data = await retryAsync(
 );
 ```
 
-<a id="toc-retry-with-exponential-backoff"></a>
 ### Retry with Exponential Backoff
 
 ```javascript
@@ -53400,7 +49721,6 @@ const response = await retryWithBackoff(
 );
 ```
 
-<a id="toc-conditional-retry"></a>
 ### Conditional Retry
 
 ```javascript
@@ -53429,10 +49749,8 @@ async function retryOnError(fn, maxRetries = 3) {
 
 ---
 
-<a id="toc-timeout-patterns"></a>
 ## Timeout Patterns
 
-<a id="toc-promise-with-timeout"></a>
 ### Promise with Timeout
 
 ```javascript
@@ -53458,7 +49776,6 @@ try {
 }
 ```
 
-<a id="toc-abortcontroller-for-native-timeouts"></a>
 ### AbortController for Native Timeouts
 
 ```javascript
@@ -53491,10 +49808,8 @@ try {
 
 ---
 
-<a id="toc-concurrency-control"></a>
 ## Concurrency Control
 
-<a id="toc-limit-concurrent-promises"></a>
 ### Limit Concurrent Promises
 
 ```javascript
@@ -53536,7 +49851,6 @@ await concurrentLimit(
 );
 ```
 
-<a id="toc-worker-pool-pattern"></a>
 ### Worker Pool Pattern
 
 ```javascript
@@ -53577,10 +49891,8 @@ await Promise.all(tasks);
 
 ---
 
-<a id="toc-queue-management"></a>
 ## Queue Management
 
-<a id="toc-simple-task-queue"></a>
 ### Simple Task Queue
 
 ```javascript
@@ -53626,7 +49938,6 @@ queue.add(() => console.log('Task 3'));
 // Output: Task 1, Task 2, Task 3 (sequentially)
 ```
 
-<a id="toc-priority-queue"></a>
 ### Priority Queue
 
 ```javascript
@@ -53675,10 +49986,8 @@ queue.add(() => console.log('Medium priority'), 5);
 
 ---
 
-<a id="toc-race-conditions-and-solutions"></a>
 ## Race Conditions and Solutions
 
-<a id="toc-identifying-race-conditions"></a>
 ### Identifying Race Conditions
 
 ```javascript
@@ -53700,7 +50009,6 @@ Promise.all([fetchData(), fetchData()]);
 // Makes 2 requests instead of 1
 ```
 
-<a id="toc-solution-1-deduplication"></a>
 ### Solution 1: Deduplication
 
 ```javascript
@@ -53720,7 +50028,6 @@ Promise.all([fetchData(), fetchData(), fetchData()]);
 // Only 1 request made
 ```
 
-<a id="toc-solution-2-request-deduplication-map"></a>
 ### Solution 2: Request Deduplication Map
 
 ```javascript
@@ -53750,7 +50057,6 @@ fetchDataByKey('user-1');  // Reuses first request
 fetchDataByKey('user-2');  // New request
 ```
 
-<a id="toc-solution-3-abort-stale-requests"></a>
 ### Solution 3: Abort Stale Requests
 
 ```javascript
@@ -53795,10 +50101,8 @@ search.fetch('/api/search?q=abc');// Cancels request 2
 
 ---
 
-<a id="toc-advanced-patterns"></a>
 ## Advanced Patterns
 
-<a id="toc-pattern-timeout-with-fallback"></a>
 ### Pattern: Timeout with Fallback
 
 ```javascript
@@ -53820,7 +50124,6 @@ const data = await withFallback(
 );
 ```
 
-<a id="toc-pattern-circuit-breaker"></a>
 ### Pattern: Circuit Breaker
 
 ```javascript
@@ -53879,10 +50182,8 @@ try {
 
 ---
 
-<a id="toc-best-practices-14"></a>
 ## Best Practices
 
-<a id="toc-✅-do-6"></a>
 ### ✅ DO
 
 ```javascript
@@ -53908,7 +50209,6 @@ const request = pendingRequests.get(key) || fetch(url);
 await retryWithBackoff(operation, 3, 1000);
 ```
 
-<a id="toc-❌-dont-6"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -53939,10 +50239,8 @@ for (let i = 0; i < 5; i++) {
 
 ---
 
-<a id="toc-summary-15"></a>
 ## Summary
 
-<a id="toc-async-patterns-overview"></a>
 ### Async Patterns Overview
 
 | Pattern | Purpose | Key Benefit |
@@ -53957,7 +50255,6 @@ for (let i = 0; i < 5; i++) {
 | **Deduplication** | Avoid duplicate requests | Save bandwidth |
 | **Circuit Breaker** | Stop calling failing service | Fail fast |
 
-<a id="toc-quick-reference-1"></a>
 ### Quick Reference
 
 ```javascript
@@ -53984,7 +50281,6 @@ const queue = new Queue();
 queue.add(task);
 ```
 
-<a id="toc-next-steps-8"></a>
 ### Next Steps
 
 - Combine patterns for complex scenarios
@@ -53992,7 +50288,6 @@ queue.add(task);
 - Optimize performance with caching
 - Monitor and debug async operations
 
-<a id="toc-136-async-summary"></a>
 ## 13.6 Async Summary
 
 | Concept | Description |
@@ -54007,10 +50302,8 @@ queue.add(task);
 
 ---
 
-<a id="toc-mastery-check-3"></a>
 ## Mastery Check
 
-<a id="toc-quiz-questions-3"></a>
 ### Quiz Questions
 
 **Q1:** Predict the output order:
@@ -54101,7 +50394,6 @@ await Promise.all(items.map(item => processItem(item)));
 Use A when order matters or resource-constrained. Use B for maximum throughput (but watch out for rate limits).
 </details>
 
-<a id="toc-coding-challenges-3"></a>
 ### Coding Challenges
 
 **Challenge 1:** Implement `delay(ms)` that returns a promise resolving after ms milliseconds.
@@ -54175,25 +50467,20 @@ const results = await asyncPool(5, urls, url => fetch(url));
 **End of Chapter 13: Asynchronous JavaScript**
 
 
-<a id="toc-14-modulesmd"></a>
 # 14-Modules.md
 
-<a id="toc-14-modules"></a>
 # 14 Modules
 
 Modules organize code into reusable units. ES modules (`import`/`export`) are the standard; CommonJS remains common in Node.js.
 
 ---
 
-<a id="toc-es-modules-esm"></a>
 # ES Modules (ESM) 
 
 
 
-<a id="toc-import-statement"></a>
 ## import Statement
 
-<a id="toc-basic-imports"></a>
 ### Basic Imports
 
 ```javascript
@@ -54219,7 +50506,6 @@ import Calculator from './calculator.js';
 import Calculator, { add, subtract } from './calculator.js';
 ```
 
-<a id="toc-import-paths"></a>
 ### Import Paths
 
 ```javascript
@@ -54242,7 +50528,6 @@ import { fn } from './module.js';  // ✓ Correct
 // import { fn } from './module';  // ✗ Wrong
 ```
 
-<a id="toc-import-side-effects"></a>
 ### Import Side Effects
 
 ```javascript
@@ -54253,7 +50538,6 @@ import './global-styles.css';
 // Module executes but nothing is imported
 ```
 
-<a id="toc-hoisting-behavior"></a>
 ### Hoisting Behavior
 
 ```javascript
@@ -54267,10 +50551,8 @@ import { add } from './math.js';
 
 ---
 
-<a id="toc-export-statement"></a>
 ## export Statement
 
-<a id="toc-named-exports"></a>
 ### Named Exports
 
 ```javascript
@@ -54306,7 +50588,6 @@ export {
 };
 ```
 
-<a id="toc-default-export"></a>
 ### Default Export
 
 ```javascript
@@ -54335,7 +50616,6 @@ export default config;
 // Note: Only ONE default export per module
 ```
 
-<a id="toc-mixed-exports"></a>
 ### Mixed Exports
 
 ```javascript
@@ -54358,10 +50638,8 @@ import User, { createUser, ADMIN_ROLE } from './user.js';
 
 ---
 
-<a id="toc-default-exports-vs-named-exports"></a>
 ## Default Exports vs Named Exports
 
-<a id="toc-comparison-3"></a>
 ### Comparison
 
 | Aspect | Default Export | Named Export |
@@ -54384,7 +50662,6 @@ import { Logger } from './logger.js';     // Must match
 import { Logger as MyLogger } from './logger.js';  // Alias required
 ```
 
-<a id="toc-when-to-use-each-4"></a>
 ### When to Use Each
 
 ```javascript
@@ -54409,10 +50686,8 @@ import { formatDate, debounce } from './utils.js';
 
 ---
 
-<a id="toc-re-exporting"></a>
 ## Re-exporting
 
-<a id="toc-basic-re-export"></a>
 ### Basic Re-export
 
 ```javascript
@@ -54429,7 +50704,6 @@ export { add as addition } from './math.js';
 export * from './math.js';
 ```
 
-<a id="toc-re-exporting-default"></a>
 ### Re-exporting Default
 
 ```javascript
@@ -54443,7 +50717,6 @@ export { default as Calculator } from './calculator.js';
 export { default as myCalculator } from './calculator.js';
 ```
 
-<a id="toc-barrel-exports-index-pattern"></a>
 ### Barrel Exports (Index Pattern)
 
 ```javascript
@@ -54463,7 +50736,6 @@ import { Button, Input, Modal, useForm } from './components';
 // Index.js is automatically resolved
 ```
 
-<a id="toc-namespace-exports"></a>
 ### Namespace Exports
 
 ```javascript
@@ -54481,10 +50753,8 @@ console.log(math.add(5, 3));
 
 ---
 
-<a id="toc-dynamic-imports-1"></a>
 ## Dynamic Imports
 
-<a id="toc-basic-dynamic-import"></a>
 ### Basic Dynamic Import
 
 ```javascript
@@ -54508,7 +50778,6 @@ async function loadModule(moduleName) {
 const utils = await loadModule('utils');
 ```
 
-<a id="toc-use-cases-6"></a>
 ### Use Cases
 
 ```javascript
@@ -54538,7 +50807,6 @@ async function renderPage(route) {
 }
 ```
 
-<a id="toc-error-handling-2"></a>
 ### Error Handling
 
 ```javascript
@@ -54565,10 +50833,8 @@ async function loadWithFallback(primary, fallback) {
 
 ---
 
-<a id="toc-importmeta"></a>
 ## import.meta
 
-<a id="toc-what-is-importmeta"></a>
 ### What is import.meta?
 
 `import.meta` is an object containing metadata about the current module.
@@ -54580,7 +50846,6 @@ console.log(import.meta.main);  // true if main module
 console.log(import.meta.resolve); // Resolve module path
 ```
 
-<a id="toc-use-cases-7"></a>
 ### Use Cases
 
 ```javascript
@@ -54617,10 +50882,8 @@ const module = await import(modulePath);
 
 ---
 
-<a id="toc-module-scope"></a>
 ## Module Scope
 
-<a id="toc-module-scope-isolation"></a>
 ### Module Scope Isolation
 
 ```javascript
@@ -54648,7 +50911,6 @@ console.log(getCounter());  // 1
 // counter is private (encapsulated)
 ```
 
-<a id="toc-global-scope-vs-module-scope"></a>
 ### Global Scope vs Module Scope
 
 ```javascript
@@ -54669,7 +50931,6 @@ import { config } from './config.js';
 console.log(config.debug);  // true (not affected by module1)
 ```
 
-<a id="toc-shared-state"></a>
 ### Shared State
 
 ```javascript
@@ -54701,10 +50962,8 @@ console.log(getCount());  // 3
 
 ---
 
-<a id="toc-top-level-await-1"></a>
 ## Top-Level await
 
-<a id="toc-using-await-outside-async-function-1"></a>
 ### Using await Outside async Function
 
 ```javascript
@@ -54717,7 +50976,6 @@ console.log('Data loaded:', data);
 // Module waits for promise before continuing
 ```
 
-<a id="toc-module-loading-order"></a>
 ### Module Loading Order
 
 ```javascript
@@ -54740,7 +50998,6 @@ console.log('Module 2: data available', data);
 // Module 2: data available ...
 ```
 
-<a id="toc-use-cases-8"></a>
 ### Use Cases
 
 ```javascript
@@ -54766,10 +51023,8 @@ console.log('Database ready');
 
 ---
 
-<a id="toc-practical-examples-3"></a>
 ## Practical Examples
 
-<a id="toc-example-1-calculator-module-with-namespace"></a>
 ### Example 1: Calculator Module with Namespace
 
 ```javascript
@@ -54789,7 +51044,6 @@ console.log(calc.add(10, 5));       // 15
 console.log(calc.multiply(3, 4));   // 12
 ```
 
-<a id="toc-example-2-component-with-re-exports"></a>
 ### Example 2: Component with Re-exports
 
 ```javascript
@@ -54811,7 +51065,6 @@ export { default as Input } from './Input.js';
 import { Button, Input } from './components/index.js';
 ```
 
-<a id="toc-example-3-feature-flags-with-dynamic-import"></a>
 ### Example 3: Feature Flags with Dynamic Import
 
 ```javascript
@@ -54843,10 +51096,8 @@ try {
 
 ---
 
-<a id="toc-best-practices-15"></a>
 ## Best Practices
 
-<a id="toc-✅-do-7"></a>
 ### ✅ DO
 
 ```javascript
@@ -54872,7 +51123,6 @@ const config = await loadConfig();
 export { config };
 ```
 
-<a id="toc-❌-dont-7"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -54898,10 +51148,8 @@ import { helper } from './utils.js';  // Correct
 
 ---
 
-<a id="toc-summary-16"></a>
 ## Summary
 
-<a id="toc-importexport-quick-reference"></a>
 ### Import/Export Quick Reference
 
 ```javascript
@@ -54933,7 +51181,6 @@ export { add } from './math.js';
 export * from './utils.js';
 ```
 
-<a id="toc-module-system-comparison"></a>
 ### Module System Comparison
 
 | Feature | ESM | CommonJS |
@@ -54945,22 +51192,18 @@ export * from './utils.js';
 | **Dynamic import** | ✅ `import()` | ✅ `require()` |
 | **Tree-shaking** | ✅ Yes | ❌ Difficult |
 
-<a id="toc-next-steps-9"></a>
 ### Next Steps
 
 - Learn CommonJS for Node.js compatibility
 - Master module patterns
 - Understand ESM vs CommonJS interop
 - Build modular applications
-<a id="toc-commonjs-nodejs"></a>
 ## CommonJS (Node.js) 
 
 
 
-<a id="toc-require-function"></a>
 ## require() Function
 
-<a id="toc-basic-require"></a>
 ### Basic require()
 
 ```javascript
@@ -54980,7 +51223,6 @@ const path = require('path');
 const package = require('package-name');
 ```
 
-<a id="toc-destructuring-imports"></a>
 ### Destructuring Imports
 
 ```javascript
@@ -54998,7 +51240,6 @@ const math = require('./math.js');
 const { add, subtract } = math;
 ```
 
-<a id="toc-module-paths"></a>
 ### Module Paths
 
 ```javascript
@@ -55021,7 +51262,6 @@ const http = require('http');
 const util = require('util');
 ```
 
-<a id="toc-conditional-imports"></a>
 ### Conditional Imports
 
 ```javascript
@@ -55048,10 +51288,8 @@ if (optional) {
 
 ---
 
-<a id="toc-moduleexports-and-exports"></a>
 ## module.exports and exports
 
-<a id="toc-moduleexports"></a>
 ### module.exports
 
 ```javascript
@@ -55091,7 +51329,6 @@ module.exports = {
 module.exports.additional = 'value';
 ```
 
-<a id="toc-exports-shorthand"></a>
 ### exports Shorthand
 
 ```javascript
@@ -55111,7 +51348,6 @@ module.exports.subtract = (a, b) => a - b;
 module.exports = { add, subtract };  // ✓ Works
 ```
 
-<a id="toc-when-to-use-each-5"></a>
 ### When to Use Each
 
 ```javascript
@@ -55133,10 +51369,8 @@ module.exports = {
 
 ---
 
-<a id="toc-module-caching"></a>
 ## Module Caching
 
-<a id="toc-how-module-caching-works"></a>
 ### How Module Caching Works
 
 ```javascript
@@ -55149,7 +51383,6 @@ console.log(math1 === math2);  // true (same object reference)
 // Module code executes only once
 ```
 
-<a id="toc-cache-behavior"></a>
 ### Cache Behavior
 
 ```javascript
@@ -55175,7 +51408,6 @@ console.log(mod2.getCounter());       // 2 (shared state)
 console.log(mod1 === mod2);           // true (same module)
 ```
 
-<a id="toc-clearing-cache"></a>
 ### Clearing Cache
 
 ```javascript
@@ -55193,7 +51425,6 @@ Object.keys(require.cache).forEach(key => {
 // ⚠️ Generally not recommended in production
 ```
 
-<a id="toc-cache-id"></a>
 ### Cache ID
 
 ```javascript
@@ -55207,10 +51438,8 @@ console.log(require.cache[moduleId]);  // Module object
 
 ---
 
-<a id="toc-circular-dependencies"></a>
 ## Circular Dependencies
 
-<a id="toc-the-problem"></a>
 ### The Problem
 
 ```javascript
@@ -55235,7 +51464,6 @@ module.exports = { value: 'b' };
 // a: b.value = b
 ```
 
-<a id="toc-solution-1-restructure"></a>
 ### Solution 1: Restructure
 
 ```javascript
@@ -55262,7 +51490,6 @@ module.exports = {
 };
 ```
 
-<a id="toc-solution-2-lazy-load"></a>
 ### Solution 2: Lazy Load
 
 ```javascript
@@ -55286,7 +51513,6 @@ module.exports = {
 };
 ```
 
-<a id="toc-solution-3-dependency-injection"></a>
 ### Solution 3: Dependency Injection
 
 ```javascript
@@ -55320,10 +51546,8 @@ b.a = a;
 
 ---
 
-<a id="toc-esm-vs-commonjs"></a>
 ## ESM vs CommonJS
 
-<a id="toc-comparison-4"></a>
 ### Comparison
 
 | Feature | ESM | CommonJS |
@@ -55338,7 +51562,6 @@ b.a = a;
 | **Named exports** | ✅ Multiple | Via object properties |
 | **Circular deps** | Partial | Full support |
 
-<a id="toc-code-comparison"></a>
 ### Code Comparison
 
 ```javascript
@@ -55359,10 +51582,8 @@ export function helper() { }
 
 ---
 
-<a id="toc-esmcommonjs-interoperability"></a>
 ## ESM/CommonJS Interoperability
 
-<a id="toc-esm-importing-commonjs"></a>
 ### ESM Importing CommonJS
 
 ```javascript
@@ -55381,7 +51602,6 @@ import * as math from './math.js';
 console.log(math.add(5, 3));  // Works
 ```
 
-<a id="toc-commonjs-requiring-esm"></a>
 ### CommonJS Requiring ESM
 
 ```javascript
@@ -55400,7 +51620,6 @@ async function loadESM() {
 }
 ```
 
-<a id="toc-dual-package-support"></a>
 ### Dual Package Support
 
 ```javascript
@@ -55424,10 +51643,8 @@ async function loadESM() {
 
 ---
 
-<a id="toc-best-practices-16"></a>
 ## Best Practices
 
-<a id="toc-✅-do-8"></a>
 ### ✅ DO
 
 ```javascript
@@ -55457,7 +51674,6 @@ const utils = require('./utils.js');
 const config = require('../config.js');
 ```
 
-<a id="toc-❌-dont-8"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -55494,10 +51710,8 @@ for (const file of files) {
 
 ---
 
-<a id="toc-summary-17"></a>
 ## Summary
 
-<a id="toc-commonjs-quick-reference"></a>
 ### CommonJS Quick Reference
 
 ```javascript
@@ -55512,7 +51726,6 @@ const { helper } = require('./module.js');
 const express = require('express');
 ```
 
-<a id="toc-moduleexports-vs-exports"></a>
 ### Module.exports vs exports
 
 | Aspect | module.exports | exports |
@@ -55522,7 +51735,6 @@ const express = require('express');
 | **Replace object** | ✅ Yes | ❌ Breaks |
 | **Primary use** | ✅ Main export | ✅ Multiple utilities |
 
-<a id="toc-when-to-use-commonjs-vs-esm"></a>
 ### When to Use CommonJS vs ESM
 
 | Scenario | Use |
@@ -55533,22 +51745,18 @@ const express = require('express');
 | **Modern project** | ESM |
 | **Legacy code** | CommonJS |
 
-<a id="toc-next-steps-10"></a>
 ### Next Steps
 
 - Learn module patterns for code organization
 - Master both CommonJS and ESM
 - Understand module loading strategies
 - Build modular applications
-<a id="toc-module-patterns"></a>
 ## Module Patterns 
 
 
 
-<a id="toc-module-pattern-iife"></a>
 ## Module Pattern (IIFE)
 
-<a id="toc-basic-module-pattern"></a>
 ### Basic Module Pattern
 
 **IIFE** = Immediately Invoked Function Expression
@@ -55580,7 +51788,6 @@ console.log(calculator.add(5, 3));       // 8 + private logOperation
 console.log(calculator.subtract(5, 3));  // 2
 ```
 
-<a id="toc-private-vs-public"></a>
 ### Private vs Public
 
 ```javascript
@@ -55613,7 +51820,6 @@ userModule.login('secret');
 // userModule.validatePassword(); // undefined
 ```
 
-<a id="toc-shared-state-with-module-pattern"></a>
 ### Shared State with Module Pattern
 
 ```javascript
@@ -55640,7 +51846,6 @@ counter.reset();
 console.log(counter.get());  // 0
 ```
 
-<a id="toc-module-parameters"></a>
 ### Module Parameters
 
 ```javascript
@@ -55657,7 +51862,6 @@ console.log(calculator.sqrt(16));  // 4
 console.log(calculator.pow(2, 3)); // 8
 ```
 
-<a id="toc-advanced-module-pattern"></a>
 ### Advanced Module Pattern
 
 ```javascript
@@ -55711,10 +51915,8 @@ console.log(userManager.getAllUsers());
 
 ---
 
-<a id="toc-revealing-module-pattern-1"></a>
 ## Revealing Module Pattern
 
-<a id="toc-what-is-revealing-module-pattern"></a>
 ### What is Revealing Module Pattern?
 
 The **Revealing Module Pattern** reveals explicitly chosen variables and methods as public API while hiding the rest.
@@ -55755,7 +51957,6 @@ app.clear();
 console.log(app.display());  // 0
 ```
 
-<a id="toc-revealing-with-aliases"></a>
 ### Revealing with Aliases
 
 ```javascript
@@ -55791,7 +51992,6 @@ console.log(userService.list());
 console.log(userService.find(1));
 ```
 
-<a id="toc-revealing-with-dependencies"></a>
 ### Revealing with Dependencies
 
 ```javascript
@@ -55839,10 +52039,8 @@ console.log(cache.stats());       // { hits: 1, misses: 1, hitRate: 0.5 }
 
 ---
 
-<a id="toc-singleton-pattern-1"></a>
 ## Singleton Pattern
 
-<a id="toc-what-is-singleton-pattern"></a>
 ### What is Singleton Pattern?
 
 **Singleton** ensures only one instance of an object exists throughout the application.
@@ -55875,7 +52073,6 @@ const db2 = database.getInstance();
 console.log(db1 === db2);  // true (same instance)
 ```
 
-<a id="toc-lazy-initialization"></a>
 ### Lazy Initialization
 
 ```javascript
@@ -55912,7 +52109,6 @@ const config2 = appConfig.getInstance();
 console.log(config === config2);  // true
 ```
 
-<a id="toc-singleton-with-methods"></a>
 ### Singleton with Methods
 
 ```javascript
@@ -55966,7 +52162,6 @@ bus.on('user-login', (user) => {
 bus.emit('user-login', 'Alice');
 ```
 
-<a id="toc-singleton-counter"></a>
 ### Singleton Counter
 
 ```javascript
@@ -56022,10 +52217,8 @@ console.log(log.getLogs());
 
 ---
 
-<a id="toc-namespace-pattern-1"></a>
 ## Namespace Pattern
 
-<a id="toc-basic-namespace"></a>
 ### Basic Namespace
 
 ```javascript
@@ -56053,7 +52246,6 @@ console.log(MyApp.utils.formatDate(new Date()));
 const user = new MyApp.models.User('Alice', 'alice@example.com');
 ```
 
-<a id="toc-nested-namespaces"></a>
 ### Nested Namespaces
 
 ```javascript
@@ -56084,7 +52276,6 @@ App.admin.dashboard.widgets.chart();
 App.user.profile.view();
 ```
 
-<a id="toc-namespace-extension"></a>
 ### Namespace Extension
 
 ```javascript
@@ -56113,10 +52304,8 @@ console.log(Library.string.capitalize('hello'));
 
 ---
 
-<a id="toc-comparison-of-patterns"></a>
 ## Comparison of Patterns
 
-<a id="toc-feature-comparison-1"></a>
 ### Feature Comparison
 
 | Feature | Module Pattern | Revealing | Singleton | Namespace |
@@ -56127,7 +52316,6 @@ console.log(Library.string.capitalize('hello'));
 | **Flexibility** | ✅ High | ✅ High | ❌ Limited | ✅ Very High |
 | **Complexity** | ⭐ 2 | ⭐ 2 | ⭐ 3 | ⭐ 2 |
 
-<a id="toc-when-to-use-each-6"></a>
 ### When to Use Each
 
 ```javascript
@@ -56170,10 +52358,8 @@ const API = {
 
 ---
 
-<a id="toc-modern-approach"></a>
 ## Modern Approach
 
-<a id="toc-why-modern-es-modules-are-better"></a>
 ### Why Modern ES Modules are Better
 
 ```javascript
@@ -56197,7 +52383,6 @@ export const publicAPI = {
 };
 ```
 
-<a id="toc-migration-path"></a>
 ### Migration Path
 
 ```javascript
@@ -56228,10 +52413,8 @@ import { increment, get } from './counter.js';
 
 ---
 
-<a id="toc-best-practices-17"></a>
 ## Best Practices
 
-<a id="toc-✅-do-9"></a>
 ### ✅ DO
 
 ```javascript
@@ -56266,7 +52449,6 @@ const App = {
 const MyModule = { /* ... */ };  // PascalCase for objects
 ```
 
-<a id="toc-❌-dont-9"></a>
 ### ❌ DON'T
 
 ```javascript
@@ -56297,10 +52479,8 @@ const part3 = (() => {
 
 ---
 
-<a id="toc-summary-18"></a>
 ## Summary
 
-<a id="toc-module-pattern-overview"></a>
 ### Module Pattern Overview
 
 | Pattern | Structure | Use Case | Complexity |
@@ -56310,7 +52490,6 @@ const part3 = (() => {
 | **Singleton** | Lazy instance creation | Single instance | Medium |
 | **Namespace** | Nested objects | Organization | Low |
 
-<a id="toc-quick-reference-2"></a>
 ### Quick Reference
 
 ```javascript
@@ -56345,7 +52524,6 @@ const app = {
 };
 ```
 
-<a id="toc-modern-alternative"></a>
 ### Modern Alternative
 
 ```javascript
@@ -56358,7 +52536,6 @@ export function subtract(a, b) { return a - b; }
 import { add, subtract } from './math.js';
 ```
 
-<a id="toc-when-to-use-patterns"></a>
 ### When to Use Patterns
 
 - **Modern projects**: Use ES modules
@@ -56370,10 +52547,8 @@ import { add, subtract } from './math.js';
 
 ---
 
-<a id="toc-common-pitfalls-5"></a>
 ## Common Pitfalls
 
-<a id="toc-pitfall-1-import-not-at-top-level"></a>
 ### Pitfall 1: import Not at Top Level
 
 ```javascript
@@ -56391,7 +52566,6 @@ async function loadModule() {
 }
 ```
 
-<a id="toc-pitfall-2-circular-dependencies"></a>
 ### Pitfall 2: Circular Dependencies
 
 ```javascript
@@ -56414,7 +52588,6 @@ export function getA() { return 'A'; }
 export function getB() { return 'B'; }
 ```
 
-<a id="toc-pitfall-3-named-vs-default-import-mismatch"></a>
 ### Pitfall 3: Named vs Default Import Mismatch
 
 ```javascript
@@ -56434,7 +52607,6 @@ import { helper } from './module.js';     // Named (braces)
 import main, { helper } from './module.js';  // Both
 ```
 
-<a id="toc-pitfall-4-live-bindings-surprise"></a>
 ### Pitfall 4: Live Bindings Surprise
 
 ```javascript
@@ -56455,7 +52627,6 @@ console.log(count);  // 1 — live binding updated!
 count = 5;  // TypeError: Assignment to constant variable
 ```
 
-<a id="toc-pitfall-5-missing-file-extensions"></a>
 ### Pitfall 5: Missing File Extensions
 
 ```javascript
@@ -56469,7 +52640,6 @@ import { helper } from './helper.js';
 // but browser native ES modules require them
 ```
 
-<a id="toc-pitfall-6-this-in-modules"></a>
 ### Pitfall 6: this in Modules
 
 ```javascript
@@ -56482,7 +52652,6 @@ console.log(globalThis);  // window in browser, global in Node
 
 ---
 
-<a id="toc-next-steps-11"></a>
 ### Next Steps
 
 - Master ES modules (modern standard)
@@ -56490,7 +52659,6 @@ console.log(globalThis);  // window in browser, global in Node
 - Combine patterns as needed
 - Build scalable, organized applications
 
-<a id="toc-144-modules-summary"></a>
 ## 14.4 Modules Summary
 
 | Feature | ES Modules | CommonJS |
@@ -56506,24 +52674,19 @@ console.log(globalThis);  // window in browser, global in Node
 **End of Chapter 14: Modules**
 
 
-<a id="toc-15-proxy-and-reflectionmd"></a>
 # 15-Proxy-and-Reflection.md
 
-<a id="toc-15-proxy-and-reflection"></a>
 # 15 Proxy and Reflection
 
 ---
 
-<a id="toc-proxy-and-reflection"></a>
 # Proxy and Reflection
 
 
-<a id="toc-151-proxy"></a>
 ## 15.1 Proxy
 
 Proxies allow you to create an object that wraps another object and intercepts fundamental operations on it. This provides powerful metaprogramming capabilities.
 
-<a id="toc-proxy-constructor"></a>
 ### Proxy Constructor
 
 The Proxy constructor creates a proxy object that wraps a target object with a handler containing traps.
@@ -56575,7 +52738,6 @@ console.log(proxy.value); // 100
 console.log(target.value); // 100 (target is modified)
 ```
 
-<a id="toc-handler-traps-get-set-has"></a>
 ### Handler Traps: `get`, `set`, `has`
 
 These are the most commonly used traps for intercepting property access.
@@ -56776,7 +52938,6 @@ try {
 }
 ```
 
-<a id="toc-handler-traps-deleteproperty"></a>
 ### Handler Traps: `deleteProperty`
 
 The `deleteProperty` trap intercepts the `delete` operator.
@@ -56880,7 +53041,6 @@ console.log(getDeleted());
 // ]
 ```
 
-<a id="toc-handler-traps-ownkeys-getownpropertydescriptor"></a>
 ### Handler Traps: `ownKeys`, `getOwnPropertyDescriptor`
 
 These traps intercept property enumeration operations.
@@ -56985,7 +53145,6 @@ console.log(desc.writable); // false
 console.log(desc.configurable); // false
 ```
 
-<a id="toc-handler-traps-defineproperty"></a>
 ### Handler Traps: `defineProperty`
 
 The `defineProperty` trap intercepts `Object.defineProperty()`.
@@ -57088,7 +53247,6 @@ console.log(getDefinitions());
 // ]
 ```
 
-<a id="toc-handler-traps-preventextensions-isextensible"></a>
 ### Handler Traps: `preventExtensions`, `isExtensible`
 
 These traps control whether new properties can be added to an object.
@@ -57178,7 +53336,6 @@ try {
 obj.a = 100; // Updating existing property works
 ```
 
-<a id="toc-handler-traps-getprototypeof-setprototypeof"></a>
 ### Handler Traps: `getPrototypeOf`, `setPrototypeOf`
 
 These traps intercept prototype operations.
@@ -57252,7 +53409,6 @@ try {
 }
 ```
 
-<a id="toc-handler-traps-apply-construct"></a>
 ### Handler Traps: `apply`, `construct`
 
 These traps are for function proxies.
@@ -57455,7 +53611,6 @@ console.log(db1.connection); // 'mysql://localhost'
 console.log(db2.connection); // 'mysql://localhost' (same instance)
 ```
 
-<a id="toc-revocable-proxies"></a>
 ### Revocable Proxies
 
 Revocable proxies can be disabled after creation, making the proxy unusable.
@@ -57573,7 +53728,6 @@ release(); // Cleanup and revoke
 // console.log(resource.data); // Error
 ```
 
-<a id="toc-use-cases-validation-logging-virtualization"></a>
 ### Use Cases (Validation, Logging, Virtualization)
 
 **Validation:**
@@ -57754,7 +53908,6 @@ api.createPost('title', 'content').then(result => console.log(result));
 api.updateUser(123, { name: 'Alice' }).then(result => console.log(result));
 ```
 
-<a id="toc-observable-pattern-with-proxy"></a>
 ### Observable Pattern with Proxy
 
 **Basic Observable:**
@@ -57982,12 +54135,10 @@ state.name = 'Bob'; // Triggers only wildcard watcher
 
 ---
 
-<a id="toc-152-reflect"></a>
 ## 15.2 Reflect
 
 The Reflect API provides methods for interceptable JavaScript operations. These methods correspond to Proxy handler traps and provide a more functional approach to object manipulation.
 
-<a id="toc-reflect-methods-mirror-proxy-traps"></a>
 ### `Reflect` Methods (Mirror Proxy Traps)
 
 Every Proxy trap has a corresponding Reflect method.
@@ -58228,7 +54379,6 @@ console.log(charlie instanceof Employee); // true
 console.log(charlie.name); // 'Charlie'
 ```
 
-<a id="toc-why-use-reflect-over-object-methods"></a>
 ### Why Use Reflect Over Object Methods
 
 Reflect provides several advantages over traditional Object methods and operators.
@@ -58359,7 +54509,6 @@ function createFlexibleObject(target, config) {
 }
 ```
 
-<a id="toc-reflect-as-receiver-in-proxy"></a>
 ### Reflect as Receiver in Proxy
 
 Using Reflect in Proxy handlers provides correct default behavior and proper receiver handling.
@@ -58570,7 +54719,6 @@ console.log(proxy.constant); // Must be 42
 
 ---
 
-<a id="toc-summary-19"></a>
 ## Summary
 
 This document covered Proxy and Reflection comprehensively:
@@ -58594,24 +54742,19 @@ Proxies and Reflect provide powerful metaprogramming capabilities for creating f
 **End of Chapter 15**
 
 
-<a id="toc-16-meta-programmingmd"></a>
 # 16-Meta-Programming.md
 
-<a id="toc-16-meta-programming"></a>
 # 16 Meta Programming
 
 ---
 
-<a id="toc-meta-programming"></a>
 # Meta-programming
 
 
-<a id="toc-161-property-descriptors"></a>
 ## 16.1 Property Descriptors
 
 Property descriptors define the characteristics of object properties. They control whether properties can be changed, deleted, or enumerated.
 
-<a id="toc-configuring-object-properties"></a>
 ### Configuring Object Properties
 
 Every property has a descriptor with specific attributes that control its behavior.
@@ -58773,7 +54916,6 @@ for (let key in obj) {
 }
 ```
 
-<a id="toc-property-attributes-manipulation"></a>
 ### Property Attributes Manipulation
 
 Understanding and manipulating the four property attributes: `value`, `writable`, `enumerable`, and `configurable`.
@@ -59157,12 +55299,10 @@ console.log(Object.keys(copy)); // ['name'] (_id is hidden)
 
 ---
 
-<a id="toc-162-object-introspection"></a>
 ## 16.2 Object Introspection
 
 Object introspection allows you to examine and analyze objects at runtime, discovering their properties, structure, and characteristics.
 
-<a id="toc-objectgetownpropertynames-1"></a>
 ### `Object.getOwnPropertyNames()`
 
 Returns an array of all property names (including non-enumerable ones) found directly on an object.
@@ -59335,7 +55475,6 @@ console.log(analyzeObject(obj));
 // }
 ```
 
-<a id="toc-objectgetownpropertysymbols-1"></a>
 ### `Object.getOwnPropertySymbols()`
 
 Returns an array of all symbol properties found directly on an object.
@@ -59506,7 +55645,6 @@ console.log(user[_privateData]); // { password: 'secret123', ... }
 console.log(JSON.stringify(user)); // {"name":"Alice"}
 ```
 
-<a id="toc-enumerability-and-iteration"></a>
 ### Enumerability and Iteration
 
 Understanding how enumerability affects iteration and various object methods.
@@ -59722,12 +55860,10 @@ console.log(getAllPropsWithEnum(obj));
 
 ---
 
-<a id="toc-163-function-introspection"></a>
 ## 16.3 Function Introspection
 
 Function introspection allows you to examine functions at runtime, accessing metadata and source code.
 
-<a id="toc-function-name-property"></a>
 ### Function `name` Property
 
 The `name` property returns the name of the function.
@@ -59877,7 +56013,6 @@ console.log(registry.list()); // ['multiply', 'divide']
 console.log(registry.call('multiply', 6, 7)); // 42
 ```
 
-<a id="toc-function-length-property"></a>
 ### Function `length` Property
 
 The `length` property indicates the number of parameters expected by the function.
@@ -60029,7 +56164,6 @@ console.log(analyzeFunctionSignature(example));
 // }
 ```
 
-<a id="toc-tostring-method"></a>
 ### `toString()` Method
 
 The `toString()` method returns a string representing the function's source code.
@@ -60098,7 +56232,6 @@ console.log(MyClass.prototype.method.toString());
 // }"
 ```
 
-<a id="toc-accessing-function-source"></a>
 ### Accessing Function Source
 
 Extracting and analyzing function source code.
@@ -60379,7 +56512,6 @@ console.log(memoFib(10)); // Cache hit
 
 ---
 
-<a id="toc-summary-20"></a>
 ## Summary
 
 This document covered Meta-programming comprehensively:
@@ -60404,24 +56536,19 @@ Meta-programming enables powerful runtime reflection and manipulation of objects
 **End of Chapter 16**
 
 
-<a id="toc-17-memory-managementmd"></a>
 # 17-Memory-Management.md
 
-<a id="toc-17-memory-management"></a>
 # 17 Memory Management
 
 ---
 
-<a id="toc-javascript-deep-dive-memory-management"></a>
 # JavaScript Deep Dive: Memory Management
 
 
-<a id="toc-171-garbage-collection"></a>
 ## 17.1 Garbage Collection
 
 JavaScript uses automatic memory management through garbage collection, which periodically frees memory occupied by objects that are no longer reachable.
 
-<a id="toc-mark-and-sweep-algorithm"></a>
 ### Mark-and-Sweep Algorithm
 
 Mark-and-sweep is the fundamental garbage collection algorithm used by modern JavaScript engines.
@@ -60605,7 +56732,6 @@ child1.sibling = child2;
 gc.collect([root]); // Collects 'orphan'
 ```
 
-<a id="toc-reference-counting"></a>
 ### Reference Counting
 
 Reference counting is an older GC technique where each object maintains a count of references to it.
@@ -60710,7 +56836,6 @@ createMemoryLeak();
 // Mark-and-sweep handles this correctly
 ```
 
-<a id="toc-generational-collection"></a>
 ### Generational Collection
 
 Modern JavaScript engines use generational garbage collection, which optimizes collection based on object lifetime.
@@ -60826,7 +56951,6 @@ function demonstrateMajorGC() {
 }
 ```
 
-<a id="toc-memory-leaks-common-causes"></a>
 ### Memory Leaks (Common Causes)
 
 Understanding common patterns that cause memory leaks in JavaScript.
@@ -61093,7 +57217,6 @@ function properManagement() {
 }
 ```
 
-<a id="toc-memory-profiling-tools"></a>
 ### Memory Profiling Tools
 
 Using browser DevTools to find and fix memory leaks.
@@ -61218,12 +57341,10 @@ for (let i = 0; i < 50; i++) {
 
 ---
 
-<a id="toc-172-weakref"></a>
 ## 17.2 WeakRef
 
 WeakRef allows holding a weak reference to an object, which doesn't prevent garbage collection.
 
-<a id="toc-creating-weak-references"></a>
 ### Creating Weak References
 
 WeakRef creates references that don't prevent the referenced object from being collected.
@@ -61273,7 +57394,6 @@ weakTarget = null;
 // Object can be collected even though weakReference exists
 ```
 
-<a id="toc-deref-method"></a>
 ### `deref()` Method
 
 The deref() method returns the referenced object if it still exists, or undefined if it was collected.
@@ -61379,7 +57499,6 @@ setTimeout(() => {
 }, 1000);
 ```
 
-<a id="toc-use-cases-9"></a>
 ### Use Cases
 
 Practical applications of WeakRef.
@@ -61582,12 +57701,10 @@ obj1 = null; // Remove reference
 
 ---
 
-<a id="toc-173-finalizationregistry"></a>
 ## 17.3 FinalizationRegistry
 
 FinalizationRegistry allows registering cleanup callbacks that run when objects are garbage collected.
 
-<a id="toc-registering-cleanup-callbacks"></a>
 ### Registering Cleanup Callbacks
 
 FinalizationRegistry runs callbacks when registered objects are collected.
@@ -61667,7 +57784,6 @@ target = null;
 // Cleanup callback won't run because we unregistered
 ```
 
-<a id="toc-use-cases-resource-management"></a>
 ### Use Cases (Resource Management)
 
 **1. File Handle Cleanup:**
@@ -61890,12 +58006,10 @@ console.log('Active:', ResourceTracker.getActiveResources());
 
 ---
 
-<a id="toc-174-memory-optimization"></a>
 ## 17.4 Memory Optimization
 
 Techniques and patterns for optimizing memory usage in JavaScript applications.
 
-<a id="toc-object-pooling"></a>
 ### Object Pooling
 
 Reusing objects instead of creating and destroying them repeatedly.
@@ -62050,7 +58164,6 @@ function processData(data) {
 }
 ```
 
-<a id="toc-avoiding-memory-leaks"></a>
 ### Avoiding Memory Leaks
 
 Best practices and patterns to prevent memory leaks.
@@ -62209,7 +58322,6 @@ function createClosureWith(value) {
 }
 ```
 
-<a id="toc-closure-memory-implications"></a>
 ### Closure Memory Implications
 
 Understanding how closures affect memory and how to optimize them.
@@ -62314,7 +58426,6 @@ function optimizedOuter() {
 // Only three numbers kept in memory, arrays are collected
 ```
 
-<a id="toc-large-data-structure-strategies"></a>
 ### Large Data Structure Strategies
 
 Efficient handling of large data structures.
@@ -62579,7 +58690,6 @@ processor.consumeAll(dataSource, (chunk) => {
 
 ---
 
-<a id="toc-summary-21"></a>
 ## Summary
 
 This document covered Memory Management comprehensively:
@@ -62605,24 +58715,19 @@ Understanding memory management helps build performant JavaScript applications t
 **End of Chapter 17**
 
 
-<a id="toc-18-internationalizationmd"></a>
 # 18-Internationalization.md
 
-<a id="toc-18-internationalization"></a>
 # 18 Internationalization
 
 ---
 
-<a id="toc-internationalization-intl"></a>
 # Internationalization (Intl)
 
 
-<a id="toc-181-intldatetimeformat"></a>
 ## 18.1 Intl.DateTimeFormat
 
 The Intl.DateTimeFormat object enables language-sensitive date and time formatting.
 
-<a id="toc-locale-aware-date-formatting"></a>
 ### Locale-Aware Date Formatting
 
 DateTimeFormat adapts date formatting to different locales and cultural conventions.
@@ -62684,7 +58789,6 @@ console.log(defaultFormatter.format(date));
 console.log(defaultFormatter.resolvedOptions().locale);
 ```
 
-<a id="toc-options-datestyle-timestyle-etc"></a>
 ### Options (dateStyle, timeStyle, etc.)
 
 DateTimeFormat accepts various options to customize formatting.
@@ -62999,12 +59103,10 @@ console.log('Full:', enFormatters.full.format(date));
 
 ---
 
-<a id="toc-182-intlnumberformat"></a>
 ## 18.2 Intl.NumberFormat
 
 The Intl.NumberFormat object enables language-sensitive number formatting.
 
-<a id="toc-number-formatting"></a>
 ### Number Formatting
 
 Basic number formatting with locale awareness.
@@ -63063,7 +59165,6 @@ console.log(new Intl.NumberFormat('en-US', {
 // "120"
 ```
 
-<a id="toc-currency-formatting"></a>
 ### Currency Formatting
 
 Formatting numbers as currency with proper symbols and positioning.
@@ -63158,7 +59259,6 @@ console.log(new Intl.NumberFormat('en-US', {
 // "($1,234.56)"
 ```
 
-<a id="toc-unit-formatting"></a>
 ### Unit Formatting
 
 Formatting numbers with units (length, weight, speed, etc.).
@@ -63278,7 +59378,6 @@ console.log(new Intl.NumberFormat('en-US', {
 // "90 min"
 ```
 
-<a id="toc-compact-notation"></a>
 ### Compact Notation
 
 Formatting large numbers in compact form (K, M, B, etc.).
@@ -63448,12 +59547,10 @@ console.log(formatPrice(1234.56, 'GBP', 'en-GB')); // "£1,234.56"
 
 ---
 
-<a id="toc-183-intlcollator"></a>
 ## 18.3 Intl.Collator
 
 The Intl.Collator object enables language-sensitive string comparison.
 
-<a id="toc-string-comparison"></a>
 ### String Comparison
 
 Comparing strings according to locale-specific rules.
@@ -63530,7 +59627,6 @@ console.log(collatorVariant.compare('a', 'á')); // -1 (different)
 console.log(collatorVariant.compare('a', 'A')); // -1 (different)
 ```
 
-<a id="toc-sorting-with-locale-awareness"></a>
 ### Sorting with Locale Awareness
 
 Using Collator for proper locale-aware sorting.
@@ -63645,12 +59741,10 @@ console.log(users);
 
 ---
 
-<a id="toc-184-intlpluralrules"></a>
 ## 18.4 Intl.PluralRules
 
 The Intl.PluralRules object enables plural-sensitive formatting.
 
-<a id="toc-plural-form-selection"></a>
 ### Plural Form Selection
 
 Determining the correct plural form for different locales.
@@ -63806,12 +59900,10 @@ console.log(getOrdinalSuffix(24)); // "24th"
 
 ---
 
-<a id="toc-185-intlrelativetimeformat"></a>
 ## 18.5 Intl.RelativeTimeFormat
 
 The Intl.RelativeTimeFormat object enables language-sensitive relative time formatting.
 
-<a id="toc-relative-time-formatting-2-days-ago"></a>
 ### Relative Time Formatting ("2 days ago")
 
 Formatting time differences in human-readable relative terms.
@@ -63993,12 +60085,10 @@ console.log(getRelativeTime(new Date(now.getTime() + 604800000))); // "next week
 
 ---
 
-<a id="toc-186-intllistformat"></a>
 ## 18.6 Intl.ListFormat
 
 The Intl.ListFormat object enables language-sensitive list formatting.
 
-<a id="toc-list-formatting"></a>
 ### List Formatting
 
 Formatting lists of items with proper conjunctions and separators.
@@ -64181,12 +60271,10 @@ console.log(formatChoices(['red', 'blue', 'green']));
 
 ---
 
-<a id="toc-187-intllocale"></a>
 ## 18.7 Intl.Locale
 
 The Intl.Locale object represents a Unicode locale identifier.
 
-<a id="toc-locale-identification"></a>
 ### Locale Identification
 
 Working with locale identifiers and their components.
@@ -64299,12 +60387,10 @@ console.log(getLocaleInfo('zh-Hans-CN-u-ca-chinese-nu-hanidec'));
 
 ---
 
-<a id="toc-188-intlsegmenter"></a>
 ## 18.8 Intl.Segmenter
 
 The Intl.Segmenter object enables locale-sensitive text segmentation.
 
-<a id="toc-text-segmentation-graphemes-words-sentences"></a>
 ### Text Segmentation (Graphemes, Words, Sentences)
 
 Breaking text into meaningful units according to locale rules.
@@ -64485,7 +60571,6 @@ console.log(getFirstWords(article, 5));
 
 ---
 
-<a id="toc-summary-22"></a>
 ## Summary
 
 This document covered Internationalization (Intl) comprehensively:
@@ -64515,24 +60600,19 @@ The Intl API enables building truly internationalized applications that adapt to
 **End of Chapter 18**
 
 
-<a id="toc-19-atomics-and-sharedarraybuffermd"></a>
 # 19-Atomics-and-SharedArrayBuffer.md
 
-<a id="toc-19-atomics-and-sharedarraybuffer"></a>
 # 19 Atomics and SharedArrayBuffer
 
 ---
 
-<a id="toc-javascript-deep-dive-atomics-and-sharedarraybuffer"></a>
 # JavaScript Deep Dive: Atomics and SharedArrayBuffer
 
 
-<a id="toc-191-sharedarraybuffer"></a>
 ## 19.1 SharedArrayBuffer
 
 SharedArrayBuffer allows multiple workers to share the same memory, enabling true multi-threading in JavaScript.
 
-<a id="toc-creating-shared-memory"></a>
 ### Creating Shared Memory
 
 SharedArrayBuffer creates a fixed-length raw binary buffer that can be shared between workers.
@@ -64650,7 +60730,6 @@ console.log('Struct 1:', struct1.id, struct1.x, struct1.y);
 console.log('Struct 2:', struct2.id, struct2.x, struct2.y);
 ```
 
-<a id="toc-sharing-between-workers"></a>
 ### Sharing Between Workers
 
 SharedArrayBuffer can be passed between the main thread and workers, allowing them to share memory.
@@ -64802,7 +60881,6 @@ self.addEventListener('message', (event) => {
 });
 ```
 
-<a id="toc-security-considerations-coopcoep-headers"></a>
 ### Security Considerations (COOP/COEP Headers)
 
 SharedArrayBuffer requires specific HTTP headers due to security concerns (Spectre vulnerability).
@@ -64954,12 +61032,10 @@ if (checkSharedArrayBufferSupport()) {
 
 ---
 
-<a id="toc-192-atomics"></a>
 ## 19.2 Atomics
 
 Atomics provides atomic operations on SharedArrayBuffer, ensuring thread-safe access to shared memory.
 
-<a id="toc-atomic-operations"></a>
 ### Atomic Operations
 
 Atomic operations are indivisible - they complete fully or not at all, preventing race conditions.
@@ -65022,7 +61098,6 @@ view[2] = 0xFF;
 console.log('Initial values:', view[0], view[1], view[2]);
 ```
 
-<a id="toc-atomicsadd-atomicssub-atomicsand-etc"></a>
 ### `Atomics.add()`, `Atomics.sub()`, `Atomics.and()`, etc.
 
 Atomic arithmetic and bitwise operations.
@@ -65228,7 +61303,6 @@ function incrementWithCAS(view, index) {
 }
 ```
 
-<a id="toc-atomicsload-atomicsstore"></a>
 ### `Atomics.load()` / `Atomics.store()`
 
 Atomic read and write operations.
@@ -65298,7 +61372,6 @@ const a = Atomics.load(view, 0); // D
 // Without atomics, reordering could occur
 ```
 
-<a id="toc-atomicswait-atomicsnotify"></a>
 ### `Atomics.wait()` / `Atomics.notify()`
 
 Atomic waiting and notification for thread synchronization.
@@ -65537,7 +61610,6 @@ function waitAtBarrier() {
 }
 ```
 
-<a id="toc-atomicsislockfree"></a>
 ### `Atomics.isLockFree()`
 
 Checks if atomic operations on a given size are lock-free (faster).
@@ -65602,7 +61674,6 @@ function benchmark(view, operations) {
 // If not lock-free, operations may use locks (slower)
 ```
 
-<a id="toc-use-cases-multi-threaded-coordination"></a>
 ### Use Cases (Multi-threaded Coordination)
 
 Practical applications of Atomics and SharedArrayBuffer.
@@ -65872,12 +61943,10 @@ parallelSum(largeArray, 4).then(sum => {
 
 ---
 
-<a id="toc-193-race-conditions-deep-dive"></a>
 ## 19.3 Race Conditions Deep Dive
 
 Race conditions are the most common bugs in concurrent programming. Understanding them is essential for writing correct multi-threaded code.
 
-<a id="toc-the-classic-race-condition"></a>
 ### The Classic Race Condition
 
 ```javascript
@@ -65911,7 +61980,6 @@ function incrementGood(arr, index) {
 }
 ```
 
-<a id="toc-check-then-act-race-condition"></a>
 ### Check-Then-Act Race Condition
 
 ```javascript
@@ -65943,7 +62011,6 @@ const gotSeat = reserveSeatGood(seats, 42);
 console.log(gotSeat ? 'Reserved seat 42!' : 'Seat 42 taken');
 ```
 
-<a id="toc-read-modify-write-patterns"></a>
 ### Read-Modify-Write Patterns
 
 ```javascript
@@ -65984,12 +62051,10 @@ function atomicMin(arr, idx, value) {
 
 ---
 
-<a id="toc-194-lock-free-data-structures"></a>
 ## 19.4 Lock-Free Data Structures
 
 Lock-free algorithms avoid mutexes entirely, using atomic operations for synchronization. They provide better performance and avoid deadlocks.
 
-<a id="toc-lock-free-stack-lifo"></a>
 ### Lock-Free Stack (LIFO)
 
 ```javascript
@@ -66040,7 +62105,6 @@ class LockFreeStack {
 }
 ```
 
-<a id="toc-lock-free-queue-fifo"></a>
 ### Lock-Free Queue (FIFO)
 
 ```javascript
@@ -66087,7 +62151,6 @@ class SPSCQueue {
 }
 ```
 
-<a id="toc-lock-free-counter-with-statistics"></a>
 ### Lock-Free Counter with Statistics
 
 ```javascript
@@ -66143,12 +62206,10 @@ class AtomicStats {
 
 ---
 
-<a id="toc-195-mutex-and-semaphore-implementation"></a>
 ## 19.5 Mutex and Semaphore Implementation
 
 Sometimes you need mutual exclusion. Here's how to build synchronization primitives with Atomics.
 
-<a id="toc-spinlock-simple-mutex"></a>
 ### Spinlock (Simple Mutex)
 
 ```javascript
@@ -66188,7 +62249,6 @@ try {
 }
 ```
 
-<a id="toc-blocking-mutex-with-waitnotify"></a>
 ### Blocking Mutex (with wait/notify)
 
 ```javascript
@@ -66227,7 +62287,6 @@ class Mutex {
 }
 ```
 
-<a id="toc-semaphore"></a>
 ### Semaphore
 
 ```javascript
@@ -66283,7 +62342,6 @@ async function useConnection() {
 }
 ```
 
-<a id="toc-read-write-lock"></a>
 ### Read-Write Lock
 
 ```javascript
@@ -66345,10 +62403,8 @@ class RWLock {
 
 ---
 
-<a id="toc-196-real-world-patterns"></a>
 ## 19.6 Real-World Patterns
 
-<a id="toc-parallel-map-reduce"></a>
 ### Parallel Map-Reduce
 
 ```javascript
@@ -66429,7 +62485,6 @@ parallelMapReduce(
 });
 ```
 
-<a id="toc-progress-reporting"></a>
 ### Progress Reporting
 
 ```javascript
@@ -66498,10 +62553,8 @@ self.addEventListener('message', ({ data: { sab } }) => {
 
 ---
 
-<a id="toc-197-common-pitfalls"></a>
 ## 19.7 Common Pitfalls
 
-<a id="toc-pitfall-1-forgetting-memory-barriers"></a>
 ### Pitfall 1: Forgetting Memory Barriers
 
 ```javascript
@@ -66530,7 +62583,6 @@ while (Atomics.load(arr, 0) === 0) {}  // Memory barrier: sees all writes
 console.log(arr[1]);  // Guaranteed to see correct data
 ```
 
-<a id="toc-pitfall-2-aba-problem"></a>
 ### Pitfall 2: ABA Problem
 
 ```javascript
@@ -66562,7 +62614,6 @@ function popGood(stack, topGen) {
 }
 ```
 
-<a id="toc-pitfall-3-deadlock"></a>
 ### Pitfall 3: Deadlock
 
 ```javascript
@@ -66597,7 +62648,6 @@ function safeOperation() {
 
 ---
 
-<a id="toc-198-summary"></a>
 ## 19.8 Summary
 
 | Concept | Purpose | Key Methods |
@@ -66609,7 +62659,6 @@ function safeOperation() {
 | **Atomics.wait/notify** | Thread synchronization | `Atomics.wait(arr, idx, val)` |
 | **Atomics.load/store** | Memory barriers | `Atomics.load(arr, idx)` |
 
-<a id="toc-when-to-use-3"></a>
 ### When to Use
 
 | Pattern | Use Case |
@@ -66620,7 +62669,6 @@ function safeOperation() {
 | **Semaphore** | Resource pools, rate limiting |
 | **SPSC Queue** | Producer-consumer pipelines |
 
-<a id="toc-best-practices-18"></a>
 ### Best Practices
 
 1. **Prefer lock-free** when possible (better performance, no deadlocks)
@@ -66634,20 +62682,16 @@ function safeOperation() {
 **End of Chapter 19**
 
 
-<a id="toc-20-temporal-api-s3md"></a>
 # 20-Temporal-API-S3.md
 
-<a id="toc-20-temporal-api-stage-3"></a>
 # 20 Temporal API (Stage 3)
 
 ---
 
-<a id="toc-why-temporal-matters"></a>
 ## Why Temporal Matters
 
 The JavaScript `Date` object is fundamentally broken. It was copied from Java's `java.util.Date` in 1995, which Java itself deprecated in 1997. Every professional JavaScript developer has encountered these problems:
 
-<a id="toc-problems-with-date"></a>
 ### Problems with Date
 
 ```javascript
@@ -66684,7 +62728,6 @@ const diff = end - start;  // 31449600000 ms... now what?
 // Can't work with Hebrew, Islamic, Japanese calendars
 ```
 
-<a id="toc-how-temporal-fixes-everything"></a>
 ### How Temporal Fixes Everything
 
 ```javascript
@@ -66745,12 +62788,10 @@ import { Temporal } from '@js-temporal/polyfill';
 
 ---
 
-<a id="toc-201-temporalinstant"></a>
 ## 20.1 Temporal.Instant
 
 `Temporal.Instant` represents an absolute point in time, independent of timezone or calendar. It's like a timestamp.
 
-<a id="toc-absolute-point-in-time"></a>
 ### Absolute Point in Time
 
 An Instant is a precise moment in the universal timeline.
@@ -66827,7 +62868,6 @@ const duration2 = instant2.since(instant1);
 console.log(duration2.toString()); // "PT2H30M"
 ```
 
-<a id="toc-utc-timestamps"></a>
 ### UTC Timestamps
 
 Instants are always in UTC and can be converted to/from various timestamp formats.
@@ -66934,12 +62974,10 @@ console.log(instant.toString({ smallestUnit: 'nanosecond' }));
 
 ---
 
-<a id="toc-202-temporalzoneddatetime"></a>
 ## 20.2 Temporal.ZonedDateTime
 
 `Temporal.ZonedDateTime` represents a date and time in a specific timezone.
 
-<a id="toc-datetime-with-timezone"></a>
 ### Date/Time with Timezone
 
 ZonedDateTime combines a wall-clock time with a timezone.
@@ -67118,12 +63156,10 @@ console.log(ny1.epochMilliseconds === tokyo.epochMilliseconds); // true
 
 ---
 
-<a id="toc-203-temporalplaindate"></a>
 ## 20.3 Temporal.PlainDate
 
 `Temporal.PlainDate` represents a calendar date without time or timezone.
 
-<a id="toc-calendar-date-no-time"></a>
 ### Calendar Date (No Time)
 
 PlainDate is useful for dates like birthdays, holidays, or deadlines.
@@ -67278,12 +63314,10 @@ console.log('Next business day:', nextBusinessDay(today).toString());
 
 ---
 
-<a id="toc-204-temporalplaintime"></a>
 ## 20.4 Temporal.PlainTime
 
 `Temporal.PlainTime` represents a wall-clock time without date or timezone.
 
-<a id="toc-clock-time-no-date"></a>
 ### Clock Time (No Date)
 
 PlainTime is useful for times like "9:00 AM" or "14:30".
@@ -67413,12 +63447,10 @@ console.log('Rounded:', roundToQuarterHour(time).toString()); // "14:45:00"
 
 ---
 
-<a id="toc-205-temporalplaindatetime"></a>
 ## 20.5 Temporal.PlainDateTime
 
 `Temporal.PlainDateTime` represents a date and time without timezone information.
 
-<a id="toc-date-and-time-no-timezone"></a>
 ### Date and Time (No Timezone)
 
 PlainDateTime combines date and time but has no timezone awareness.
@@ -67566,12 +63598,10 @@ console.log(formatEventDuration(
 
 ---
 
-<a id="toc-206-temporalduration"></a>
 ## 20.6 Temporal.Duration
 
 `Temporal.Duration` represents a length of time, independent of any starting point.
 
-<a id="toc-time-duration"></a>
 ### Time Duration
 
 Duration represents amounts of time like "2 hours and 30 minutes" or "3 days".
@@ -67786,12 +63816,10 @@ console.log(formatElapsed(3665000)); // "01:01:05"
 
 ---
 
-<a id="toc-207-temporalcalendar"></a>
 ## 20.7 Temporal.Calendar
 
 `Temporal.Calendar` handles different calendar systems beyond the ISO 8601 calendar.
 
-<a id="toc-calendar-systems"></a>
 ### Calendar Systems
 
 Temporal supports multiple calendar systems.
@@ -67921,12 +63949,10 @@ class FiscalYearCalendar extends Temporal.Calendar {
 
 ---
 
-<a id="toc-208-temporaltimezone"></a>
 ## 20.8 Temporal.TimeZone
 
 `Temporal.TimeZone` handles timezone operations and conversions.
 
-<a id="toc-timezone-handling"></a>
 ### Timezone Handling
 
 TimeZone provides timezone-aware date/time operations.
@@ -68154,10 +64180,8 @@ console.log('Business hours overlap:', overlap);
 
 ---
 
-<a id="toc-209-migrating-from-date-to-temporal"></a>
 ## 20.9 Migrating from Date to Temporal
 
-<a id="toc-common-migration-patterns"></a>
 ### Common Migration Patterns
 
 ```javascript
@@ -68265,7 +64289,6 @@ const fmt = pdt.toLocaleString('en-US', {
 });
 ```
 
-<a id="toc-converting-between-date-and-temporal"></a>
 ### Converting Between Date and Temporal
 
 ```javascript
@@ -68293,10 +64316,8 @@ const date3 = new Date(zdt2.epochMilliseconds);
 
 ---
 
-<a id="toc-2010-duration-deep-dive"></a>
 ## 20.10 Duration Deep Dive
 
-<a id="toc-understanding-duration-components"></a>
 ### Understanding Duration Components
 
 ```javascript
@@ -68331,7 +64352,6 @@ console.log(duration.toString());
 // 7.008009010S = 7 seconds and fractional
 ```
 
-<a id="toc-duration-balancing"></a>
 ### Duration Balancing
 
 ```javascript
@@ -68355,7 +64375,6 @@ const balanced = duration.round({
 console.log(balanced.toString());  // P1DT1H1M1S
 ```
 
-<a id="toc-duration-arithmetic"></a>
 ### Duration Arithmetic
 
 ```javascript
@@ -68378,7 +64397,6 @@ const abs = neg.abs();
 console.log(abs.toString());  // PT5H30M
 ```
 
-<a id="toc-duration-with-relative-context"></a>
 ### Duration with Relative Context
 
 ```javascript
@@ -68403,7 +64421,6 @@ const totalDays = duration.total({
 console.log(totalDays);  // 31
 ```
 
-<a id="toc-common-duration-patterns"></a>
 ### Common Duration Patterns
 
 ```javascript
@@ -68477,10 +64494,8 @@ function businessHoursBetween(start, end) {
 
 ---
 
-<a id="toc-2011-timezone-gotchas"></a>
 ## 20.11 Timezone Gotchas
 
-<a id="toc-dst-transitions"></a>
 ### DST Transitions
 
 ```javascript
@@ -68519,7 +64534,6 @@ const ambiguous2 = Temporal.ZonedDateTime.from({
 console.log(ambiguous1.epochMilliseconds !== ambiguous2.epochMilliseconds);  // true!
 ```
 
-<a id="toc-duration-across-dst"></a>
 ### Duration Across DST
 
 ```javascript
@@ -68537,7 +64551,6 @@ console.log(plus1d.toString());   // 2024-03-11T01:00 (clock shows 1AM)
 // Different results! March 10 only has 23 hours
 ```
 
-<a id="toc-common-timezone-mistakes"></a>
 ### Common Timezone Mistakes
 
 ```javascript
@@ -68573,7 +64586,6 @@ const correctZDT = instant.toZonedDateTimeISO('America/New_York');
 
 ---
 
-<a id="toc-summary-23"></a>
 ## Summary
 
 | Type | Use Case | Example |
@@ -68585,7 +64597,6 @@ const correctZDT = instant.toZonedDateTimeISO('America/New_York');
 | **PlainDateTime** | Form inputs, local events | `2024-06-15T09:00` |
 | **Duration** | Time differences, intervals | `P1Y2M3D` |
 
-<a id="toc-migration-checklist"></a>
 ### Migration Checklist
 
 - [ ] Replace `new Date()` with `Temporal.Now.instant()` or `Temporal.Now.zonedDateTimeISO()`
@@ -68600,20 +64611,16 @@ const correctZDT = instant.toZonedDateTimeISO('America/New_York');
 **End of Chapter 20**
 
 
-<a id="toc-21-decorators-s3md"></a>
 # 21-Decorators-S3.md
 
-<a id="toc-21-decorators-stage-3"></a>
 # 21 Decorators (Stage 3)
 
 ---
 
-<a id="toc-why-decorators-matter"></a>
 ## Why Decorators Matter
 
 Decorators are **metaprogramming** — code that writes code. They let you modify class behavior declaratively, without cluttering your business logic.
 
-<a id="toc-the-problem-decorators-solve"></a>
 ### The Problem Decorators Solve
 
 ```javascript
@@ -68663,7 +64670,6 @@ class UserService {
 // Cross-cutting concerns are declarative, reusable, and testable
 ```
 
-<a id="toc-when-to-use-decorators"></a>
 ### When to Use Decorators
 
 | Use Case | Example Decorators |
@@ -68705,12 +64711,10 @@ class UserService {
 ---
 
 
-<a id="toc-211-class-decorators"></a>
 ## 21.1 Class Decorators
 
 Class decorators can modify or replace the entire class definition.
 
-<a id="toc-modifying-class-behavior"></a>
 ### Modifying Class Behavior
 
 Class decorators receive the class constructor and can return a new constructor or modify the existing one.
@@ -68950,12 +64954,10 @@ console.log(point.x); // 10 (unchanged)
 
 ---
 
-<a id="toc-212-method-decorators"></a>
 ## 21.2 Method Decorators
 
 Method decorators can modify method behavior, add logging, validation, or completely replace methods.
 
-<a id="toc-modifying-methods"></a>
 ### Modifying Methods
 
 Method decorators receive the original method and can return a replacement function.
@@ -69235,12 +65237,10 @@ class SearchBox {
 
 ---
 
-<a id="toc-213-accessor-decorators"></a>
 ## 21.3 Accessor Decorators
 
 Accessor decorators can modify getters and setters, adding validation, logging, or computed properties.
 
-<a id="toc-modifying-getterssetters"></a>
 ### Modifying Getters/Setters
 
 Accessor decorators work with getter and setter methods.
@@ -69467,12 +65467,10 @@ console.log(form.active); // true
 
 ---
 
-<a id="toc-214-field-decorators"></a>
 ## 21.4 Field Decorators
 
 Field decorators can modify class fields, adding initialization logic or validation.
 
-<a id="toc-modifying-class-fields"></a>
 ### Modifying Class Fields
 
 Field decorators receive an initialization function that can transform the field value.
@@ -69702,12 +65700,10 @@ console.log(fieldMetadata.get(UserModel));
 
 ---
 
-<a id="toc-215-auto-accessor-decorators"></a>
 ## 21.5 Auto-accessor Decorators
 
 Auto-accessors combine getter and setter into a single declaration using the `accessor` keyword.
 
-<a id="toc-combined-gettersetter-decorators"></a>
 ### Combined Getter/Setter Decorators
 
 Auto-accessors create a private backing field with public getter and setter.
@@ -70036,7 +66032,6 @@ component.render(); // Works correctly
 
 ---
 
-<a id="toc-combining-multiple-decorators"></a>
 ## Combining Multiple Decorators
 
 Decorators can be stacked, applying transformations in order.
@@ -70106,12 +66101,10 @@ console.log(input.text);
 
 ---
 
-<a id="toc-216-dependency-injection-with-decorators"></a>
 ## 21.6 Dependency Injection with Decorators
 
 Decorators are perfect for implementing Dependency Injection (DI) — a pattern where classes receive their dependencies from the outside rather than creating them internally.
 
-<a id="toc-simple-di-container"></a>
 ### Simple DI Container
 
 ```javascript
@@ -70172,7 +66165,6 @@ const userService = new UserService();
 console.log(userService.getUser(123));
 ```
 
-<a id="toc-singleton-pattern-2"></a>
 ### Singleton Pattern
 
 ```javascript
@@ -70205,7 +66197,6 @@ const config2 = new ConfigService();
 console.log(config1 === config2);  // true (same instance)
 ```
 
-<a id="toc-scoped-dependencies"></a>
 ### Scoped Dependencies
 
 ```javascript
@@ -70274,10 +66265,8 @@ class Logger {}
 
 ---
 
-<a id="toc-217-real-world-decorator-patterns"></a>
 ## 21.7 Real-World Decorator Patterns
 
-<a id="toc-validation-decorators"></a>
 ### Validation Decorators
 
 ```javascript
@@ -70361,7 +66350,6 @@ user.email = 'test@example.com';  // OK
 // user.email = 'invalid';  // Error: email must be a valid email
 ```
 
-<a id="toc-api-route-decorators-express-style"></a>
 ### API Route Decorators (Express-style)
 
 ```javascript
@@ -70454,7 +66442,6 @@ function registerRoutes(app) {
 }
 ```
 
-<a id="toc-orm-style-entity-decorators"></a>
 ### ORM-Style Entity Decorators
 
 ```javascript
@@ -70541,10 +66528,8 @@ console.log(generateCreateTable(User));
 
 ---
 
-<a id="toc-218-common-pitfalls"></a>
 ## 21.8 Common Pitfalls
 
-<a id="toc-pitfall-1-decorator-order-matters"></a>
 ### Pitfall 1: Decorator Order Matters
 
 ```javascript
@@ -70566,7 +66551,6 @@ async getData() { ... }
 async getData() { ... }
 ```
 
-<a id="toc-pitfall-2-this-binding-in-decorators"></a>
 ### Pitfall 2: this Binding in Decorators
 
 ```javascript
@@ -70591,7 +66575,6 @@ function logged(value, context) {
 }
 ```
 
-<a id="toc-pitfall-3-async-method-decoration"></a>
 ### Pitfall 3: Async Method Decoration
 
 ```javascript
@@ -70629,7 +66612,6 @@ function timed(value, context) {
 
 ---
 
-<a id="toc-summary-24"></a>
 ## Summary
 
 | Decorator Type | Target | Returns |
@@ -70640,7 +66622,6 @@ function timed(value, context) {
 | **Accessor** | Getter/setter | New getter/setter object |
 | **Auto-accessor** | Auto accessor | Modified get/set/init |
 
-<a id="toc-context-object-properties"></a>
 ### Context Object Properties
 
 | Property | Description |
@@ -70652,7 +66633,6 @@ function timed(value, context) {
 | `access` | Object with `get()` and `set()` for fields |
 | `addInitializer()` | Register callback to run during construction |
 
-<a id="toc-best-practices-19"></a>
 ### Best Practices
 
 1. **Keep decorators focused** — one concern per decorator
@@ -70667,33 +66647,27 @@ function timed(value, context) {
 **End of Chapter 21**
 
 
-<a id="toc-22-design-patternsmd"></a>
 # 22-Design-Patterns.md
 
-<a id="toc-22-design-patterns"></a>
 # 22 Design Patterns
 
 Design patterns are reusable solutions to common programming problems. This chapter covers creational, structural, behavioral, functional, and async patterns in JavaScript.
 
 ---
 
-<a id="toc-creational-patterns"></a>
 # Creational Patterns
 
 
-<a id="toc-creational-patterns-1"></a>
 ## Creational Patterns
 
 Creational patterns deal with object creation mechanisms, trying to create objects in a manner suitable to the situation.
 
 ---
 
-<a id="toc-factory-pattern"></a>
 ## Factory Pattern
 
 The Factory Pattern creates objects without specifying the exact class to create. It provides an interface for creating objects.
 
-<a id="toc-simple-factory"></a>
 ### Simple Factory
 
 ```javascript
@@ -70762,7 +66736,6 @@ const motorcycle = factory.createVehicle('motorcycle', {
 console.log(car); // Car { type: 'car', doors: 4, color: 'blue', ... }
 ```
 
-<a id="toc-factory-method-pattern"></a>
 ### Factory Method Pattern
 
 ```javascript
@@ -70794,7 +66767,6 @@ const sedan = carFactory.createVehicle({ doors: 4, color: 'silver' });
 const pickupTruck = truckFactory.createVehicle({ wheelSize: 'medium' });
 ```
 
-<a id="toc-abstract-factory-pattern"></a>
 ### Abstract Factory Pattern
 
 ```javascript
@@ -70890,7 +66862,6 @@ console.log(createUI(macFactory));
 // { button: '<button class="mac">...</button>', ... }
 ```
 
-<a id="toc-practical-factory-example"></a>
 ### Practical Factory Example
 
 ```javascript
@@ -70935,12 +66906,10 @@ console.log(viewer.hasPermission('write')); // false
 
 ---
 
-<a id="toc-constructor-pattern"></a>
 ## Constructor Pattern
 
 The Constructor Pattern uses constructor functions or ES6 classes to create objects.
 
-<a id="toc-function-constructor"></a>
 ### Function Constructor
 
 ```javascript
@@ -70960,7 +66929,6 @@ const person2 = new Person('Bob', 25, 'Designer');
 person1.sayName(); // "Alice"
 ```
 
-<a id="toc-constructor-with-prototype"></a>
 ### Constructor with Prototype
 
 ```javascript
@@ -70984,7 +66952,6 @@ person.sayName(); // "Alice"
 console.log(person.getDetails()); // "Alice, 30, Engineer"
 ```
 
-<a id="toc-es6-class-constructor"></a>
 ### ES6 Class Constructor
 
 ```javascript
@@ -71015,7 +66982,6 @@ person.sayName();
 const person2 = Person.create('Bob', 25, 'Designer');
 ```
 
-<a id="toc-constructor-with-private-properties"></a>
 ### Constructor with Private Properties
 
 ```javascript
@@ -71064,7 +67030,6 @@ console.log(account.getBalance('1234')); // 1500
 // console.log(account.#balance); // SyntaxError: Private field
 ```
 
-<a id="toc-constructor-with-validation"></a>
 ### Constructor with Validation
 
 ```javascript
@@ -71105,12 +67070,10 @@ const user = new User('Alice', 'alice@example.com', 30);
 
 ---
 
-<a id="toc-singleton-pattern-3"></a>
 ## Singleton Pattern
 
 The Singleton Pattern ensures a class has only one instance and provides a global point of access to it.
 
-<a id="toc-basic-singleton"></a>
 ### Basic Singleton
 
 ```javascript
@@ -71142,7 +67105,6 @@ instance1.setData('name', 'Alice');
 console.log(instance2.getData('name')); // "Alice"
 ```
 
-<a id="toc-singleton-with-private-constructor"></a>
 ### Singleton with Private Constructor
 
 ```javascript
@@ -71194,7 +67156,6 @@ db2.query('SELECT * FROM users'); // Works because same instance
 // const db3 = new Database(); // Error: Use Database.getInstance()
 ```
 
-<a id="toc-lazy-singleton"></a>
 ### Lazy Singleton
 
 ```javascript
@@ -71230,7 +67191,6 @@ config1.set('apiUrl', 'https://api.example.com');
 console.log(config2.get('apiUrl')); // "https://api.example.com"
 ```
 
-<a id="toc-singleton-module-pattern"></a>
 ### Singleton Module Pattern
 
 ```javascript
@@ -71283,12 +67243,10 @@ console.log(logger1.getLogs().length); // 2
 
 ---
 
-<a id="toc-prototype-pattern"></a>
 ## Prototype Pattern
 
 The Prototype Pattern creates objects based on a template of an existing object through cloning.
 
-<a id="toc-basic-prototype"></a>
 ### Basic Prototype
 
 ```javascript
@@ -71314,7 +67272,6 @@ console.log(car1.getInfo()); // "2024 Toyota Camry"
 console.log(car2.getInfo()); // "2023 Honda Accord"
 ```
 
-<a id="toc-prototype-with-clone-method"></a>
 ### Prototype with Clone Method
 
 ```javascript
@@ -71352,7 +67309,6 @@ original.display(); // "Alice, 30, New York"
 clone.display(); // "Bob, 30, Boston"
 ```
 
-<a id="toc-prototype-registry"></a>
 ### Prototype Registry
 
 ```javascript
@@ -71422,7 +67378,6 @@ rect.init(4, 6);
 console.log(rect.getArea()); // 24
 ```
 
-<a id="toc-deep-clone-pattern"></a>
 ### Deep Clone Pattern
 
 ```javascript
@@ -71503,12 +67458,10 @@ console.log(clone.inventory.length); // 3
 
 ---
 
-<a id="toc-builder-pattern"></a>
 ## Builder Pattern
 
 The Builder Pattern constructs complex objects step by step. It separates construction from representation.
 
-<a id="toc-basic-builder"></a>
 ### Basic Builder
 
 ```javascript
@@ -71571,7 +67524,6 @@ const car = new CarBuilder()
 console.log(car);
 ```
 
-<a id="toc-director-pattern"></a>
 ### Director Pattern
 
 ```javascript
@@ -71671,7 +67623,6 @@ const customPC = new ComputerBuilder()
 customPC.display();
 ```
 
-<a id="toc-fluent-builder-with-validation"></a>
 ### Fluent Builder with Validation
 
 ```javascript
@@ -71744,12 +67695,10 @@ console.log(user);
 
 ---
 
-<a id="toc-module-pattern"></a>
 ## Module Pattern
 
 The Module Pattern encapsulates private and public members, providing a clean API.
 
-<a id="toc-basic-module-pattern-1"></a>
 ### Basic Module Pattern
 
 ```javascript
@@ -71795,7 +67744,6 @@ CounterModule.reset(); // "Current count: 0"
 // console.log(CounterModule.count); // undefined
 ```
 
-<a id="toc-revealing-module-pattern-2"></a>
 ### Revealing Module Pattern
 
 ```javascript
@@ -71861,7 +67809,6 @@ console.log(ShoppingCart.getItems());
 console.log('Total:', ShoppingCart.getTotal()); // 1049
 ```
 
-<a id="toc-module-with-dependencies"></a>
 ### Module with Dependencies
 
 ```javascript
@@ -71938,7 +67885,6 @@ const UserModule = (function(validator, storage) {
 );
 ```
 
-<a id="toc-es6-module-pattern"></a>
 ### ES6 Module Pattern
 
 ```javascript
@@ -71997,7 +67943,6 @@ export function getAllUsers() {
 
 ---
 
-<a id="toc-summary-25"></a>
 ## Summary
 
 This document covered Creational Design Patterns:
@@ -72019,23 +67964,19 @@ These patterns provide reusable solutions for object creation in JavaScript appl
 - Behavioral Patterns
 - SOLID Principles
 - Dependency Injection
-<a id="toc-structural-patterns"></a>
 # Structural Patterns
 
 
-<a id="toc-structural-patterns-1"></a>
 ## Structural Patterns
 
 Structural patterns deal with object composition, creating relationships between objects to form larger structures while keeping these structures flexible and efficient.
 
 ---
 
-<a id="toc-decorator-pattern"></a>
 ## Decorator Pattern
 
 The Decorator Pattern dynamically adds new functionality to objects without modifying their structure.
 
-<a id="toc-basic-decorator"></a>
 ### Basic Decorator
 
 ```javascript
@@ -72107,7 +68048,6 @@ myCoffee = new WhipDecorator(myCoffee);
 console.log(myCoffee.description(), '-', myCoffee.cost()); // "Simple coffee, milk, sugar, whipped cream - 11"
 ```
 
-<a id="toc-functional-decorator"></a>
 ### Functional Decorator
 
 ```javascript
@@ -72152,7 +68092,6 @@ logger = withPrefix('INFO')(logger);
 logger('Hello'); // "INFO: [2024-02-10T...] HELLO"
 ```
 
-<a id="toc-class-method-decorator"></a>
 ### Class Method Decorator
 
 ```javascript
@@ -72211,7 +68150,6 @@ user.save();
 // "save completed"
 ```
 
-<a id="toc-ui-component-decorator"></a>
 ### UI Component Decorator
 
 ```javascript
@@ -72273,12 +68211,10 @@ console.log(component.render());
 
 ---
 
-<a id="toc-facade-pattern"></a>
 ## Facade Pattern
 
 The Facade Pattern provides a simplified interface to a complex subsystem.
 
-<a id="toc-basic-facade"></a>
 ### Basic Facade
 
 ```javascript
@@ -72334,7 +68270,6 @@ const computer = new ComputerFacade();
 computer.start();
 ```
 
-<a id="toc-api-facade"></a>
 ### API Facade
 
 ```javascript
@@ -72403,7 +68338,6 @@ async function displayProfile() {
 }
 ```
 
-<a id="toc-dom-manipulation-facade"></a>
 ### DOM Manipulation Facade
 
 ```javascript
@@ -72511,12 +68445,10 @@ DOMFacade.ajax({
 
 ---
 
-<a id="toc-flyweight-pattern"></a>
 ## Flyweight Pattern
 
 The Flyweight Pattern minimizes memory usage by sharing data among similar objects.
 
-<a id="toc-basic-flyweight"></a>
 ### Basic Flyweight
 
 ```javascript
@@ -72619,7 +68551,6 @@ console.log(forest.getStats());
 // Only 3 TreeType objects created, shared by 1000 Tree instances
 ```
 
-<a id="toc-particle-system-flyweight"></a>
 ### Particle System Flyweight
 
 ```javascript
@@ -72727,7 +68658,6 @@ for (let i = 0; i < 10000; i++) {
 // Only 4 ParticleType objects created, shared by 10000 particles
 ```
 
-<a id="toc-string-interning-flyweight"></a>
 ### String Interning (Flyweight)
 
 ```javascript
@@ -72783,12 +68713,10 @@ console.log(stringPool.getStats());
 
 ---
 
-<a id="toc-adapter-pattern"></a>
 ## Adapter Pattern
 
 The Adapter Pattern allows incompatible interfaces to work together by converting one interface into another.
 
-<a id="toc-basic-adapter"></a>
 ### Basic Adapter
 
 ```javascript
@@ -72841,7 +68769,6 @@ console.log(calculator.operation(5, 3, 'add')); // 8
 console.log(calculator.operation(5, 3, 'subtract')); // 2
 ```
 
-<a id="toc-api-adapter"></a>
 ### API Adapter
 
 ```javascript
@@ -72901,7 +68828,6 @@ console.log(userData);
 // { name: { first: 'Alice', last: 'Smith' }, contact: { ... } }
 ```
 
-<a id="toc-payment-gateway-adapter"></a>
 ### Payment Gateway Adapter
 
 ```javascript
@@ -72985,7 +68911,6 @@ processPayment(new PayPal(), 200, 'EUR');
 processPayment(new Square(), 300, 'GBP');
 ```
 
-<a id="toc-data-format-adapter"></a>
 ### Data Format Adapter
 
 ```javascript
@@ -73028,12 +68953,10 @@ console.log(json);
 
 ---
 
-<a id="toc-proxy-pattern"></a>
 ## Proxy Pattern
 
 The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.
 
-<a id="toc-virtual-proxy-lazy-loading"></a>
 ### Virtual Proxy (Lazy Loading)
 
 ```javascript
@@ -73081,7 +69004,6 @@ image1.display(); // Loads and displays
 image1.display(); // Just displays (already loaded)
 ```
 
-<a id="toc-protection-proxy-access-control"></a>
 ### Protection Proxy (Access Control)
 
 ```javascript
@@ -73158,7 +69080,6 @@ console.log(account.getBalance('1234')); // 1300
 account.withdraw(100, 'wrong'); // Authentication failed
 ```
 
-<a id="toc-caching-proxy"></a>
 ### Caching Proxy
 
 ```javascript
@@ -73216,7 +69137,6 @@ setTimeout(() => {
 }, 6000);
 ```
 
-<a id="toc-logging-proxy"></a>
 ### Logging Proxy
 
 ```javascript
@@ -73280,12 +69200,10 @@ loggingCalc.divide(10, 2);
 
 ---
 
-<a id="toc-composite-pattern"></a>
 ## Composite Pattern
 
 The Composite Pattern composes objects into tree structures to represent part-whole hierarchies.
 
-<a id="toc-basic-composite"></a>
 ### Basic Composite
 
 ```javascript
@@ -73373,7 +69291,6 @@ root.display();
 console.log(`Total size: ${root.getSize()}KB`);
 ```
 
-<a id="toc-ui-component-composite"></a>
 ### UI Component Composite
 
 ```javascript
@@ -73495,7 +69412,6 @@ form
 console.log(form.getHTML());
 ```
 
-<a id="toc-organization-hierarchy"></a>
 ### Organization Hierarchy
 
 ```javascript
@@ -73579,12 +69495,10 @@ console.log(`Total team size: ${ceo.getTeamSize()}`);
 
 ---
 
-<a id="toc-bridge-pattern"></a>
 ## Bridge Pattern
 
 The Bridge Pattern separates abstraction from implementation, allowing them to vary independently.
 
-<a id="toc-basic-bridge"></a>
 ### Basic Bridge
 
 ```javascript
@@ -73652,7 +69566,6 @@ circle1.resize(2);
 circle1.draw(); // Radius doubled, still uses API1
 ```
 
-<a id="toc-device-control-bridge"></a>
 ### Device Control Bridge
 
 ```javascript
@@ -73831,7 +69744,6 @@ radioRemote.mute(); // Radio volume: 0
 
 ---
 
-<a id="toc-summary-26"></a>
 ## Summary
 
 This document covered Structural Design Patterns:
@@ -73854,23 +69766,19 @@ These patterns help organize object relationships and create flexible, maintaina
 - Creational Patterns
 - SOLID Principles
 - Object Composition
-<a id="toc-design-patterns-behavioral-patterns"></a>
 # Design Patterns - Behavioral Patterns
 
 
-<a id="toc-behavioral-patterns"></a>
 ## Behavioral Patterns
 
 Behavioral patterns are concerned with algorithms and the assignment of responsibilities between objects. They describe patterns of communication between objects.
 
 ---
 
-<a id="toc-observer-pattern-pubsub"></a>
 ## Observer Pattern (Pub/Sub)
 
 The Observer Pattern defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified.
 
-<a id="toc-basic-observer"></a>
 ### Basic Observer
 
 ```javascript
@@ -73924,7 +69832,6 @@ subject.notify('Second notification');
 // Observer 3 received: Second notification
 ```
 
-<a id="toc-event-emitter-pattern"></a>
 ### Event Emitter Pattern
 
 ```javascript
@@ -74006,7 +69913,6 @@ emitter.emit('connect'); // (nothing - listener removed)
 console.log('Listeners for "data":', emitter.listenerCount('data')); // 2
 ```
 
-<a id="toc-pubsub-pattern"></a>
 ### Pub/Sub Pattern
 
 ```javascript
@@ -74078,7 +69984,6 @@ pubsub.publish('userLoggedOut', { name: 'Alice' });
 // User logged out: Alice
 ```
 
-<a id="toc-real-world-example-store"></a>
 ### Real-World Example: Store
 
 ```javascript
@@ -74145,12 +70050,10 @@ store.setState({ count: 2 });
 
 ---
 
-<a id="toc-iterator-pattern"></a>
 ## Iterator Pattern
 
 The Iterator Pattern provides a way to access elements of a collection sequentially without exposing its underlying representation.
 
-<a id="toc-basic-iterator"></a>
 ### Basic Iterator
 
 ```javascript
@@ -74188,7 +70091,6 @@ iterator.reset();
 console.log(iterator.next()); // 1
 ```
 
-<a id="toc-es6-iterator-protocol"></a>
 ### ES6 Iterator Protocol
 
 ```javascript
@@ -74231,7 +70133,6 @@ console.log([...range]); // [1, 3, 5, 7, 9]
 console.log(Array.from(range)); // [1, 3, 5, 7, 9]
 ```
 
-<a id="toc-generator-iterator"></a>
 ### Generator Iterator
 
 ```javascript
@@ -74296,7 +70197,6 @@ console.log('Even:', [...collection.filter(x => x % 2 === 0)]); // [2, 4]
 console.log('Squared:', [...collection.map(x => x * x)]); // [1, 4, 9, 16, 25]
 ```
 
-<a id="toc-tree-iterator"></a>
 ### Tree Iterator
 
 ```javascript
@@ -74361,12 +70261,10 @@ console.log('Breadth-first:', [...root.breadthFirst()]);
 
 ---
 
-<a id="toc-strategy-pattern"></a>
 ## Strategy Pattern
 
 The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable.
 
-<a id="toc-basic-strategy"></a>
 ### Basic Strategy
 
 ```javascript
@@ -74458,7 +70356,6 @@ cart.setPaymentStrategy(new PayPalStrategy('user@example.com'));
 cart.checkout(); // Paid $12 using PayPal...
 ```
 
-<a id="toc-validation-strategy"></a>
 ### Validation Strategy
 
 ```javascript
@@ -74576,7 +70473,6 @@ console.log(result2);
 // { isValid: true, errors: [] }
 ```
 
-<a id="toc-sorting-strategy"></a>
 ### Sorting Strategy
 
 ```javascript
@@ -74653,12 +70549,10 @@ console.log(sorter.sort(data)); // Using Native Sort
 
 ---
 
-<a id="toc-command-pattern"></a>
 ## Command Pattern
 
 The Command Pattern encapsulates a request as an object, allowing you to parameterize clients with different requests, queue or log requests, and support undoable operations.
 
-<a id="toc-basic-command"></a>
 ### Basic Command
 
 ```javascript
@@ -74747,7 +70641,6 @@ remote.undo();           // Light is ON
 remote.undo();           // Light is OFF
 ```
 
-<a id="toc-text-editor-with-undoredo"></a>
 ### Text Editor with Undo/Redo
 
 ```javascript
@@ -74876,7 +70769,6 @@ manager.redo();
 console.log(editor.getContent()); // "Hello World"
 ```
 
-<a id="toc-macro-command"></a>
 ### Macro Command
 
 ```javascript
@@ -74923,12 +70815,10 @@ remote.undo();
 
 ---
 
-<a id="toc-chain-of-responsibility"></a>
 ## Chain of Responsibility
 
 The Chain of Responsibility Pattern passes a request along a chain of handlers. Each handler decides either to process the request or pass it to the next handler.
 
-<a id="toc-basic-chain"></a>
 ### Basic Chain
 
 ```javascript
@@ -75023,7 +70913,6 @@ console.log('Result:', result2);
 // Result: { error: 'Not authenticated' }
 ```
 
-<a id="toc-middleware-chain"></a>
 ### Middleware Chain
 
 ```javascript
@@ -75101,7 +70990,6 @@ chain.execute(context);
 // [TIMING] Request took 2ms
 ```
 
-<a id="toc-support-ticket-system"></a>
 ### Support Ticket System
 
 ```javascript
@@ -75161,12 +71049,10 @@ juniorSupport.handle({ priority: 4, description: 'System outage' });
 
 ---
 
-<a id="toc-state-pattern"></a>
 ## State Pattern
 
 The State Pattern allows an object to alter its behavior when its internal state changes.
 
-<a id="toc-basic-state"></a>
 ### Basic State
 
 ```javascript
@@ -75222,7 +71108,6 @@ light.change(); // Yellow Light - CAUTION
 light.change(); // Red Light - STOP
 ```
 
-<a id="toc-document-state-machine"></a>
 ### Document State Machine
 
 ```javascript
@@ -75311,7 +71196,6 @@ doc.publish();  // Publishing document...
 doc.review();   // Cannot review in this state
 ```
 
-<a id="toc-vending-machine"></a>
 ### Vending Machine
 
 ```javascript
@@ -75434,12 +71318,10 @@ machine.insertMoney(1.00);
 
 ---
 
-<a id="toc-template-method-pattern"></a>
 ## Template Method Pattern
 
 The Template Method Pattern defines the skeleton of an algorithm, letting subclasses override specific steps without changing the algorithm's structure.
 
-<a id="toc-basic-template-method"></a>
 ### Basic Template Method
 
 ```javascript
@@ -75510,7 +71392,6 @@ jsonProcessor.process();
 // Saving data...
 ```
 
-<a id="toc-game-template"></a>
 ### Game Template
 
 ```javascript
@@ -75579,7 +71460,6 @@ football.play();
 // Football game ended
 ```
 
-<a id="toc-report-generator"></a>
 ### Report Generator
 
 ```javascript
@@ -75665,12 +71545,10 @@ console.log(htmlReport.generate());
 
 ---
 
-<a id="toc-mediator-pattern"></a>
 ## Mediator Pattern
 
 The Mediator Pattern defines an object that encapsulates how a set of objects interact, promoting loose coupling.
 
-<a id="toc-basic-mediator"></a>
 ### Basic Mediator
 
 ```javascript
@@ -75735,7 +71613,6 @@ colleague2.send('Hi Alice!');
 // Charlie receives from Bob: Hi Alice!
 ```
 
-<a id="toc-chat-room-mediator"></a>
 ### Chat Room Mediator
 
 ```javascript
@@ -75814,7 +71691,6 @@ bob.send('Hi Alice!', 'Alice');
 // [Alice] Received from Bob: Hi Alice!
 ```
 
-<a id="toc-air-traffic-control"></a>
 ### Air Traffic Control
 
 ```javascript
@@ -75902,12 +71778,10 @@ flight2.requestLanding(); // Should wait
 
 ---
 
-<a id="toc-memento-pattern"></a>
 ## Memento Pattern
 
 The Memento Pattern captures and externalizes an object's internal state without violating encapsulation, allowing the object to be restored to this state later.
 
-<a id="toc-basic-memento"></a>
 ### Basic Memento
 
 ```javascript
@@ -75991,7 +71865,6 @@ editor.restore(history.pop());
 console.log('After undo:', editor.getContent()); // "Hello"
 ```
 
-<a id="toc-game-state-memento"></a>
 ### Game State Memento
 
 ```javascript
@@ -76095,12 +71968,10 @@ game.display(); // Level: 2, Score: 100, Health: 100
 
 ---
 
-<a id="toc-visitor-pattern"></a>
 ## Visitor Pattern
 
 The Visitor Pattern lets you add further operations to objects without having to modify them, by separating the algorithm from the objects on which it operates.
 
-<a id="toc-basic-visitor"></a>
 ### Basic Visitor
 
 ```javascript
@@ -76176,7 +72047,6 @@ console.log('Total bonuses:', engineering.accept(bonusCalc));
 // Total bonuses: 22000
 ```
 
-<a id="toc-file-system-visitor"></a>
 ### File System Visitor
 
 ```javascript
@@ -76264,7 +72134,6 @@ console.log(`Total size: ${sizeCalc.getTotal()}KB`);
 
 ---
 
-<a id="toc-summary-27"></a>
 ## Summary
 
 This document covered Behavioral Design Patterns:
@@ -76290,23 +72159,19 @@ These patterns help manage complex behaviors and communication between objects.
 - Async Patterns
 - Event-Driven Architecture
 - State Machines
-<a id="toc-functional-patterns"></a>
 # Functional Patterns
 
 
-<a id="toc-functional-patterns-1"></a>
 ## Functional Patterns
 
 Functional patterns focus on using functions as first-class citizens, emphasizing immutability, pure functions, and function composition.
 
 ---
 
-<a id="toc-function-composition"></a>
 ## Function Composition
 
 Function composition is the process of combining two or more functions to produce a new function.
 
-<a id="toc-basic-composition-1"></a>
 ### Basic Composition
 
 ```javascript
@@ -76332,7 +72197,6 @@ const pipedFn = pipe(add2, multiply3, subtract1);
 console.log(pipedFn(5)); // (5 + 2) * 3 - 1 = 20
 ```
 
-<a id="toc-string-processing-pipeline"></a>
 ### String Processing Pipeline
 
 ```javascript
@@ -76375,7 +72239,6 @@ console.log(normalizeEmail('  Alice@EXAMPLE.COM  '));
 // "alice@example.com"
 ```
 
-<a id="toc-data-transformation-pipeline"></a>
 ### Data Transformation Pipeline
 
 ```javascript
@@ -76407,7 +72270,6 @@ console.log(getTopActiveUsers(users));
 // ["Charlie", "Eve", "Alice"]
 ```
 
-<a id="toc-async-function-composition"></a>
 ### Async Function Composition
 
 ```javascript
@@ -76447,7 +72309,6 @@ getUserWithStats(1).then(result => {
 });
 ```
 
-<a id="toc-point-free-style"></a>
 ### Point-Free Style
 
 ```javascript
@@ -76482,12 +72343,10 @@ console.log(processNumbers([1, 2, 3, 4, 5, 6]));
 
 ---
 
-<a id="toc-higher-order-functions"></a>
 ## Higher-Order Functions
 
 Higher-order functions are functions that take functions as arguments or return functions.
 
-<a id="toc-map-filter-reduce"></a>
 ### Map, Filter, Reduce
 
 ```javascript
@@ -76523,7 +72382,6 @@ const result = numbers
 console.log(result); // [2, 4] -> [4, 8] -> 12
 ```
 
-<a id="toc-custom-higher-order-functions"></a>
 ### Custom Higher-Order Functions
 
 ```javascript
@@ -76582,7 +72440,6 @@ loggedAdd(5, 3);
 // add returned: 8
 ```
 
-<a id="toc-function-decorators"></a>
 ### Function Decorators
 
 ```javascript
@@ -76650,7 +72507,6 @@ initialize(); // No log
 initialize(); // No log
 ```
 
-<a id="toc-array-methods-as-hofs"></a>
 ### Array Methods as HOFs
 
 ```javascript
@@ -76682,12 +72538,10 @@ console.log(sorted); // [1, 1, 2, 3, 4, 5, 6, 9]
 
 ---
 
-<a id="toc-currying-and-partial-application"></a>
 ## Currying and Partial Application
 
 Currying transforms a function with multiple arguments into a sequence of functions each taking a single argument.
 
-<a id="toc-basic-currying"></a>
 ### Basic Currying
 
 ```javascript
@@ -76708,7 +72562,6 @@ console.log(add1And2(3)); // 6
 console.log(add1And2(10)); // 13
 ```
 
-<a id="toc-auto-curry-function"></a>
 ### Auto-Curry Function
 
 ```javascript
@@ -76744,7 +72597,6 @@ const doubleThenTriple = double(3);
 console.log(doubleThenTriple(4)); // 24
 ```
 
-<a id="toc-partial-application-1"></a>
 ### Partial Application
 
 ```javascript
@@ -76776,7 +72628,6 @@ getWithAuth('/api/users');
 // GET /api/users { 'Authorization': 'Bearer token' } undefined
 ```
 
-<a id="toc-curried-utility-functions"></a>
 ### Curried Utility Functions
 
 ```javascript
@@ -76824,7 +72675,6 @@ console.log(processNumbers([1, 2, 3, 4, 5, 6]));
 // [2, 4, 6] -> [4, 8, 12] -> 24
 ```
 
-<a id="toc-practical-currying-examples"></a>
 ### Practical Currying Examples
 
 ```javascript
@@ -76884,12 +72734,10 @@ getUser({ params: { id: 1 } });
 
 ---
 
-<a id="toc-memoization-1"></a>
 ## Memoization
 
 Memoization is an optimization technique that caches function results based on their inputs.
 
-<a id="toc-basic-memoization-1"></a>
 ### Basic Memoization
 
 ```javascript
@@ -76924,7 +72772,6 @@ console.log(memoizedFib(10)); // Cache hit
 console.log(memoizedFib(15)); // Computing...
 ```
 
-<a id="toc-advanced-memoization-1"></a>
 ### Advanced Memoization
 
 ```javascript
@@ -76988,7 +72835,6 @@ setTimeout(() => {
 }, 6000);
 ```
 
-<a id="toc-recursive-memoization"></a>
 ### Recursive Memoization
 
 ```javascript
@@ -77030,7 +72876,6 @@ console.log(factorial(10)); // 3628800
 console.log(factorial(20)); // 2432902008176640000
 ```
 
-<a id="toc-practical-memoization"></a>
 ### Practical Memoization
 
 ```javascript
@@ -77075,12 +72920,10 @@ console.log(calculateDistance(0, 0, 3, 4)); // 5 (cached)
 
 ---
 
-<a id="toc-pure-functions-1"></a>
 ## Pure Functions
 
 Pure functions always return the same output for the same inputs and have no side effects.
 
-<a id="toc-pure-vs-impure-functions"></a>
 ### Pure vs Impure Functions
 
 ```javascript
@@ -77117,7 +72960,6 @@ console.log(cart); // Original unchanged
 console.log(cart2); // New cart with item
 ```
 
-<a id="toc-benefits-of-pure-functions-1"></a>
 ### Benefits of Pure Functions
 
 ```javascript
@@ -77152,7 +72994,6 @@ const numbers = [1, 2, 3, 4, 5];
 const doubled = numbers.map(x => x * 2); // Can be parallelized safely
 ```
 
-<a id="toc-making-functions-pure"></a>
 ### Making Functions Pure
 
 ```javascript
@@ -77199,7 +73040,6 @@ const fetchUserPure = httpClient => async id => {
 };
 ```
 
-<a id="toc-pure-function-patterns"></a>
 ### Pure Function Patterns
 
 ```javascript
@@ -77267,12 +73107,10 @@ console.log(state.user.profile.settings.theme); // 'light' (unchanged)
 
 ---
 
-<a id="toc-immutability-patterns"></a>
 ## Immutability Patterns
 
 Immutability means data cannot be changed after creation. Instead, new copies are created with modifications.
 
-<a id="toc-immutable-arrays"></a>
 ### Immutable Arrays
 
 ```javascript
@@ -77316,7 +73154,6 @@ console.log(sortedDesc); // [5, 4, 3, 2, 1]
 console.log(numbers); // [1, 2, 3, 4, 5] (unchanged)
 ```
 
-<a id="toc-immutable-objects"></a>
 ### Immutable Objects
 
 ```javascript
@@ -77365,7 +73202,6 @@ console.log(newState.user.profile.age); // 31
 console.log(state.user.profile.age); // 30 (unchanged)
 ```
 
-<a id="toc-immutable-data-structures"></a>
 ### Immutable Data Structures
 
 ```javascript
@@ -77445,7 +73281,6 @@ console.log(map2.toObject()); // { a: 1, b: 2, c: 3 }
 console.log(map3.toObject()); // { a: 1, c: 3 }
 ```
 
-<a id="toc-objectfreeze-and-const"></a>
 ### Object.freeze and Const
 
 ```javascript
@@ -77492,7 +73327,6 @@ nested.user.profile.settings.theme = 'dark'; // Fails
 console.log(nested.user.profile.settings.theme); // 'light'
 ```
 
-<a id="toc-immutability-helpers"></a>
 ### Immutability Helpers
 
 ```javascript
@@ -77551,7 +73385,6 @@ console.log(modified); // [1, 2, 99, 100, 4, 5]
 
 ---
 
-<a id="toc-summary-28"></a>
 ## Summary
 
 This document covered Functional Programming Patterns:
@@ -77573,23 +73406,19 @@ These patterns promote predictable, testable, and maintainable code through func
 - Functional Libraries (Ramda, Lodash/FP)
 - Category Theory
 - Monads and Functors
-<a id="toc-async-patterns-1"></a>
 # Async Patterns
 
 
-<a id="toc-async-patterns-2"></a>
 ## Async Patterns
 
 Async patterns help manage asynchronous operations, handling callbacks, promises, and event-driven programming effectively.
 
 ---
 
-<a id="toc-promise-patterns"></a>
 ## Promise Patterns
 
 Promises represent the eventual completion or failure of an asynchronous operation.
 
-<a id="toc-basic-promise-patterns"></a>
 ### Basic Promise Patterns
 
 ```javascript
@@ -77623,7 +73452,6 @@ fetchUser(1)
   .catch(error => console.error('Error:', error));
 ```
 
-<a id="toc-promiseall-parallel-execution"></a>
 ### Promise.all - Parallel Execution
 
 ```javascript
@@ -77658,7 +73486,6 @@ const fetchDashboardData = async () => {
 };
 ```
 
-<a id="toc-promiserace-first-to-complete"></a>
 ### Promise.race - First to Complete
 
 ```javascript
@@ -77696,7 +73523,6 @@ fetchFromMirrors([
 ]).then(data => console.log('Fastest response:', data));
 ```
 
-<a id="toc-promiseallsettled-all-results"></a>
 ### Promise.allSettled - All Results
 
 ```javascript
@@ -77735,7 +73561,6 @@ const batchUpdate = async items => {
 };
 ```
 
-<a id="toc-promiseany-first-successful"></a>
 ### Promise.any - First Successful
 
 ```javascript
@@ -77760,7 +73585,6 @@ fetchFromBackups([
   .catch(error => console.error('All requests failed:', error));
 ```
 
-<a id="toc-sequential-promise-execution"></a>
 ### Sequential Promise Execution
 
 ```javascript
@@ -77800,7 +73624,6 @@ sequentialReduce(tasks)
   .then(results => console.log('Results:', results));
 ```
 
-<a id="toc-promise-retry-pattern"></a>
 ### Promise Retry Pattern
 
 ```javascript
@@ -77856,7 +73679,6 @@ const retryWithBackoff = async (fn, maxAttempts) => {
 };
 ```
 
-<a id="toc-promise-queue"></a>
 ### Promise Queue
 
 ```javascript
@@ -77911,7 +73733,6 @@ Promise.all(tasks.map(task => queue.add(task)))
   .then(results => console.log('All tasks completed:', results));
 ```
 
-<a id="toc-promisify-pattern"></a>
 ### Promisify Pattern
 
 ```javascript
@@ -77963,12 +73784,10 @@ const promisifyAll = obj => {
 
 ---
 
-<a id="toc-asyncawait-patterns"></a>
 ## Async/Await Patterns
 
 Async/await provides syntactic sugar for working with promises, making async code look synchronous.
 
-<a id="toc-basic-asyncawait"></a>
 ### Basic Async/Await
 
 ```javascript
@@ -78002,7 +73821,6 @@ fetchUserSafe(1)
   .catch(error => console.error('Error:', error));
 ```
 
-<a id="toc-parallel-async-operations"></a>
 ### Parallel Async Operations
 
 ```javascript
@@ -78043,7 +73861,6 @@ async function fetchUserData(userId) {
 }
 ```
 
-<a id="toc-async-error-handling"></a>
 ### Async Error Handling
 
 ```javascript
@@ -78102,7 +73919,6 @@ async function fetchWithCleanup() {
 }
 ```
 
-<a id="toc-async-iteration-1"></a>
 ### Async Iteration
 
 ```javascript
@@ -78156,7 +73972,6 @@ async function asyncMapParallel(array, asyncFn) {
 const usersParallel = await asyncMapParallel(userIds, fetchUser);
 ```
 
-<a id="toc-async-control-flow"></a>
 ### Async Control Flow
 
 ```javascript
@@ -78220,7 +74035,6 @@ const total = await asyncReduce(
 );
 ```
 
-<a id="toc-async-memoization"></a>
 ### Async Memoization
 
 ```javascript
@@ -78270,7 +74084,6 @@ const results = await Promise.all([
 // Only one actual fetch, others wait or use cache
 ```
 
-<a id="toc-async-pipeline"></a>
 ### Async Pipeline
 
 ```javascript
@@ -78320,12 +74133,10 @@ console.log(completeUser);
 
 ---
 
-<a id="toc-observable-pattern"></a>
 ## Observable Pattern
 
 Observables represent a stream of asynchronous events.
 
-<a id="toc-basic-observable"></a>
 ### Basic Observable
 
 ```javascript
@@ -78390,7 +74201,6 @@ const subscription = numbers$
 // Complete
 ```
 
-<a id="toc-event-observable"></a>
 ### Event Observable
 
 ```javascript
@@ -78448,7 +74258,6 @@ const subscription = timer$.subscribe({
 setTimeout(() => subscription(), 5000);
 ```
 
-<a id="toc-observable-operators"></a>
 ### Observable Operators
 
 ```javascript
@@ -78550,7 +74359,6 @@ clicks$
   });
 ```
 
-<a id="toc-subject-hot-observable"></a>
 ### Subject (Hot Observable)
 
 ```javascript
@@ -78649,12 +74457,10 @@ behavior$.subscribe({
 
 ---
 
-<a id="toc-reactive-programming-concepts"></a>
 ## Reactive Programming Concepts
 
 Reactive programming is about working with asynchronous data streams.
 
-<a id="toc-stream-composition"></a>
 ### Stream Composition
 
 ```javascript
@@ -78722,7 +74528,6 @@ Observable.combineLatest(temp$, humidity$)
   });
 ```
 
-<a id="toc-reactive-state-management"></a>
 ### Reactive State Management
 
 ```javascript
@@ -78771,7 +74576,6 @@ store.setState(state => ({ count: state.count + 1 })); // Count: 2
 store.setState({ user: { name: 'Alice' } }); // User: { name: 'Alice' }
 ```
 
-<a id="toc-reactive-forms"></a>
 ### Reactive Forms
 
 ```javascript
@@ -78838,7 +74642,6 @@ emailControl.setValue('test'); // Invalid email
 emailControl.setValue('test@example.com'); // Valid
 ```
 
-<a id="toc-reactive-data-flow"></a>
 ### Reactive Data Flow
 
 ```javascript
@@ -78898,7 +74701,6 @@ flow.emit({ value: 10 });
 
 ---
 
-<a id="toc-summary-29"></a>
 ## Summary
 
 This document covered Async Programming Patterns:
@@ -78919,7 +74721,6 @@ These patterns enable effective handling of asynchronous operations and event-dr
 - Async Generators
 - WebSockets and Real-time Communication
 
-<a id="toc-226-design-patterns-summary"></a>
 ## 22.6 Design Patterns Summary
 
 | Category | Patterns |
@@ -78935,28 +74736,18 @@ These patterns enable effective handling of asynchronous operations and event-dr
 **End of Chapter 22: Design Patterns**
 
 
-<a id="toc-23-performance-optimizationmd"></a>
 # 23-Performance-Optimization.md
 
-<a id="toc-23-performance-optimization"></a>
 # 23 Performance Optimization
 
 Performance matters for user experience. This chapter covers JavaScript optimization, algorithm complexity, memory management, rendering, and bundle optimization.
 
 ---
 
-<a id="toc-table-of-contents"></a>
-# Table of Contents
-
-
----
-
-<a id="toc-231-javascript-engine-optimization"></a>
 ## 23.1 JavaScript Engine Optimization
 
 Modern JavaScript engines like V8 (Chrome, Node.js), SpiderMonkey (Firefox), and JavaScriptCore (Safari) use sophisticated optimization techniques.
 
-<a id="toc-v8-optimization-tips"></a>
 ### V8 Optimization Tips
 
 V8 uses multiple compilation tiers and optimization strategies to make JavaScript fast.
@@ -79132,7 +74923,6 @@ function useRest(...args) {
 }
 ```
 
-<a id="toc-jit-compilation"></a>
 ### JIT Compilation
 
 V8 uses Just-In-Time compilation to optimize hot code paths.
@@ -79224,7 +75014,6 @@ distance({ y: 8, x: 9 }); // Different property order
 distance({ x: '10', y: '11' }); // Different types
 ```
 
-<a id="toc-hidden-classes-and-inline-caching"></a>
 ### Hidden Classes and Inline Caching
 
 V8 uses hidden classes (also called shapes or maps) to optimize property access.
@@ -79388,7 +75177,6 @@ const mixedShapes = [
 console.log(totalArea(mixedShapes)); // Polymorphic - slower
 ```
 
-<a id="toc-deoptimization-triggers"></a>
 ### Deoptimization Triggers
 
 Certain patterns cause optimized code to deoptimize back to interpreted code.
@@ -79566,7 +75354,6 @@ function sumDense(arr) {
 }
 ```
 
-<a id="toc-engine-internals-deep-dive"></a>
 ### Engine Internals Deep Dive
 
 Understanding what happens inside JavaScript engines helps write code that the engine can optimize.
@@ -79894,12 +75681,10 @@ obj.x = undefined;  // Keeps fast mode
 
 ---
 
-<a id="toc-232-algorithm-optimization"></a>
 ## 23.2 Algorithm Optimization
 
 Understanding algorithmic complexity helps write performant code.
 
-<a id="toc-time-complexity-big-o"></a>
 ### Time Complexity (Big O)
 
 Big O notation describes how an algorithm's runtime grows with input size.
@@ -80162,7 +75947,6 @@ function findPairsWithSum(arr, target) {
 }
 ```
 
-<a id="toc-space-complexity"></a>
 ### Space Complexity
 
 Space complexity measures memory usage relative to input size.
@@ -80301,7 +76085,6 @@ expensiveCalculation(10);
 console.timeEnd('Cached call'); // Instant
 ```
 
-<a id="toc-common-algorithm-patterns"></a>
 ### Common Algorithm Patterns
 
 Recognizing patterns helps choose the right algorithm.
@@ -80546,7 +76329,6 @@ function knapsack(weights, values, capacity) {
 }
 ```
 
-<a id="toc-choosing-appropriate-data-structures"></a>
 ### Choosing Appropriate Data Structures
 
 The right data structure dramatically affects performance.
@@ -80876,7 +76658,6 @@ class MinHeap {
 
 ---
 
-<a id="toc-summary-30"></a>
 ## Summary
 
 This document covered Performance Optimization:
@@ -80906,16 +76687,13 @@ Understanding these concepts helps write performant JavaScript code.
 - Bundle Optimization
 - Lazy Loading
 - Code Splitting
-<a id="toc-code-memory"></a>
 # Code & Memory
 
 
-<a id="toc-233-code-level-optimization"></a>
 ## 23.3 Code-Level Optimization
 
 Code-level optimizations focus on writing efficient code patterns that execute faster.
 
-<a id="toc-loop-optimization"></a>
 ### Loop Optimization
 
 Loops are often the performance bottleneck in applications.
@@ -81114,7 +76892,6 @@ const result2 = data1.map(item1 => {
 console.timeEnd('Hash map');
 ```
 
-<a id="toc-function-call-overhead"></a>
 ### Function Call Overhead
 
 Function calls have overhead; minimize them in hot code paths.
@@ -81307,7 +77084,6 @@ for (let i = 0; i < 100000; i++) {
 console.timeEnd('Arrow function');
 ```
 
-<a id="toc-variable-scope-optimization"></a>
 ### Variable Scope Optimization
 
 Variable access speed depends on scope depth.
@@ -81415,7 +77191,6 @@ function createOptimizedCounter() {
 }
 ```
 
-<a id="toc-avoiding-unnecessary-work"></a>
 ### Avoiding Unnecessary Work
 
 Don't compute what you don't need.
@@ -81589,7 +77364,6 @@ if (__DEV__) {
 }
 ```
 
-<a id="toc-lazy-evaluation-1"></a>
 ### Lazy Evaluation
 
 Defer computation until actually needed.
@@ -81783,12 +77557,10 @@ function App() {
 
 ---
 
-<a id="toc-234-memory-optimization"></a>
 ## 23.4 Memory Optimization
 
 Efficient memory usage improves performance and prevents leaks.
 
-<a id="toc-reducing-memory-allocations"></a>
 ### Reducing Memory Allocations
 
 Minimize object creation in hot code paths.
@@ -81908,7 +77680,6 @@ for (let i = 0; i < typedNumbers.length; i++) {
 console.timeEnd('Typed array sum');
 ```
 
-<a id="toc-object-pooling-1"></a>
 ### Object Pooling
 
 Reuse objects instead of creating and destroying them.
@@ -82134,7 +77905,6 @@ async function performQuery(sql) {
 }
 ```
 
-<a id="toc-weakmapweakset-usage"></a>
 ### WeakMap/WeakSet Usage
 
 WeakMap and WeakSet hold weak references, allowing garbage collection.
@@ -82269,7 +78039,6 @@ console.log(expensiveOperation(data)); // Cache hit
 // When data is GC'd, cache entry is automatically removed
 ```
 
-<a id="toc-avoiding-memory-leaks-1"></a>
 ### Avoiding Memory Leaks
 
 Common patterns that cause memory leaks and how to fix them.
@@ -82449,7 +78218,6 @@ function createProper() {
 
 ---
 
-<a id="toc-summary-31"></a>
 ## Summary
 
 This document covered Code-Level and Memory Optimization:
@@ -82479,16 +78247,13 @@ These optimizations help create faster, more memory-efficient JavaScript applica
 - Bundle Optimization
 - Profiling Tools
 - Performance Monitoring
-<a id="toc-rendering-bundle"></a>
 # Rendering & Bundle
 
 
-<a id="toc-235-rendering-performance"></a>
 ## 23.5 Rendering Performance
 
 Browser rendering performance is crucial for smooth user experiences.
 
-<a id="toc-reflow-and-repaint"></a>
 ### Reflow and Repaint
 
 Understanding the browser's rendering pipeline helps avoid performance bottlenecks.
@@ -82664,7 +78429,6 @@ element.style.width = (width * 2) + 'px';
 element.style.transform = 'scaleX(2)'; // No reflow!
 ```
 
-<a id="toc-layout-thrashing"></a>
 ### Layout Thrashing
 
 Layout thrashing occurs when you repeatedly read and write to the DOM, forcing synchronous reflows.
@@ -82781,7 +78545,6 @@ document.querySelectorAll('.lazy-load').forEach(el => {
 });
 ```
 
-<a id="toc-requestanimationframe"></a>
 ### requestAnimationFrame
 
 requestAnimationFrame synchronizes animations with the browser's refresh rate.
@@ -82924,7 +78687,6 @@ const monitor = new FPSMonitor();
 monitor.start();
 ```
 
-<a id="toc-virtual-scrolling"></a>
 ### Virtual Scrolling
 
 Virtual scrolling only renders visible items, dramatically improving performance for long lists.
@@ -83096,7 +78858,6 @@ const items = Array.from({ length: 1000000 }, (_, i) => `Item ${i}`);
 const scroller = new AdvancedVirtualScroller(container, items, 40, 10);
 ```
 
-<a id="toc-debouncing-and-throttling"></a>
 ### Debouncing and Throttling
 
 Rate limiting for event handlers improves performance.
@@ -83309,12 +79070,10 @@ window.addEventListener('scroll', rafScrollHandler);
 
 ---
 
-<a id="toc-236-bundle-optimization"></a>
 ## 23.6 Bundle Optimization
 
 Optimizing JavaScript bundles reduces load time and improves performance.
 
-<a id="toc-code-splitting"></a>
 ### Code Splitting
 
 Split code into smaller chunks loaded on demand.
@@ -83454,7 +79213,6 @@ function AppWithErrorBoundary() {
 }
 ```
 
-<a id="toc-tree-shaking"></a>
 ### Tree Shaking
 
 Remove unused code from the final bundle.
@@ -83566,7 +79324,6 @@ module.exports = {
 // Run build and open bundle-report.html to see what's in your bundle
 ```
 
-<a id="toc-minification"></a>
 ### Minification
 
 Reduce code size by removing whitespace and shortening names.
@@ -83675,7 +79432,6 @@ module.exports = {
 };
 ```
 
-<a id="toc-compression"></a>
 ### Compression
 
 Compress assets for faster transfer over the network.
@@ -83834,7 +79590,6 @@ new ImageMinimizerPlugin({
 
 ---
 
-<a id="toc-summary-32"></a>
 ## Summary
 
 This document covered Rendering and Bundle Optimization:
@@ -83866,7 +79621,6 @@ These optimizations reduce bundle size, improve load times, and create smooth us
 - CDN Configuration
 - Critical CSS
 
-<a id="toc-237-performance-summary"></a>
 ## 23.7 Performance Summary
 
 | Area | Key Techniques |
@@ -83882,26 +79636,21 @@ These optimizations reduce bundle size, improve load times, and create smooth us
 **End of Chapter 23: Performance Optimization**
 
 
-<a id="toc-24-security-best-practicesmd"></a>
 # 24-Security-Best-Practices.md
 
-<a id="toc-24-security-best-practices"></a>
 # 24 Security Best Practices
 
 Security is critical for web applications. This chapter covers common vulnerabilities, secure coding practices, authentication, and data protection.
 
 ---
 
-<a id="toc-javascript-deep-dive-security"></a>
 # JavaScript Deep Dive: Security
 
 
-<a id="toc-241-common-vulnerabilities"></a>
 ## 24.1 Common Vulnerabilities
 
 Understanding common vulnerabilities helps prevent security breaches.
 
-<a id="toc-cross-site-scripting-xss"></a>
 ### Cross-Site Scripting (XSS)
 
 XSS allows attackers to inject malicious scripts into web pages viewed by other users.
@@ -84091,7 +79840,6 @@ res.cookie('session', sessionId, {
 // Protection: Input sanitization and CSP
 ```
 
-<a id="toc-cross-site-request-forgery-csrf"></a>
 ### Cross-Site Request Forgery (CSRF)
 
 CSRF tricks users into performing unwanted actions on a site where they're authenticated.
@@ -84246,7 +79994,6 @@ app.post('/api/sensitive', checkOrigin, (req, res) => {
 });
 ```
 
-<a id="toc-injection-attacks"></a>
 ### Injection Attacks
 
 Injection attacks insert malicious code into application queries or commands.
@@ -84427,7 +80174,6 @@ app.get('/file', (req, res) => {
 });
 ```
 
-<a id="toc-prototype-pollution"></a>
 ### Prototype Pollution
 
 Prototype pollution allows attackers to modify Object.prototype, affecting all objects.
@@ -84552,7 +80298,6 @@ function createSafeObject(data) {
 }
 ```
 
-<a id="toc-insecure-dependencies"></a>
 ### Insecure Dependencies
 
 Third-party packages may contain vulnerabilities.
@@ -84560,27 +80305,21 @@ Third-party packages may contain vulnerabilities.
 #### Dependency Scanning
 
 ```bash
-<a id="toc-npm-audit-check-for-known-vulnerabilities"></a>
 # npm audit - check for known vulnerabilities
 npm audit
 
-<a id="toc-view-detailed-report"></a>
 # View detailed report
 npm audit --json
 
-<a id="toc-automatically-fix-vulnerabilities"></a>
 # Automatically fix vulnerabilities
 npm audit fix
 
-<a id="toc-force-fix-may-include-breaking-changes"></a>
 # Force fix (may include breaking changes)
 npm audit fix --force
 
-<a id="toc-yarn-alternative"></a>
 # yarn alternative
 yarn audit
 
-<a id="toc-snyk-more-comprehensive"></a>
 # snyk - more comprehensive
 npm install -g snyk
 snyk test
@@ -84671,12 +80410,10 @@ npm profile enable-2fa auth-and-writes
 
 ---
 
-<a id="toc-242-secure-coding-practices"></a>
 ## 24.2 Secure Coding Practices
 
 Implementing secure coding practices prevents vulnerabilities.
 
-<a id="toc-input-validation-and-sanitization"></a>
 ### Input Validation and Sanitization
 
 Always validate and sanitize user input.
@@ -84886,7 +80623,6 @@ function validateUpload(file) {
 }
 ```
 
-<a id="toc-output-encoding"></a>
 ### Output Encoding
 
 Properly encode output based on context.
@@ -84986,7 +80722,6 @@ const html = template({
 });
 ```
 
-<a id="toc-content-security-policy-csp"></a>
 ### Content Security Policy (CSP)
 
 CSP prevents XSS by controlling which resources can be loaded.
@@ -85114,7 +80849,6 @@ app.post('/csp-violation-report', express.json(), (req, res) => {
 });
 ```
 
-<a id="toc-subresource-integrity-sri"></a>
 ### Subresource Integrity (SRI)
 
 SRI ensures that files fetched from CDNs haven't been tampered with.
@@ -85122,13 +80856,10 @@ SRI ensures that files fetched from CDNs haven't been tampered with.
 #### Generating SRI Hashes
 
 ```bash
-<a id="toc-generate-sri-hash"></a>
 # Generate SRI hash
 cat script.js | openssl dgst -sha384 -binary | openssl base64 -A
 
-<a id="toc-or-use-online-tool"></a>
 # Or use online tool
-<a id="toc-httpswwwsrihashorg"></a>
 # https://www.srihash.org/
 ```
 
@@ -85193,7 +80924,6 @@ console.log(integrity);
 // sha384-oqVuAfXRKap7fdgcCY5uykM6+...
 ```
 
-<a id="toc-https-enforcement"></a>
 ### HTTPS Enforcement
 
 Always use HTTPS to protect data in transit.
@@ -85235,7 +80965,6 @@ app.use((req, res, next) => {
 app.use(helmet());
 ```
 
-<a id="toc-secure-cookie-practices"></a>
 ### Secure Cookie Practices
 
 Properly configure cookies to prevent attacks.
@@ -85307,7 +81036,6 @@ res.cookie('__Host-sessionId', sessionId, {
 
 ---
 
-<a id="toc-summary-33"></a>
 ## Summary
 
 This document covered JavaScript Security comprehensively:
@@ -85340,16 +81068,13 @@ Security requires defense in depth: multiple layers of protection working togeth
 - API Security
 - Penetration Testing
 - Security Headers
-<a id="toc-authentication-data-protection"></a>
 # Authentication & Data Protection
 
 
-<a id="toc-243-authentication-authorization"></a>
 ## 24.3 Authentication & Authorization
 
 Authentication verifies identity; authorization determines access rights.
 
-<a id="toc-token-based-authentication-jwt"></a>
 ### Token-based Authentication (JWT)
 
 JSON Web Tokens provide stateless authentication.
@@ -85698,7 +81423,6 @@ function secureCompare(a, b) {
 }
 ```
 
-<a id="toc-oauth-20-openid-connect"></a>
 ### OAuth 2.0 / OpenID Connect
 
 OAuth 2.0 provides delegated authorization; OpenID Connect adds authentication.
@@ -85958,7 +81682,6 @@ app.get('/logout', (req, res) => {
 });
 ```
 
-<a id="toc-session-management"></a>
 ### Session Management
 
 Server-side session storage for authentication state.
@@ -86160,7 +81883,6 @@ app.use((req, res, next) => {
 });
 ```
 
-<a id="toc-password-hashing-bcrypt"></a>
 ### Password Hashing (bcrypt)
 
 Never store passwords in plain text; use strong hashing algorithms.
@@ -86398,7 +82120,6 @@ app.post('/password/reset', async (req, res) => {
 });
 ```
 
-<a id="toc-multi-factor-authentication"></a>
 ### Multi-factor Authentication
 
 Add an extra layer of security beyond passwords.
@@ -86653,12 +82374,10 @@ app.post('/auth/2fa/sms/verify', authenticateToken, async (req, res) => {
 
 ---
 
-<a id="toc-244-data-protection"></a>
 ## 24.4 Data Protection
 
 Protecting user data is both a security and legal requirement.
 
-<a id="toc-encryption-in-transit-and-at-rest"></a>
 ### Encryption in Transit and at Rest
 
 Encrypt data during transmission and storage.
@@ -86907,7 +82626,6 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(encryptionPlugin);
 ```
 
-<a id="toc-secure-storage-practices"></a>
 ### Secure Storage Practices
 
 Store sensitive data securely in databases and file systems.
@@ -87083,7 +82801,6 @@ app.get('/files/:fileId', authenticateToken, async (req, res) => {
 });
 ```
 
-<a id="toc-privacy-considerations"></a>
 ### Privacy Considerations
 
 Respect user privacy and minimize data collection.
@@ -87170,7 +82887,6 @@ app.delete('/api/my-account', authenticateToken, async (req, res) => {
 });
 ```
 
-<a id="toc-gdpr-compliance-basics"></a>
 ### GDPR Compliance Basics
 
 General Data Protection Regulation requirements for EU users.
@@ -87357,7 +83073,6 @@ app.post('/api/accept-policy', authenticateToken, async (req, res) => {
 
 ---
 
-<a id="toc-summary-34"></a>
 ## Summary
 
 This document covered Authentication, Authorization, and Data Protection:
@@ -87389,7 +83104,6 @@ Security requires layers of protection and ongoing vigilance to protect user dat
 - Zero Trust Architecture
 - API Security
 
-<a id="toc-245-security-summary"></a>
 ## 24.5 Security Summary
 
 | Vulnerability | Prevention |
@@ -87405,15 +83119,12 @@ Security requires layers of protection and ongoing vigilance to protect user dat
 **End of Chapter 24: Security Best Practices**
 
 
-<a id="toc-25-other-proposals-and-future-featuresmd"></a>
 # 25-Other-Proposals-and-Future-Features.md
 
-<a id="toc-25-other-proposals-and-future-features"></a>
 # 25 Other Proposals and Future Features
 
 ---
 
-<a id="toc-future-features-proposals"></a>
 # Future Features & Proposals
 
 
@@ -87429,12 +83140,10 @@ Security requires layers of protection and ongoing vigilance to protect user dat
 
 ---
 
-<a id="toc-251-pattern-matching-stage-1"></a>
 ## 25.1 Pattern Matching (Stage 1)
 
 Pattern matching provides a more expressive way to handle conditional logic and destructuring.
 
-<a id="toc-match-expression"></a>
 ### Match Expression
 
 The `match` expression matches a value against patterns and executes corresponding code.
@@ -87584,7 +83293,6 @@ function categorize(num) {
 }
 ```
 
-<a id="toc-pattern-syntax"></a>
 ### Pattern Syntax
 
 Different types of patterns available in match expressions.
@@ -87757,12 +83465,10 @@ const parseCommand = match (input) {
 
 ---
 
-<a id="toc-252-records-and-tuples-stage-2"></a>
 ## 25.2 Records and Tuples (Stage 2)
 
 Records and Tuples are deeply immutable data structures with value semantics.
 
-<a id="toc-immutable-data-structures-1"></a>
 ### Immutable Data Structures
 
 Records are immutable objects; Tuples are immutable arrays.
@@ -87927,7 +83633,6 @@ const updated = #[
 ];  // #[1, 2, 99, 4, 5]
 ```
 
-<a id="toc-deep-equality"></a>
 ### Deep Equality
 
 Records and Tuples use value equality instead of reference equality.
@@ -88099,12 +83804,10 @@ const nestedRecord = toRecord(nested);
 
 ---
 
-<a id="toc-253-pipeline-operator-stage-2"></a>
 ## 25.3 Pipeline Operator (Stage 2)
 
 The pipeline operator `|>` enables cleaner function chaining.
 
-<a id="toc-function-chaining-with"></a>
 ### Function Chaining with `|>`
 
 Pipeline operator passes the result of one expression as an argument to the next.
@@ -88297,12 +84000,10 @@ const debugPipeline = value
 
 ---
 
-<a id="toc-254-throw-expressions-stage-2"></a>
 ## 25.4 Throw Expressions (Stage 2)
 
 Throw expressions allow `throw` to be used in expression contexts.
 
-<a id="toc-throw-as-expression"></a>
 ### `throw` as Expression
 
 Currently, `throw` is a statement. The proposal makes it an expression.
@@ -88538,7 +84239,6 @@ const lastOrThrow = (array) =>
 
 ---
 
-<a id="toc-summary-35"></a>
 ## Summary
 
 This document covered future JavaScript proposals:
@@ -88593,5 +84293,4 @@ These proposals aim to make JavaScript more expressive and maintainable.
 ---
 
 **End of Chapter 25**
-
 

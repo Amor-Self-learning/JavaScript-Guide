@@ -169,19 +169,19 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 3.1 | Event Fundamentals | `03-Events/001-Event-Fundamentals.md` | ⬜ |
-| 3.2 | Event Handling | `03-Events/002-Event-Handling.md` | ⬜ |
-| 3.3 | Event Object | `03-Events/003-Event-Object.md` | ⬜ |
-| 3.4 | Mouse Events | `03-Events/004-Mouse-Events.md` | ⬜ |
-| 3.5 | Keyboard Events | `03-Events/005-Keyboard-Events.md` | ⬜ |
-| 3.6 | Form Events | `03-Events/006-Form-Events.md` | ⬜ |
-| 3.7 | Touch Events | `03-Events/007-Touch-Events.md` | ⬜ |
-| 3.8 | Pointer Events | `03-Events/008-Pointer-Events.md` | ⬜ |
-| 3.9 | Drag and Drop Events | `03-Events/009-Drag-and-Drop-Events.md` | ⬜ |
-| 3.10 | Window Events | `03-Events/010-Window-Events.md` | ⬜ |
-| 3.11 | Document Events | `03-Events/011-Document-Events.md` | ⬜ |
-| 3.12 | Custom Events | `03-Events/012-Custom-Events.md` | ⬜ |
-| 3.13 | Event Delegation | `03-Events/013-Event-Delegation.md` | ⬜ |
+| 3.1 | Event Fundamentals | `03-Events/001-Event-Fundamentals.md` | ✅ |
+| 3.2 | Event Handling | `03-Events/002-Event-Handling.md` | ✅ |
+| 3.3 | Event Object | `03-Events/003-Event-Object.md` | ✅ |
+| 3.4 | Mouse Events | `03-Events/004-Mouse-Events.md` | ✅ |
+| 3.5 | Keyboard Events | `03-Events/005-Keyboard-Events.md` | ✅ |
+| 3.6 | Form Events | `03-Events/006-Form-Events.md` | ✅ |
+| 3.7 | Touch Events | `03-Events/007-Touch-Events.md` | ✅ |
+| 3.8 | Pointer Events | `03-Events/008-Pointer-Events.md` | ✅ |
+| 3.9 | Drag and Drop Events | `03-Events/009-Drag-Drop-Events.md` | ✅ |
+| 3.10 | Window Events | `03-Events/010-Window-Events.md` | ✅ |
+| 3.11 | Document Events | `03-Events/011-Document-Events.md` | ✅ |
+| 3.12 | Custom Events | `03-Events/012-Custom-Events.md` | ✅ |
+| 3.13 | Event Delegation | `03-Events/013-Event-Delegation.md` | ✅ |
 
 **README coverage (§II.3):**
 - 3.1: Event flow (capture → target → bubble), event object, event types
