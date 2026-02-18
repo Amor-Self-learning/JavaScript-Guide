@@ -489,13 +489,13 @@ Status key: ✅ Done · ⬜ Pending
 | 27.1 | NFC Operations | `27-Web-NFC-API/001-NFC-Operations.md` | ✅ |
 | 28.1 | MIDI Access | `28-Web-MIDI-API/001-MIDI-Access.md` | ✅ |
 | 29.1 | Gamepad Input | `29-Gamepad-API/001-Gamepad-Input.md` | ✅ |
-| 30.1 | Orientation Control | `30-Screen-Orientation-API/001-Orientation-Control.md` | ⬜ |
-| 31.1 | Fullscreen Mode | `31-Fullscreen-API/001-Fullscreen-Mode.md` | ⬜ |
-| 32.1 | Mouse Lock | `32-Pointer-Lock-API/001-Mouse-Lock.md` | ⬜ |
-| 33.1 | Visibility State | `33-Page-Visibility-API/001-Visibility-State.md` | ⬜ |
-| 34.1 | Element Visibility Detection | `34-Intersection-Observer-API/001-Element-Visibility-Detection.md` | ⬜ |
-| 35.1 | DOM Change Detection | `35-Mutation-Observer-API/001-DOM-Change-Detection.md` | ⬜ |
-| 36.1 | Element Size Changes | `36-Resize-Observer-API/001-Element-Size-Changes.md` | ⬜ |
+| 30.1 | Orientation Control | `30-Screen-Orientation-API/001-Orientation-Control.md` | ✅ |
+| 31.1 | Fullscreen Mode | `31-Fullscreen-API/001-Fullscreen-Mode.md` | ✅ |
+| 32.1 | Mouse Lock | `32-Pointer-Lock-API/001-Mouse-Lock.md` | ✅ |
+| 33.1 | Visibility State | `33-Page-Visibility-API/001-Visibility-State.md` | ✅ |
+| 34.1 | Element Visibility Detection | `34-Intersection-Observer-API/001-Element-Visibility-Detection.md` | ✅ |
+| 35.1 | DOM Change Detection | `35-Mutation-Observer-API/001-DOM-Change-Detection.md` | ✅ |
+| 36.1 | Element Size Changes | `36-Resize-Observer-API/001-Element-Size-Changes.md` | ✅ |
 
 **README coverage (§II.21–36):**
 - 21.1: `navigator.contacts.select`; contact properties; privacy
