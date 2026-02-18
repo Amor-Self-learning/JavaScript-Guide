@@ -367,8 +367,8 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 13.1 | Generic Sensor API | `13-Sensor-APIs/001-Generic-Sensor-API.md` | ⬜ |
-| 13.2 | Specific Sensors | `13-Sensor-APIs/002-Specific-Sensors.md` | ⬜ |
+| 13.1 | Generic Sensor API | `13-Sensor-APIs/001-Generic-Sensor-API.md` | ✅ |
+| 13.2 | Specific Sensors | `13-Sensor-APIs/002-Specific-Sensors.md` | ✅ |
 
 **README coverage (§II.13):**
 - 13.1: Sensor base class; reading sensor data; sensor states
@@ -380,10 +380,10 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 14.1 | WebSocket | `14-Connectivity-APIs/001-WebSocket.md` | ⬜ |
-| 14.2 | Server-Sent Events | `14-Connectivity-APIs/002-Server-Sent-Events.md` | ⬜ |
-| 14.3 | Network Information API | `14-Connectivity-APIs/003-Network-Information-API.md` | ⬜ |
-| 14.4 | Online/Offline Detection | `14-Connectivity-APIs/004-Online-Offline-Detection.md` | ⬜ |
+| 14.1 | WebSocket API | `14-Connectivity-APIs/001-WebSocket-API.md` | ✅ |
+| 14.2 | Server-Sent Events | `14-Connectivity-APIs/002-Server-Sent-Events.md` | ✅ |
+| 14.3 | Beacon API | `14-Connectivity-APIs/003-Beacon-API.md` | ✅ |
+| 14.4 | Network Information API | `14-Connectivity-APIs/004-Network-Information-API.md` | ✅ |
 
 **README coverage (§II.14):**
 - 14.1: Creating WebSocket; `send`; events (open/message/error/close); binary data; subprotocols
