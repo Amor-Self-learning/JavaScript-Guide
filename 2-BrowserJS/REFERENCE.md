@@ -126,13 +126,13 @@ Status key: ✅ Done · ⬜ Pending
 | # | Chapter | File | Status |
 |---|---|---|---|
 | 1.1 | DOM Fundamentals | `01-DOM/001-DOM-Fundamentals.md` | ✅ |
-| 1.2 | Document Interface | `01-DOM/002-Document-Interface.md` | ⬜ |
-| 1.3 | Selecting Elements | `01-DOM/003-Selecting-Elements.md` | ⬜ |
-| 1.4 | Creating Elements | `01-DOM/004-Creating-Elements.md` | ⬜ |
-| 1.5 | Manipulating Elements | `01-DOM/005-Manipulating-Elements.md` | ⬜ |
-| 1.6 | Element Properties and Methods | `01-DOM/006-Element-Properties-and-Methods.md` | ⬜ |
-| 1.7 | DOM Traversal | `01-DOM/007-DOM-Traversal.md` | ⬜ |
-| 1.8 | ClassList API | `01-DOM/008-ClassList-API.md` | ⬜ |
+| 1.2 | Document Interface | `01-DOM/002-Document-Interface.md` | ✅ |
+| 1.3 | Selecting Elements | `01-DOM/003-Selecting-Elements.md` | ✅ |
+| 1.4 | Creating Elements | `01-DOM/004-Creating-Elements.md` | ✅ |
+| 1.5 | Manipulating Elements | `01-DOM/005-Manipulating-Elements.md` | ✅ |
+| 1.6 | Element Properties and Methods | `01-DOM/006-Element-Properties-Methods.md` | ✅ |
+| 1.7 | DOM Traversal | `01-DOM/007-DOM-Traversal.md` | ✅ |
+| 1.8 | ClassList API | `01-DOM/008-ClassList-API.md` | ✅ |
 
 **README coverage (§II.1):**
 - 1.1: DOM tree structure, Node types, Node relationships, NodeList vs HTMLCollection, Live vs static collections
