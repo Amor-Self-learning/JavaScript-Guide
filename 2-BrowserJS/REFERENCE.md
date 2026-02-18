@@ -329,10 +329,10 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 11.1 | Notifications API | `11-Notifications-and-Messaging/001-Notifications-API.md` | ⬜ |
-| 11.2 | Push API | `11-Notifications-and-Messaging/002-Push-API.md` | ⬜ |
-| 11.3 | Broadcast Channel API | `11-Notifications-and-Messaging/003-Broadcast-Channel-API.md` | ⬜ |
-| 11.4 | Channel Messaging API | `11-Notifications-and-Messaging/004-Channel-Messaging-API.md` | ⬜ |
+| 11.1 | Notifications API | `11-Notifications-and-Messaging/001-Notifications-API.md` | ✅ |
+| 11.2 | Push API | `11-Notifications-and-Messaging/002-Push-API.md` | ✅ |
+| 11.3 | Broadcast Channel API | `11-Notifications-and-Messaging/003-Broadcast-Channel-API.md` | ✅ |
+| 11.4 | Channel Messaging API | `11-Notifications-and-Messaging/004-Channel-Messaging-API.md` | ✅ |
 
 **README coverage (§II.11):**
 - 11.1: Requesting permission; creating notifications; options (body/icon/badge/tag/actions); events (click/close)
