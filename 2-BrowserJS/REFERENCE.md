@@ -521,16 +521,16 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 37.1 | Performance Object | `37-Performance-APIs/001-Performance-Object.md` | ⬜ |
-| 37.2 | Navigation Timing API | `37-Performance-APIs/002-Navigation-Timing-API.md` | ⬜ |
-| 37.3 | Resource Timing API | `37-Performance-APIs/003-Resource-Timing-API.md` | ⬜ |
-| 37.4 | User Timing API | `37-Performance-APIs/004-User-Timing-API.md` | ⬜ |
-| 37.5 | Paint Timing API | `37-Performance-APIs/005-Paint-Timing-API.md` | ⬜ |
-| 37.6 | Long Tasks API | `37-Performance-APIs/006-Long-Tasks-API.md` | ⬜ |
-| 37.7 | Element Timing API | `37-Performance-APIs/007-Element-Timing-API.md` | ⬜ |
-| 37.8 | Event Timing API | `37-Performance-APIs/008-Event-Timing-API.md` | ⬜ |
-| 37.9 | Server Timing API | `37-Performance-APIs/009-Server-Timing-API.md` | ⬜ |
-| 37.10 | Performance Observer | `37-Performance-APIs/010-Performance-Observer.md` | ⬜ |
+| 37.1 | Performance Object | `37-Performance-APIs/001-Performance-Object.md` | ✅ |
+| 37.2 | Navigation Timing API | `37-Performance-APIs/002-Navigation-Timing-API.md` | ✅ |
+| 37.3 | Resource Timing API | `37-Performance-APIs/003-Resource-Timing-API.md` | ✅ |
+| 37.4 | User Timing API | `37-Performance-APIs/004-User-Timing-API.md` | ✅ |
+| 37.5 | Paint Timing API | `37-Performance-APIs/005-Paint-Timing-API.md` | ✅ |
+| 37.6 | Long Tasks API | `37-Performance-APIs/006-Long-Tasks-API.md` | ✅ |
+| 37.7 | Element Timing API | `37-Performance-APIs/007-Element-Timing-API.md` | ✅ |
+| 37.8 | Event Timing API | `37-Performance-APIs/008-Event-Timing-API.md` | ✅ |
+| 37.9 | Server Timing API | `37-Performance-APIs/009-Server-Timing-API.md` | ✅ |
+| 37.10 | Performance Observer | `37-Performance-APIs/010-Performance-Observer.md` | ✅ |
 
 **README coverage (§II.37):**
 - 37.1: `performance.now()`; high-resolution timestamps
@@ -550,10 +550,10 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 38.1 | Deprecation Reports | `38-Reporting-API/001-Deprecation-Reports.md` | ⬜ |
-| 38.2 | Intervention Reports | `38-Reporting-API/002-Intervention-Reports.md` | ⬜ |
-| 38.3 | Crash Reports | `38-Reporting-API/003-Crash-Reports.md` | ⬜ |
-| 38.4 | ReportingObserver | `38-Reporting-API/004-ReportingObserver.md` | ⬜ |
+| 38.1 | Deprecation Reports | `38-Reporting-API/001-Deprecation-Reports.md` | ✅ |
+| 38.2 | Intervention Reports | `38-Reporting-API/002-Intervention-Reports.md` | ✅ |
+| 38.3 | Crash Reports | `38-Reporting-API/003-Crash-Reports.md` | ✅ |
+| 38.4 | ReportingObserver | `38-Reporting-API/004-ReportingObserver.md` | ✅ |
 
 ---
 
@@ -561,8 +561,8 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 39.1 | Speech Recognition | `39-Web-Speech-API/001-Speech-Recognition.md` | ⬜ |
-| 39.2 | Speech Synthesis | `39-Web-Speech-API/002-Speech-Synthesis.md` | ⬜ |
+| 39.1 | Speech Recognition | `39-Web-Speech-API/001-Speech-Recognition.md` | ✅ |
+| 39.2 | Speech Synthesis | `39-Web-Speech-API/002-Speech-Synthesis.md` | ✅ |
 
 **README coverage (§II.39):**
 - 39.1: SpeechRecognition; starting/stopping; results; language; continuous vs single
@@ -574,9 +574,9 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 40.1 | Custom Elements | `40-Web-Components/001-Custom-Elements.md` | ⬜ |
-| 40.2 | Shadow DOM | `40-Web-Components/002-Shadow-DOM.md` | ⬜ |
-| 40.3 | HTML Templates | `40-Web-Components/003-HTML-Templates.md` | ⬜ |
+| 40.1 | Custom Elements | `40-Web-Components/001-Custom-Elements.md` | ✅ |
+| 40.2 | Shadow DOM | `40-Web-Components/002-Shadow-DOM.md` | ✅ |
+| 40.3 | HTML Templates | `40-Web-Components/003-HTML-Templates.md` | ✅ |
 
 **README coverage (§II.40):**
 - 40.1: `customElements.define`; autonomous/customized built-in elements; lifecycle callbacks (connected/disconnected/attributeChanged/adopted); `observedAttributes`
@@ -589,55 +589,50 @@ Status key: ✅ Done · ⬜ Pending
 
 | # | Chapter | File | Status |
 |---|---|---|---|
-| 41.1 | TextEncoder | `41-Encoding-API/001-TextEncoder.md` | ⬜ |
-| 41.2 | TextDecoder | `41-Encoding-API/002-TextDecoder.md` | ⬜ |
-| 42.1 | CompressionStream | `42-Compression-Streams-API/001-CompressionStream.md` | ⬜ |
-| 42.2 | DecompressionStream | `42-Compression-Streams-API/002-DecompressionStream.md` | ⬜ |
-| 43.1 | ReadableStream | `43-Streams-API/001-ReadableStream.md` | ⬜ |
-| 43.2 | WritableStream | `43-Streams-API/002-WritableStream.md` | ⬜ |
-| 43.3 | TransformStream | `43-Streams-API/003-TransformStream.md` | ⬜ |
-| 43.4 | Byte Streams | `43-Streams-API/004-Byte-Streams.md` | ⬜ |
-| 44.1 | SubtleCrypto | `44-Web-Cryptography-API/001-SubtleCrypto.md` | ⬜ |
-| 44.2 | Cryptographic Operations | `44-Web-Cryptography-API/002-Cryptographic-Operations.md` | ⬜ |
-| 44.3 | Random Values | `44-Web-Cryptography-API/003-Random-Values.md` | ⬜ |
-| 45.1 | WebAssembly Object | `45-WebAssembly/001-WebAssembly-Object.md` | ⬜ |
-| 45.2 | Module and Instance | `45-WebAssembly/002-Module-and-Instance.md` | ⬜ |
-| 45.3 | JavaScript Interop | `45-WebAssembly/003-JavaScript-Interop.md` | ⬜ |
-| 46.1 | XR Session | `46-Web-XR/001-XR-Session.md` | ⬜ |
-| 46.2 | XR Frame Loop | `46-Web-XR/002-XR-Frame-Loop.md` | ⬜ |
-| 46.3 | Input Sources | `46-Web-XR/003-Input-Sources.md` | ⬜ |
-| 46.4 | Hit Testing | `46-Web-XR/004-Hit-Testing.md` | ⬜ |
-| 47.1 | Text Selection | `47-Selection-API/001-Text-Selection.md` | ⬜ |
-| 47.2 | Range API | `47-Selection-API/002-Range-API.md` | ⬜ |
-| 48.1 | Color Picking | `48-Eye-Dropper-API/001-Color-Picking.md` | ⬜ |
-| 49.1 | App Badge | `49-Badging-API/001-App-Badge.md` | ⬜ |
-| 50.1 | Offline Content | `50-Content-Index-API/001-Offline-Content.md` | ⬜ |
-| 51.1 | Lock Management | `51-Web-Locks-API/001-Lock-Management.md` | ⬜ |
-| 52.1 | Keyboard Layout | `52-Keyboard-API/001-Keyboard-Layout.md` | ⬜ |
-| 53.1 | Async Cookie Access | `53-Cookie-Store-API/001-Async-Cookie-Access.md` | ⬜ |
-| 54.1 | HTML Sanitization | `54-Sanitizer-API/001-HTML-Sanitization.md` | ⬜ |
-| 55.1 | System Pressure | `55-Compute-Pressure-API/001-System-Pressure.md` | ⬜ |
-| 56.1 | Federated Login | `56-FedCM/001-Federated-Login.md` | ⬜ |
-| 57.1 | Page Transitions | `57-View-Transitions-API/001-Page-Transitions.md` | ⬜ |
+| 41.1 | TextEncoder | `41-Encoding-API/001-TextEncoder.md` | ✅ |
+| 41.2 | TextDecoder | `41-Encoding-API/002-TextDecoder.md` | ✅ |
+| 42.1 | CompressionStream | `42-Compression-Streams-API/001-CompressionStream.md` | ✅ |
+| 42.2 | DecompressionStream | `42-Compression-Streams-API/002-DecompressionStream.md` | ✅ |
+| 43.1 | ReadableStream | `43-Streams-API/001-ReadableStream.md` | ✅ |
+| 43.2 | WritableStream | `43-Streams-API/002-WritableStream.md` | ✅ |
+| 43.3 | TransformStream | `43-Streams-API/003-TransformStream.md` | ✅ |
+| 43.4 | Byte Streams | `43-Streams-API/004-Byte-Streams.md` | ✅ |
+| 44.1 | SubtleCrypto | `44-Web-Cryptography-API/001-SubtleCrypto.md` | ✅ |
+| 44.2 | Random Values | `44-Web-Cryptography-API/002-Random-Values.md` | ✅ |
+| 45.1 | WebGL Context | `45-WebGL-API/001-WebGL-Context.md` | ✅ |
+| 45.2 | Shaders | `45-WebGL-API/002-Shaders.md` | ✅ |
+| 45.3 | Buffers and Drawing | `45-WebGL-API/003-Buffers-and-Drawing.md` | ✅ |
+| 46.1 | WebGPU Basics | `46-WebGPU-API/001-WebGPU-Basics.md` | ✅ |
+| 47.1 | WebXR Device API | `47-WebXR-API/001-WebXR-Device-API.md` | ✅ |
+| 48.1 | Picture-in-Picture | `48-Picture-in-Picture-API/001-Picture-in-Picture.md` | ✅ |
+| 49.1 | Document Picture-in-Picture | `49-Document-Picture-in-Picture-API/001-Document-Picture-in-Picture.md` | ✅ |
+| 50.1 | View Transitions | `50-View-Transitions-API/001-View-Transitions.md` | ✅ |
+| 51.1 | Popover API | `51-Popover-API/001-Popover-API.md` | ✅ |
+| 52.1 | Dialog Element | `52-Dialog-Element/001-Dialog-Element.md` | ✅ |
+| 53.1 | Content Security Policy | `53-Content-Security-Policy-API/001-Content-Security-Policy.md` | ✅ |
+| 54.1 | Trusted Types | `54-Trusted-Types-API/001-Trusted-Types.md` | ✅ |
+| 55.1 | Permissions Policy | `55-Feature-Policy-API/001-Permissions-Policy.md` | ✅ |
+| 56.1 | Launch Handler | `56-Launch-Handler-API/001-Launch-Handler.md` | ✅ |
+| 57.1 | Window Management | `57-Window-Management-API/001-Window-Management.md` | ✅ |
 
 **README coverage (§II.41–57):**
 - 41.1/41.2: TextEncoder (strings → Uint8Array, UTF-8); TextDecoder (Uint8Array → strings, multiple encodings, streaming)
 - 42: CompressionStream/DecompressionStream (gzip/deflate/deflate-raw); streaming compression
 - 43: ReadableStream (create/read/pipe/tee); WritableStream (create/write); TransformStream; BYOB readers
 - 44: `crypto.subtle` (SHA/AES/RSA/ECDSA); hashing/encrypt/decrypt/sign/verify; key generation/derivation/import/export; `crypto.getRandomValues`/`randomUUID`
-- 45: `WebAssembly.compile`/`instantiate`/`validate`; Module/Instance; Memory/Table; JS↔Wasm interop
-- 46: XR sessions (immersive-vr/ar/inline); XR frame loop; controllers/hand tracking; hit testing
-- 47: `window.getSelection`; Selection object; Range API (boundaries/cloneContents/deleteContents)
-- 48: EyeDropper; `open()`; color selection from screen
-- 49: `navigator.setAppBadge`/`clearAppBadge`; badge counts
-- 50: Adding content to offline index (PWA)
-- 51: `navigator.locks.request`; exclusive/shared locks
-- 52: `navigator.keyboard.getLayoutMap`; physical key mapping
-- 53: `cookieStore.get`/`getAll`/`set`/`delete`; cookie change events
-- 54: Sanitizer constructor; `sanitize`; config; XSS prevention
-- 55: PressureObserver; CPU/thermal pressure; adaptive performance
-- 56: Identity provider integration; `navigator.credentials.get` with identity
-- 57: `document.startViewTransition`; cross-document transitions; custom animation
+- 45: WebGL context; shaders; buffers; drawing
+- 46: WebGPU basics; adapter/device; pipelines; render passes
+- 47: WebXR Device API; VR/AR sessions; frame loop; input sources
+- 48: Picture-in-Picture for video; enter/exit; events
+- 49: Document Picture-in-Picture; arbitrary HTML content in floating window
+- 50: View Transitions API; animated DOM state changes
+- 51: Popover API; native popup support; auto/manual modes
+- 52: Dialog element; modal/non-modal; form integration
+- 53: Content Security Policy; directives; violation reporting
+- 54: Trusted Types; XSS prevention; policy creation
+- 55: Permissions Policy (Feature Policy); feature control
+- 56: Launch Handler API; PWA launch modes; file handling
+- 57: Window Management API; multi-screen support; window positioning
 
 ---
 
@@ -666,10 +661,11 @@ Status key: ✅ Done · ⬜ Pending
 
 | Metric | Value |
 |---|---|
-| Total chapter files | ~160 |
-| Completed | 1 |
-| Remaining | ~159 |
-| Next chapter | **1.2 Document Interface** → `01-DOM/002-Document-Interface.md` |
+| Total groups | 58 |
+| Groups completed | 57 (Groups 01-57) |
+| Groups remaining | 1 (Group 58 — Accessibility) |
+| Total chapter files created | ~110 |
+| Next chapter | **58.1 ARIA Fundamentals** → `58-Accessibility/001-ARIA-Fundamentals.md` |
 
 ---
 
