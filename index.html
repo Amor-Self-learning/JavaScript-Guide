@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JavaScript Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Literata:opsz,wght@7..72,300;400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link id="hljs-light" rel="stylesheet" href="assets/vendor/highlight/github.min.css" />
+  <link id="hljs-dark" rel="stylesheet" href="assets/vendor/highlight/github-dark.min.css" disabled />
+</head>
+<body class="loading-ui">
+  <div class="ambient"></div>
+  <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+  <div class="app">
+    <aside class="sidebar" aria-label="Guide navigation">
+      <div class="brand">
+        <div class="logo">JS</div>
+        <div>
+          <div class="title">JavaScript Guide</div>
+          <div class="subtitle">Modern, Obsidian-inspired docs</div>
+        </div>
+      </div>
+      <div class="search">
+        <input id="nav-search" type="search" placeholder="Search chapters" aria-label="Search chapters" />
+      </div>
+      <nav id="nav" class="nav"></nav>
+      <div class="sidebar-footer">
+        <div class="chip">Accent: #3fb83d</div>
+        <div class="chip">Theme: GitHub + Custom</div>
+      </div>
+    </aside>
+
+    <div class="content">
+      <header class="topbar">
+        <button id="menu-toggle" class="icon-btn" aria-label="Toggle navigation">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="crumbs">
+          <button id="home-btn" class="icon-btn" aria-label="Go home">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span>Home</span>
+          </button>
+          <div class="breadcrumbs" id="breadcrumbs">Home</div>
+        </div>
+        <div class="topbar-actions">
+          <button id="theme-toggle" class="pill">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 14a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm8-6a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zm9.07-5.07a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0zM8.75 15.34a1 1 0 0 1 0 1.41L7.34 18.16a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0zm7.32 1.41a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41zM8.75 8.66a1 1 0 0 1-1.41 0L5.93 7.25a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41z" fill="currentColor"/>
+            </svg>
+            <span>Toggle theme</span>
+          </button>
+          <button id="scroll-top" class="pill">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5l6 6-1.4 1.4L13 8.8V19h-2V8.8l-3.6 3.6L6 11z" fill="currentColor"/>
+            </svg>
+            <span>Back to top</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="hero" id="hero">
+          <div>
+            <div class="eyebrow">JavaScript, end-to-end</div>
+            <h1>Readable, fast, and pleasant docs.</h1>
+            <p>Open any chapter on the left. Markdown is rendered live with syntax highlighting and Obsidian-style blocks, tables, and inline code.</p>
+            <div class="hero-actions">
+              <button class="pill" data-open="home">Open Overview</button>
+              <button class="pill ghost" data-open="ecmascript">ECMAScript Guide</button>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="stat">
+              <div class="stat-label">Render engine</div>
+              <div class="stat-value">Marked + Highlight.js</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Typography</div>
+              <div class="stat-value">Varela Round + Literata</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Code font</div>
+              <div class="stat-value">JetBrains Mono</div>
+            </div>
+          </div>
+        </section>
+
+        <article id="doc" class="doc" aria-live="polite"></article>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="assets/vendor/highlight/highlight.min.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
