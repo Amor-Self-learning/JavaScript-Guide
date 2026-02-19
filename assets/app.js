@@ -201,7 +201,7 @@ const hero = document.getElementById("hero");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 const content = document.querySelector(".content");
 
-const markdownWorker = "Worker" in window ? new Worker("/assets/markdown-worker.js") : null;
+const markdownWorker = "Worker" in window ? new Worker(new URL("assets/markdown-worker.js", document.baseURI)) : null;
 let workerRequestId = 0;
 const workerCallbacks = new Map();
 const renderCache = new Map();
@@ -495,8 +495,7 @@ function resolveSection(sectionId) {
 }
 
 function resolvePath(path) {
-  const base = `${window.location.origin}/`;
-  return new URL(path, base).toString();
+  return new URL(path, document.baseURI).toString();
 }
 
 async function loadContent(state) {
