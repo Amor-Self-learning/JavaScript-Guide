@@ -1,16 +1,36 @@
 # JavaScript Mastery Guide
 
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Markdown](https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white)
+![Obsidian](https://img.shields.io/badge/Obsidian-7C3AED?style=for-the-badge&logo=obsidian&logoColor=white)
+
+![Modules](https://img.shields.io/badge/Modules-116+-blue?style=flat-square)
+![Lines](https://img.shields.io/badge/Lines-97K+-green?style=flat-square)
+![Size](https://img.shields.io/badge/Size-3.5MB-orange?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
+
 A comprehensive, in-depth JavaScript reference covering everything from core language fundamentals to advanced browser APIs, Node.js, and modern tooling. Organized as an Obsidian-friendly vault with 116+ modules.
+
+---
 
 ## 🌐 Live Site
 
-**[📖 Read Online →](https://amor-self-learning.github.io/JavaScript-Guide/)**
+<p align="center">
+  <a href="https://amor-self-learning.github.io/JavaScript-Guide/">
+    <img src="https://img.shields.io/badge/📖_Read_Online-JavaScript_Guide-4CAF50?style=for-the-badge" alt="Read Online">
+  </a>
+</p>
 
 ---
 
 ## 📚 Table of Contents
 
+> 📋 For the complete detailed outline, see **[Table_of_contents.md](Table_of_contents.md)**
+
 ### Section I: ECMAScript (Core JavaScript)
+![ECMAScript](https://img.shields.io/badge/ECMAScript-ES2024-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 *25 modules covering the language specification*
 
 | # | Module | Topics |
@@ -44,6 +64,7 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 ---
 
 ### Section II: Browser JavaScript
+![Browser](https://img.shields.io/badge/Web_APIs-Modern_Browser-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
 *58 modules covering Web Platform APIs*
 
 | # | Module | Topics |
@@ -69,6 +90,7 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 ---
 
 ### Section III: Node.js
+![Node.js](https://img.shields.io/badge/Node.js-v20+-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 *25 modules covering server-side JavaScript*
 
 | # | Module | Topics |
@@ -102,6 +124,10 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 ---
 
 ### Section IV: Build Tools & Development Environment
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=flat-square&logo=webpack&logoColor=black)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white)
 *8 modules covering modern JS tooling*
 
 | # | Module | Topics |
@@ -118,9 +144,12 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 ---
 
 ### Section V: Browser Extensions
+![Chrome](https://img.shields.io/badge/Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
+![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=flat-square&logo=firefox&logoColor=white)
 *Coming soon*
 
 ### Section VI: Advanced Topics & Best Practices
+![Architecture](https://img.shields.io/badge/Architecture-Design_Patterns-9B59B6?style=flat-square)
 *Coming soon*
 
 ---
