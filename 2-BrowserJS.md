@@ -1,3 +1,4 @@
+# Browser JS
 # 1.1 DOM Fundamentals
 
 The **Document Object Model (DOM)** is the programming interface that bridges HTML/XML documents and JavaScript. When a browser parses an HTML file, it does not keep the raw text in memory — it constructs a live, in-memory tree of objects. JavaScript reads and manipulates that tree, and the browser synchronises the screen with every change.

@@ -369,6 +369,12 @@ body.reading-mode .doc {
   min-width: 180px;
 }
 
+@media (min-width: 961px) {
+  .search-inline input {
+    min-width: 300px;
+  }
+}
+
 .search-inline {
   flex: 1;
   max-width: 360px;
