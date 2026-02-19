@@ -467,7 +467,7 @@ body.reading-mode .doc {
   padding: 28px;
   box-shadow: var(--shadow);
   margin-bottom: 30px;
-  max-width: 90ch;
+  max-width: 110ch;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
