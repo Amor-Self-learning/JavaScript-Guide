@@ -4,17 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JavaScript Guide</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Literata:opsz,wght@7..72,300;400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="prefetch" href="README.md" />
+  <link rel="prefetch" href="1-ECMAScript/01-Language-Fundamentals.md" />
   <link id="hljs-light" rel="stylesheet" href="assets/vendor/highlight/github.min.css" />
   <link id="hljs-dark" rel="stylesheet" href="assets/vendor/highlight/github-dark.min.css" disabled />
 </head>
 <body class="loading-ui">
   <div class="ambient"></div>
-  <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
   <div class="app">
+    <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
     <aside class="sidebar" aria-label="Guide navigation">
       <div class="brand">
         <div class="logo">JS</div>
@@ -40,28 +39,25 @@
             <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </button>
+        <div class="topbar-actions">
+          <button id="reading-toggle" class="pill" aria-label="Toggle reading mode" title="Reading mode">
+            <i class="fa-solid fa-book-open"></i>
+          </button>
+          <button id="theme-toggle" class="pill" aria-label="Toggle theme" title="Toggle theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button id="scroll-top" class="pill" aria-label="Back to top" title="Back to top">
+            <i class="fa-solid fa-arrow-up"></i>
+          </button>
+        </div>
+        <div class="search-inline">
+          <input id="doc-search" type="search" placeholder="Find in page" aria-label="Find in page" />
+        </div>
         <div class="crumbs">
-          <button id="home-btn" class="icon-btn" aria-label="Go home">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            </svg>
-            <span>Home</span>
+          <button id="home-btn" class="icon-btn" aria-label="Go home" title="Home">
+            <i class="fa-solid fa-house"></i>
           </button>
           <div class="breadcrumbs" id="breadcrumbs">Home</div>
-        </div>
-        <div class="topbar-actions">
-          <button id="theme-toggle" class="pill">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 4a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 14a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm8-6a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zm9.07-5.07a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0zM8.75 15.34a1 1 0 0 1 0 1.41L7.34 18.16a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0zm7.32 1.41a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41zM8.75 8.66a1 1 0 0 1-1.41 0L5.93 7.25a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41z" fill="currentColor"/>
-            </svg>
-            <span>Toggle theme</span>
-          </button>
-          <button id="scroll-top" class="pill">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 5l6 6-1.4 1.4L13 8.8V19h-2V8.8l-3.6 3.6L6 11z" fill="currentColor"/>
-            </svg>
-            <span>Back to top</span>
-          </button>
         </div>
       </header>
 
@@ -92,13 +88,35 @@
           </div>
         </section>
 
-        <article id="doc" class="doc" aria-live="polite"></article>
+        <div class="doc-layout">
+          <div class="doc-stack">
+            <article id="doc" class="doc" aria-live="polite"></article>
+            <div class="doc-skeleton" aria-hidden="true">
+              <div class="line long"></div>
+              <div class="line medium"></div>
+              <div class="line long"></div>
+              <div class="line short"></div>
+            </div>
+          </div>
+          <aside id="toc" class="toc" aria-label="On this page"></aside>
+        </div>
       </main>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <div id="progress-bar" class="progress-bar" aria-hidden="true"></div>
+
+  <div id="palette" class="palette" aria-hidden="true">
+    <div class="palette-box">
+      <input id="palette-input" type="search" placeholder="Jump to section or chapter..." aria-label="Command palette" />
+      <div id="palette-results" class="palette-results"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/marked/marked.min.js"></script>
+  <script src="https://kit.fontawesome.com/299cf8e5fa.js" crossorigin="anonymous"></script>
   <script src="assets/vendor/highlight/highlight.min.js"></script>
+  <script src="assets/vendor/mark/mark.min.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

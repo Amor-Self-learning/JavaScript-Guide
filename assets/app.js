@@ -1,4 +1,4 @@
-/* global marked, hljs */
+/* global hljs, Mark */
 
 const sections = [
   {
@@ -6,6 +6,10 @@ const sections = [
     title: "ECMAScript",
     root: "1-ECMAScript",
     description: "Language fundamentals, syntax, and advanced patterns.",
+    intro: [
+      "Start here for the core language: syntax, types, objects, and modern features.",
+      "Each chapter builds toward real-world patterns and performance-minded code."
+    ],
     files: [
       "01-Language-Fundamentals.md",
       "02-Control-Flow.md",
@@ -39,6 +43,10 @@ const sections = [
     title: "Browser JS",
     root: "2-BrowserJS",
     description: "DOM, events, and modern browser APIs.",
+    intro: [
+      "Everything that runs in the browser, from DOM foundations to modern APIs.",
+      "Work through chapters in order or jump to a specific API when you need it."
+    ],
     files: [
       "01-DOM.md",
       "02-BOM.md",
@@ -105,6 +113,10 @@ const sections = [
     title: "Node.js",
     root: "3-NodeJS",
     description: "Core modules, runtime APIs, and Node tooling.",
+    intro: [
+      "Server-side JavaScript: core modules, runtime concepts, and tooling.",
+      "Designed for quick lookup and deep dives into Node internals."
+    ],
     files: [
       "01-Fundamentals.md",
       "02-Module-Systems.md",
@@ -139,6 +151,10 @@ const sections = [
     title: "Build Tools",
     root: "4-BuildTools-and-DevEnvironment",
     description: "Tooling and developer environment guides.",
+    intro: [
+      "Build systems, bundlers, and developer environment setup.",
+      "Use this section to keep your toolchain consistent and fast."
+    ],
     files: []
   },
   {
@@ -146,6 +162,10 @@ const sections = [
     title: "Browser Extensions",
     root: "5-Browser-Extensions",
     description: "Extension APIs and workflows.",
+    intro: [
+      "Patterns and APIs for building browser extensions.",
+      "Keep this section handy for permissions and manifest references."
+    ],
     files: []
   },
   {
@@ -153,6 +173,10 @@ const sections = [
     title: "Advanced Topics",
     root: "6-Advanced-Topics-and-Best-Practices",
     description: "Best practices and advanced patterns.",
+    intro: [
+      "Deep dives into architecture, security, and performance.",
+      "Use these chapters when you want to refine production-grade code."
+    ],
     files: []
   }
 ];
@@ -163,16 +187,53 @@ const breadcrumbs = document.getElementById("breadcrumbs");
 const search = document.getElementById("nav-search");
 const menuToggle = document.getElementById("menu-toggle");
 const homeBtn = document.getElementById("home-btn");
+const readingToggle = document.getElementById("reading-toggle");
 const themeToggle = document.getElementById("theme-toggle");
 const scrollTopBtn = document.getElementById("scroll-top");
+const docSearch = document.getElementById("doc-search");
+const toc = document.getElementById("toc");
+const palette = document.getElementById("palette");
+const paletteInput = document.getElementById("palette-input");
+const paletteResults = document.getElementById("palette-results");
+const topbar = document.querySelector(".topbar");
+let currentSearchQuery = "";
 const hero = document.getElementById("hero");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 const content = document.querySelector(".content");
 
-marked.setOptions({
-  gfm: true,
-  breaks: false
-});
+const markdownWorker = "Worker" in window ? new Worker("/assets/markdown-worker.js") : null;
+let workerRequestId = 0;
+const workerCallbacks = new Map();
+const renderCache = new Map();
+const marker = window.Mark ? new Mark(doc) : null;
+const markdownCacheKey = (path) => `js-guide-md:${path}`;
+const READING_KEY = "js-guide-reading";
+const MD_INDEX_KEY = "js-guide-md-index";
+const MD_CACHE_LIMIT = 20;
+
+if (markdownWorker) {
+  markdownWorker.onmessage = (event) => {
+    const { id, html } = event.data || {};
+    const callback = workerCallbacks.get(id);
+    if (callback) {
+      workerCallbacks.delete(id);
+      callback(html);
+    }
+  };
+}
+
+function parseMarkdown(markdown) {
+  if (!markdownWorker) {
+    return Promise.resolve(transformHighlights(markdown)).then((processed) => {
+      return window.marked ? window.marked.parse(processed) : processed;
+    });
+  }
+  return new Promise((resolve) => {
+    const id = ++workerRequestId;
+    workerCallbacks.set(id, resolve);
+    markdownWorker.postMessage({ id, markdown });
+  });
+}
 
 function titleFromFilename(filename) {
   return filename
@@ -180,6 +241,130 @@ function titleFromFilename(filename) {
     .replace(/-S[0-9]+/g, "")
     .replace(/\\.md$/i, "")
     .replace(/-/g, " ");
+}
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\\s-]/g, "")
+    .trim()
+    .replace(/\\s+/g, "-");
+}
+
+function buildToc() {
+  if (!toc) return;
+  const headings = Array.from(doc.querySelectorAll("h2, h3"));
+  if (headings.length < 3) {
+    toc.classList.remove("is-visible");
+    toc.innerHTML = "";
+    return;
+  }
+  const used = new Map();
+  headings.forEach((heading) => {
+    if (!heading.id) {
+      let base = slugify(heading.textContent || "section");
+      const count = (used.get(base) || 0) + 1;
+      used.set(base, count);
+      if (count > 1) base = `${base}-${count}`;
+      heading.id = base;
+    }
+  });
+  const items = headings
+    .map((heading) => {
+      const level = heading.tagName.toLowerCase();
+      return `<li><a class="toc-link ${level === "h3" ? "toc-h3" : "toc-h2"}" href="javascript:void(0)" data-target="${heading.id}">${heading.textContent}</a></li>`;
+    })
+    .join("");
+  toc.innerHTML = `<div class="toc-title">On this page</div><ul>${items}</ul>`;
+  toc.classList.add("is-visible");
+}
+
+function wrapTables() {
+  doc.querySelectorAll("table").forEach((table) => {
+    if (table.parentElement?.classList.contains("table-wrap")) return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrap";
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  });
+}
+
+function enhanceHeadings() {
+  const headings = doc.querySelectorAll("h2, h3");
+  headings.forEach((heading) => {
+    if (heading.querySelector(".heading-anchor")) return;
+    const button = document.createElement("button");
+    button.className = "heading-anchor";
+    button.setAttribute("aria-label", "Copy link to heading");
+    button.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M10 14a3 3 0 0 1 0-4l2-2a3 3 0 0 1 4.24 4.24l-1 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M14 10a3 3 0 0 1 0 4l-2 2a3 3 0 1 1-4.24-4.24l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    `;
+    button.addEventListener("click", async () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("heading", heading.id);
+      const text = url.toString();
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const temp = document.createElement("input");
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+      }
+      button.classList.add("copied");
+      setTimeout(() => button.classList.remove("copied"), 1200);
+    });
+    heading.prepend(button);
+  });
+}
+
+function scrollToHeadingFromQuery() {
+  const params = new URLSearchParams(window.location.search);
+  const targetId = params.get("heading");
+  if (!targetId) return;
+  const target = document.getElementById(targetId);
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function updateHeadingParam(targetId) {
+  const url = new URL(window.location.href);
+  if (targetId) {
+    url.searchParams.set("heading", targetId);
+  } else {
+    url.searchParams.delete("heading");
+  }
+  history.replaceState(null, "", url.toString());
+}
+
+function touchMarkdownCache(path, markdown) {
+  if (!path || markdown == null) return;
+  let index = [];
+  try {
+    index = JSON.parse(localStorage.getItem(MD_INDEX_KEY) || "[]");
+  } catch {}
+  index = index.filter((item) => item !== path);
+  index.unshift(path);
+  if (index.length > MD_CACHE_LIMIT) {
+    const removed = index.splice(MD_CACHE_LIMIT);
+    removed.forEach((item) => {
+      try {
+        localStorage.removeItem(markdownCacheKey(item));
+      } catch {}
+    });
+  }
+  try {
+    localStorage.setItem(MD_INDEX_KEY, JSON.stringify(index));
+  } catch {}
+  try {
+    localStorage.setItem(markdownCacheKey(path), markdown);
+  } catch {}
 }
 
 function renderHomeNav(filterText = "") {
@@ -201,6 +386,12 @@ function renderHomeNav(filterText = "") {
 
 function renderSectionNav(section, filterText = "") {
   nav.innerHTML = "";
+  if (window.innerWidth <= 960) {
+    const mobileHeader = document.createElement("div");
+    mobileHeader.className = "nav-mobile-header";
+    mobileHeader.textContent = section.title;
+    nav.appendChild(mobileHeader);
+  }
   const label = document.createElement("div");
   label.className = "nav-section";
   label.textContent = section.title;
@@ -295,10 +486,8 @@ function parseStateFromHash() {
     return { mode: "home", sectionId: null, file: null };
   }
   const [sectionId, file] = hash.split("/");
-  const section = resolveSection(sectionId);
   const decoded = file ? decodeURIComponent(file) : null;
-  const fallback = section && section.files.length ? section.files[0] : null;
-  return { mode: "section", sectionId, file: decoded || fallback };
+  return { mode: "section", sectionId, file: decoded };
 }
 
 function resolveSection(sectionId) {
@@ -314,6 +503,7 @@ async function loadContent(state) {
   let path = "README.md";
   let breadcrumb = "Home";
   let title = "JavaScript Guide";
+  let sectionLanding = null;
 
   if (state.mode === "section") {
     const section = resolveSection(state.sectionId);
@@ -321,43 +511,165 @@ async function loadContent(state) {
       window.location.hash = "home";
       return;
     }
-    const targetFile = state.file || section.files[0];
-    path = section.files.length ? `${section.root}/${targetFile}` : "README.md";
-    const fileTitle = targetFile ? titleFromFilename(targetFile) : "Overview";
-    breadcrumb = `${section.title}${targetFile ? ` / ${fileTitle}` : ""}`;
-    title = `${section.title} · JavaScript Guide`;
+    if (!state.file) {
+      sectionLanding = section;
+      breadcrumb = section.title;
+      title = `${section.title} · JavaScript Guide`;
+    } else {
+      const targetFile = state.file;
+      path = section.files.length ? `${section.root}/${targetFile}` : "README.md";
+      const fileTitle = targetFile ? titleFromFilename(targetFile) : "Overview";
+      breadcrumb = `${section.title}${targetFile ? ` / ${fileTitle}` : ""}`;
+      title = `${section.title} · JavaScript Guide`;
+    }
   }
 
   breadcrumbs.textContent = breadcrumb;
   document.title = title;
 
+  if (window.currentDocController) {
+    window.currentDocController.abort();
+  }
+  const controller = new AbortController();
+  window.currentDocController = controller;
+
   document.body.classList.add("is-busy");
   doc.classList.add("is-loading", "fade-in");
+  doc.classList.remove("is-ready");
+  window.scrollTo({ top: 0, behavior: "auto" });
   try {
-    const response = await fetch(resolvePath(path));
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (sectionLanding) {
+      const list = sectionLanding.files
+        .map((file) => {
+          const label = titleFromFilename(file);
+          return `<li><a href="#${sectionLanding.id}/${encodeURIComponent(file)}">${label}</a></li>`;
+        })
+        .join("");
+      const intro = (sectionLanding.intro || [])
+        .map((sentence) => `<p>${sentence}</p>`)
+        .join("");
+      doc.innerHTML = `
+        <h1>${sectionLanding.title}</h1>
+        <p>${sectionLanding.description}</p>
+        ${intro}
+        <h2>Chapters</h2>
+        <ul>${list}</ul>
+      `;
+      buildToc();
+      wrapTables();
+      enhanceHeadings();
+      requestAnimationFrame(() => {
+        doc.classList.add("is-ready");
+      });
+      document.body.classList.remove("is-busy");
+      doc.classList.remove("is-loading");
+      return;
     }
-    const markdown = await response.text();
-    const processed = transformHighlights(markdown);
-    const html = marked.parse(processed);
-    doc.innerHTML = html;
-    transformCallouts(doc);
-    highlightCode(doc);
-    doc.classList.remove("is-ready");
-    requestAnimationFrame(() => {
-      doc.classList.add("is-ready");
-    });
-    doc.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (renderCache.has(path)) {
+      const cached = renderCache.get(path);
+      doc.innerHTML = cached;
+      if (currentSearchQuery) {
+        applySearch(currentSearchQuery);
+      }
+      transformCallouts(doc);
+      buildToc();
+      wrapTables();
+      enhanceHeadings();
+      scrollToHeadingFromQuery();
+      requestAnimationFrame(() => {
+        doc.classList.add("is-ready");
+      });
+      document.body.classList.remove("is-busy");
+      doc.classList.remove("is-loading");
+      window.scrollTo({ top: 0, behavior: "auto" });
+      return;
+    }
+
+    let markdown = localStorage.getItem(markdownCacheKey(path));
+    if (!markdown) {
+      const response = await fetch(resolvePath(path), { signal: controller.signal });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      markdown = await response.text();
+      touchMarkdownCache(path, markdown);
+    } else {
+      touchMarkdownCache(path, markdown);
+    }
+    const render = async () => {
+      if (controller.signal.aborted) return;
+      const html = await parseMarkdown(markdown);
+      if (controller.signal.aborted) return;
+      doc.innerHTML = html;
+      renderCache.set(path, html);
+      if (currentSearchQuery) {
+        applySearch(currentSearchQuery);
+      }
+      transformCallouts(doc);
+      buildToc();
+      wrapTables();
+      enhanceHeadings();
+      scrollToHeadingFromQuery();
+      if (state.mode === "section") {
+        const section = resolveSection(state.sectionId);
+        if (section && state.file) {
+          const idx = section.files.indexOf(state.file);
+          if (idx !== -1) {
+            const nav = document.createElement("div");
+            nav.className = "doc-nav";
+            const prevFile = section.files[idx - 1];
+            const nextFile = section.files[idx + 1];
+            nav.innerHTML = `
+              <a class="doc-nav-link ${prevFile ? "" : "disabled"}" href="${prevFile ? `#${section.id}/${encodeURIComponent(prevFile)}` : "#"}">
+                <span>Previous</span>
+                <strong>${prevFile ? titleFromFilename(prevFile) : "Start"}</strong>
+              </a>
+              <a class="doc-nav-link ${nextFile ? "" : "disabled"}" href="${nextFile ? `#${section.id}/${encodeURIComponent(nextFile)}` : "#"}">
+                <span>Next</span>
+                <strong>${nextFile ? titleFromFilename(nextFile) : "End"}</strong>
+              </a>
+            `;
+            doc.appendChild(nav);
+          }
+        }
+      }
+      requestAnimationFrame(() => {
+        doc.classList.add("is-ready");
+      });
+
+      const runHighlight = () => {
+        if (controller.signal.aborted) return;
+        if (doc.querySelector("pre code")) {
+          highlightCode(doc);
+        }
+      };
+
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(runHighlight, { timeout: 600 });
+      } else {
+        setTimeout(runHighlight, 0);
+      }
+    };
+
+    setTimeout(() => {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(render, { timeout: 600 });
+      } else {
+        setTimeout(render, 0);
+      }
+    }, 0);
   } catch (error) {
+    if (controller.signal.aborted) return;
     doc.innerHTML = `
       <h2>Unable to load content</h2>
       <p>Could not fetch <strong>${path}</strong>. ${error?.message || ""}</p>
       <pre><code>python -m http.server</code></pre>
     `;
   } finally {
-    document.body.classList.remove("is-busy");
-    doc.classList.remove("is-loading");
+    if (!controller.signal.aborted) {
+      document.body.classList.remove("is-busy");
+      doc.classList.remove("is-loading");
+    }
   }
 }
 
@@ -371,6 +683,14 @@ function setTheme(mode) {
     lightCss.disabled = mode === "dark";
     darkCss.disabled = mode !== "dark";
   }
+  if (themeToggle) {
+    const icon = themeToggle.querySelector("i");
+    if (icon) {
+      icon.className = mode === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    }
+    themeToggle.setAttribute("title", mode === "dark" ? "Switch to light" : "Switch to dark");
+    themeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light" : "Switch to dark");
+  }
 }
 
 function setCodeWrap(enabled) {
@@ -381,6 +701,27 @@ function initCodeWrap() {
   setCodeWrap(true);
 }
 
+function setReadingMode(enabled) {
+  document.body.classList.toggle("reading-mode", enabled);
+  localStorage.setItem(READING_KEY, enabled ? "1" : "0");
+  if (readingToggle) {
+    const icon = readingToggle.querySelector("i");
+    if (icon) {
+      icon.className = enabled ? "fa-solid fa-book-open-reader" : "fa-solid fa-book-open";
+    }
+    readingToggle.setAttribute("title", enabled ? "Exit reading mode" : "Reading mode");
+    readingToggle.setAttribute("aria-label", enabled ? "Exit reading mode" : "Reading mode");
+    readingToggle.classList.toggle("active", enabled);
+  }
+}
+
+function initReadingMode() {
+  const stored = localStorage.getItem(READING_KEY);
+  if (stored) {
+    setReadingMode(stored === "1");
+  }
+}
+
 function initTheme() {
   const stored = localStorage.getItem("js-guide-theme");
   if (stored) {
@@ -389,6 +730,53 @@ function initTheme() {
   }
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   setTheme(prefersDark ? "dark" : "light");
+}
+
+function buildPaletteItems(filter = "") {
+  if (!paletteResults) return;
+  paletteResults.innerHTML = "";
+  const term = filter.toLowerCase();
+  const items = [];
+  sections.forEach((section) => {
+    items.push({
+      label: section.title,
+      meta: "Section",
+      hash: `#${section.id}`
+    });
+    section.files.forEach((file) => {
+      items.push({
+        label: titleFromFilename(file),
+        meta: section.title,
+        hash: `#${section.id}/${encodeURIComponent(file)}`
+      });
+    });
+  });
+
+  const filtered = items.filter((item) => item.label.toLowerCase().includes(term) || item.meta.toLowerCase().includes(term));
+  filtered.slice(0, 60).forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = `palette-item${index === 0 ? " active" : ""}`;
+    row.dataset.hash = item.hash;
+    row.innerHTML = `${item.label}<span>${item.meta}</span>`;
+    paletteResults.appendChild(row);
+  });
+}
+
+function openPalette() {
+  if (!palette) return;
+  palette.classList.add("open");
+  palette.setAttribute("aria-hidden", "false");
+  buildPaletteItems("");
+  if (paletteInput) {
+    paletteInput.value = "";
+    paletteInput.focus();
+  }
+}
+
+function closePalette() {
+  if (!palette) return;
+  palette.classList.remove("open");
+  palette.setAttribute("aria-hidden", "true");
 }
 
 function renderNavigation(state, filterText = "") {
@@ -416,6 +804,7 @@ function handleRouteChange() {
 
 initTheme();
 initCodeWrap();
+initReadingMode();
 handleRouteChange();
 
 window.addEventListener("hashchange", handleRouteChange);
@@ -425,7 +814,8 @@ search.addEventListener("input", (event) => {
   renderNavigation(parseStateFromHash(), value);
 });
 
-menuToggle.addEventListener("click", () => {
+menuToggle.addEventListener("click", (event) => {
+  event.stopPropagation();
   const sidebar = document.querySelector(".sidebar");
   sidebar.classList.toggle("open");
   if (sidebarOverlay) sidebarOverlay.classList.toggle("open", sidebar.classList.contains("open"));
@@ -456,6 +846,13 @@ themeToggle.addEventListener("click", () => {
   setTheme(next);
 });
 
+if (readingToggle) {
+  readingToggle.addEventListener("click", () => {
+    const enabled = document.body.classList.contains("reading-mode");
+    setReadingMode(!enabled);
+  });
+}
+
 // Code wrapping is always on to prevent horizontal overflow.
 
 homeBtn.addEventListener("click", () => {
@@ -466,4 +863,137 @@ if (content) {
   content.addEventListener("click", () => closeSidebarOnMobile());
 }
 
+document.querySelector(".sidebar")?.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
 document.body.classList.remove("loading-ui");
+
+function clearSearchHighlights() {
+  if (marker) {
+    marker.unmark();
+    return;
+  }
+  doc.querySelectorAll("mark[data-search]").forEach((el) => {
+    const text = document.createTextNode(el.textContent || "");
+    el.replaceWith(text);
+  });
+}
+
+function applySearch(query) {
+  clearSearchHighlights();
+  if (!query) return;
+
+  if (marker) {
+    marker.mark(query, { separateWordSearch: false });
+    return;
+  }
+}
+
+if (docSearch) {
+  let searchTimer;
+  docSearch.addEventListener("input", () => {
+    currentSearchQuery = docSearch.value.trim().toLowerCase();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      applySearch(currentSearchQuery);
+    }, 350);
+  });
+}
+
+if (toc) {
+  toc.addEventListener("click", (event) => {
+    const link = event.target.closest(".toc-link");
+    if (!link) return;
+    event.preventDefault();
+    const targetId = link.dataset.target;
+    if (!targetId) return;
+    const target = document.getElementById(targetId);
+    if (target) {
+      updateHeadingParam(targetId);
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
+if (paletteInput) {
+  paletteInput.addEventListener("input", () => {
+    buildPaletteItems(paletteInput.value.trim());
+  });
+  paletteInput.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closePalette();
+    }
+    if (event.key === "Enter") {
+      const active = paletteResults?.querySelector(".palette-item.active");
+      if (active) {
+        window.location.hash = active.dataset.hash;
+        closePalette();
+      }
+    }
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const items = Array.from(paletteResults?.querySelectorAll(".palette-item") || []);
+      const current = paletteResults?.querySelector(".palette-item.active");
+      let idx = items.indexOf(current);
+      if (event.key === "ArrowDown") idx = Math.min(items.length - 1, idx + 1);
+      if (event.key === "ArrowUp") idx = Math.max(0, idx - 1);
+      items.forEach((item) => item.classList.remove("active"));
+      if (items[idx]) {
+        items[idx].classList.add("active");
+        items[idx].scrollIntoView({ block: "nearest" });
+      }
+    }
+  });
+}
+
+if (paletteResults) {
+  paletteResults.addEventListener("click", (event) => {
+    const item = event.target.closest(".palette-item");
+    if (!item) return;
+    window.location.hash = item.dataset.hash;
+    closePalette();
+  });
+}
+
+if (palette) {
+  palette.addEventListener("click", (event) => {
+    if (event.target === palette) closePalette();
+  });
+}
+
+window.addEventListener("keydown", (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    if (palette.classList.contains("open")) {
+      closePalette();
+    } else {
+      openPalette();
+    }
+  }
+  if (event.key === "Escape" && palette?.classList.contains("open")) {
+    closePalette();
+  }
+});
+
+if (topbar) {
+  let lastY = window.scrollY;
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const currentY = window.scrollY;
+      const delta = currentY - lastY;
+      if (currentY < 50) {
+        topbar.classList.remove("topbar-hidden");
+      } else if (delta > 6) {
+        topbar.classList.add("topbar-hidden");
+      } else if (delta < -6) {
+        topbar.classList.remove("topbar-hidden");
+      }
+      lastY = currentY;
+      ticking = false;
+    });
+  });
+}
