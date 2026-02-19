@@ -1,5 +1,5 @@
 /* global marked */
-importScripts("/assets/vendor/marked/marked.min.js");
+importScripts("./vendor/marked/marked.min.js");
 
 marked.setOptions({
   gfm: true,
