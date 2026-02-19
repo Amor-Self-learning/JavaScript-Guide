@@ -6,12 +6,12 @@
 ![Markdown](https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white)
 ![Obsidian](https://img.shields.io/badge/Obsidian-7C3AED?style=for-the-badge&logo=obsidian&logoColor=white)
 
-![Modules](https://img.shields.io/badge/Modules-116+-blue?style=flat-square)
-![Lines](https://img.shields.io/badge/Lines-97K+-green?style=flat-square)
-![Size](https://img.shields.io/badge/Size-3.5MB-orange?style=flat-square)
+![Modules](https://img.shields.io/badge/Modules-125+-blue?style=flat-square)
+![Lines](https://img.shields.io/badge/Lines-169K+-green?style=flat-square)
+![Size](https://img.shields.io/badge/Size-3.7MB-orange?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-A comprehensive, in-depth JavaScript reference covering everything from core language fundamentals to advanced browser APIs, Node.js, and modern tooling. Organized as an Obsidian-friendly vault with 116+ modules.
+A comprehensive, in-depth JavaScript reference covering everything from core language fundamentals to advanced browser APIs, Node.js, build tools, browser extensions, and professional best practices. Organized as an Obsidian-friendly vault with 125+ modules.
 
 ---
 
@@ -85,8 +85,6 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 | 37–46 | Performance & Graphics | Observers, WebGL, WebGPU, WebXR |
 | 47–58 | Advanced Browser APIs | View Transitions, CSP, Trusted Types, Accessibility |
 
-📖 [Full Browser API list →](2-BrowserJS/REFERENCE.md)
-
 ---
 
 ### Section III: Node.js
@@ -146,11 +144,30 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 ### Section V: Browser Extensions
 ![Chrome](https://img.shields.io/badge/Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
 ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=flat-square&logo=firefox&logoColor=white)
-*Coming soon*
+*4 modules covering cross-browser extension development*
+
+| # | Module | Topics |
+|---|--------|--------|
+| 01 | [Extension Fundamentals](5-Browser-Extensions/01-Extension-Fundamentals.md) | Architecture, manifest V3, content scripts, service workers |
+| 02 | [Chrome Extension APIs](5-Browser-Extensions/02-Chrome-Extension-APIs.md) | action, tabs, runtime, storage, scripting, alarms, notifications |
+| 03 | [Firefox WebExtensions](5-Browser-Extensions/03-Firefox-WebExtensions.md) | browser namespace, Firefox-specific APIs, containers, themes |
+| 04 | [Extension Development](5-Browser-Extensions/04-Extension-Development.md) | Build setup, testing, debugging, security, publishing |
+
+---
 
 ### Section VI: Advanced Topics & Best Practices
 ![Architecture](https://img.shields.io/badge/Architecture-Design_Patterns-9B59B6?style=flat-square)
-*Coming soon*
+![Security](https://img.shields.io/badge/Security-OWASP-E34F26?style=flat-square)
+![DevOps](https://img.shields.io/badge/DevOps-CI%2FCD-2088FF?style=flat-square)
+*5 modules covering professional JavaScript development*
+
+| # | Module | Topics |
+|---|--------|--------|
+| 01 | [Architecture and Design Patterns](6-Advanced-Topics-and-Best-Practices/01-Architecture-and-Design-Patterns.md) | Creational, structural, behavioral patterns, MVC, Flux |
+| 02 | [Performance Optimization](6-Advanced-Topics-and-Best-Practices/02-Performance-Optimization.md) | V8 internals, memory, rendering, network, profiling |
+| 03 | [Security Best Practices](6-Advanced-Topics-and-Best-Practices/03-Security-Best-Practices.md) | XSS, CSRF, auth, input validation, CSP, dependencies |
+| 04 | [Deployment and DevOps](6-Advanced-Topics-and-Best-Practices/04-Deployment-and-DevOps.md) | CI/CD, Docker, Kubernetes, cloud platforms, monitoring |
+| 05 | [Career Development](6-Advanced-Topics-and-Best-Practices/05-Career-Development.md) | Learning path, interviews, code quality, leadership, OSS |
 
 ---
 
@@ -158,11 +175,13 @@ A comprehensive, in-depth JavaScript reference covering everything from core lan
 
 | Section | Modules | Lines | Size |
 |---------|---------|-------|------|
-| ECMAScript | 25 | ~45,000 | 1.8 MB |
-| Browser JS | 58 | ~30,000 | 1.2 MB |
-| Node.js | 25 | ~16,000 | 336 KB |
-| Build Tools | 8 | ~5,600 | 124 KB |
-| **Total** | **116** | **~97,000** | **~3.5 MB** |
+| ECMAScript | 25 | 84,296 | 1.8 MB |
+| Browser JS | 58 | 55,520 | 1.2 MB |
+| Node.js | 25 | 15,828 | 336 KB |
+| Build Tools | 8 | 5,595 | 124 KB |
+| Browser Extensions | 4 | 3,225 | 76 KB |
+| Advanced Topics | 5 | 4,732 | 108 KB |
+| **Total** | **125** | **169,196** | **~3.7 MB** |
 
 ---
 
