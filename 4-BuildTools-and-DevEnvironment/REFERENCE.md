@@ -231,14 +231,14 @@ goodConfig();
 
 | # | Module | Status | Lines |
 |---|--------|--------|-------|
-| 01 | Build Tools and Bundlers | ⬜ | — |
-| 02 | Transpilers and Compilers | ⬜ | — |
-| 03 | Linters and Formatters | ⬜ | — |
-| 04 | Testing Frameworks | ⬜ | — |
-| 05 | Version Control and Git | ⬜ | — |
-| 06 | Task Runners | ⬜ | — |
-| 07 | Development Tools | ⬜ | — |
-| 08 | Package Publishing | ⬜ | — |
+| 01 | Build Tools and Bundlers | ✅ | ~930 |
+| 02 | Transpilers and Compilers | ✅ | ~710 |
+| 03 | Linters and Formatters | ✅ | ~680 |
+| 04 | Testing Frameworks | ✅ | ~980 |
+| 05 | Version Control and Git | ✅ | ~600 |
+| 06 | Task Runners | ✅ | ~465 |
+| 07 | Development Tools | ✅ | ~590 |
+| 08 | Package Publishing | ✅ | ~640 |
 
 ---
 
