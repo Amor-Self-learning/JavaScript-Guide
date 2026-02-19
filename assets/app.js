@@ -142,8 +142,7 @@ const sections = [
       "22-Test-Runner.md",
       "23-NPM-and-Package-Management.md",
       "24-Advanced-Concepts.md",
-      "25-Ecosystem.md",
-      "REFERENCE.md"
+      "25-Ecosystem.md"
     ]
   },
   {
@@ -155,7 +154,16 @@ const sections = [
       "Build systems, bundlers, and developer environment setup.",
       "Use this section to keep your toolchain consistent and fast."
     ],
-    files: []
+    files: [
+      "01-Build-Tools-and-Bundlers.md",
+      "02-Transpilers-and-Compilers.md",
+      "03-Linters-and-Formatters.md",
+      "04-Testing-Frameworks.md",
+      "05-Version-Control-and-Git.md",
+      "06-Task-Runners.md",
+      "07-Development-Tools.md",
+      "08-Package-Publishing.md"
+    ]
   },
   {
     id: "extensions",
@@ -166,7 +174,12 @@ const sections = [
       "Patterns and APIs for building browser extensions.",
       "Keep this section handy for permissions and manifest references."
     ],
-    files: []
+    files: [
+      "01-Extension-Fundamentals.md",
+      "02-Chrome-Extension-APIs.md",
+      "03-Firefox-WebExtensions.md",
+      "04-Extension-Development.md"
+    ]
   },
   {
     id: "advanced",
@@ -177,7 +190,13 @@ const sections = [
       "Deep dives into architecture, security, and performance.",
       "Use these chapters when you want to refine production-grade code."
     ],
-    files: []
+    files: [
+      "01-Architecture-and-Design-Patterns.md",
+      "02-Performance-Optimization.md",
+      "03-Security-Best-Practices.md",
+      "04-Deployment-and-DevOps.md",
+      "05-Career-Development.md"
+    ]
   }
 ];
 
